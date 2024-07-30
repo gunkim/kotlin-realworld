@@ -6,15 +6,14 @@ import io.github.gunkim.realworld.domain.vo.UserName
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
-@Entity
+@Entity(name = "users")
 class User(
     @Id
-    val id: UserId,
+    val id: UserId?,
     @Embedded
     val email: Email,
-    name: UserName,
     password: String,
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val profile: UserProfile,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
@@ -38,5 +37,17 @@ class User(
 
     override fun hashCode(): Int {
         return id.hashCode()
+    }
+
+    companion object {
+        fun create(name: UserName, email: Email, password: String): User {
+            val userId = UserId()
+            return User(
+                userId,
+                email,
+                password,
+                UserProfile.create(userId, name)
+            )
+        }
     }
 }
