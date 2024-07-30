@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.domain.entity
 
+import io.github.gunkim.realworld.domain.base.DomainEntity
 import io.github.gunkim.realworld.domain.vo.TagId
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -9,9 +10,9 @@ import jakarta.persistence.ManyToOne
 @Entity
 class Tag(
     @Id
-    val id: TagId,
+    override val id: TagId,
     val name: String,
-) {
+) : DomainEntity<Tag, TagId>() {
     @ManyToOne(fetch = FetchType.LAZY)
     var article: Article? = null
         protected set

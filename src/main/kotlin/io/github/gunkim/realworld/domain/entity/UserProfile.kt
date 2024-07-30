@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.domain.entity
 
+import io.github.gunkim.realworld.domain.base.DomainEntity
 import io.github.gunkim.realworld.domain.vo.UserId
 import io.github.gunkim.realworld.domain.vo.UserName
 import jakarta.persistence.Entity
@@ -8,11 +9,11 @@ import jakarta.persistence.Id
 @Entity
 class UserProfile(
     @Id
-    val userId: UserId?,
+    override val id: UserId?,
     name: UserName,
     bio: String?,
     image: String?,
-) {
+) : DomainEntity<UserProfile, UserId>() {
     var name = name
         protected set
     var bio = bio
@@ -26,11 +27,11 @@ class UserProfile(
 
         other as UserProfile
 
-        return userId == other.userId
+        return id == other.id
     }
 
     override fun hashCode(): Int {
-        return userId.hashCode()
+        return id.hashCode()
     }
 
     companion object {

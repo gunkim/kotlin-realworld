@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.domain.entity
 
+import io.github.gunkim.realworld.domain.base.DomainEntity
 import io.github.gunkim.realworld.domain.vo.CommentId
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -7,10 +8,10 @@ import java.time.LocalDateTime
 @Entity
 class Comment(
     @Id
-    val id: CommentId,
+    override val id: CommentId,
     body: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-) {
+) : DomainEntity<Comment, CommentId>() {
     var body = body
         protected set
     var updatedAt: LocalDateTime = createdAt

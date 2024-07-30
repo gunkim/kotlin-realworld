@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.domain.entity
 
+import io.github.gunkim.realworld.domain.base.AggregateRoot
 import io.github.gunkim.realworld.domain.vo.ArticleId
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -7,14 +8,14 @@ import java.time.LocalDateTime
 @Entity
 class Article(
     @Id
-    val id: ArticleId,
+    override val id: ArticleId,
     title: String,
     description: String,
     body: String,
     val createdAt: LocalDateTime,
     tags: MutableSet<Tag> = mutableSetOf(),
     comments: MutableSet<Comment> = mutableSetOf(),
-) {
+) : AggregateRoot<Article, ArticleId>() {
     var title = title
         protected set
     var description = description

@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.domain.entity
 
+import io.github.gunkim.realworld.domain.base.AggregateRoot
 import io.github.gunkim.realworld.domain.vo.Email
 import io.github.gunkim.realworld.domain.vo.UserId
 import io.github.gunkim.realworld.domain.vo.UserName
@@ -9,14 +10,14 @@ import java.time.LocalDateTime
 @Entity(name = "users")
 class User(
     @Id
-    val id: UserId?,
+    override val id: UserId?,
     @Embedded
     val email: Email,
     password: String,
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val profile: UserProfile,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-) {
+) : AggregateRoot<User, UserId>() {
     var password = password
         protected set
     var updatedAt: LocalDateTime? = null
