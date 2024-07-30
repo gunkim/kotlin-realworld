@@ -1,9 +1,6 @@
-package io.github.gunkim.realworld.domain.entity
+package io.github.gunkim.realworld.domain.user
 
-import io.github.gunkim.realworld.domain.base.AggregateRoot
-import io.github.gunkim.realworld.domain.vo.Email
-import io.github.gunkim.realworld.domain.vo.UserId
-import io.github.gunkim.realworld.domain.vo.UserName
+import io.github.gunkim.realworld.domain.common.AggregateRoot
 import jakarta.persistence.*
 import java.time.LocalDateTime
 

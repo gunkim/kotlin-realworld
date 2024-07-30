@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.domain.base
+package io.github.gunkim.realworld.domain.common
 
 abstract class DomainEntity<T : DomainEntity<T, TID>?, TID> {
     override fun equals(other: Any?): Boolean {

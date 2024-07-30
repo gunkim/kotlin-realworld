@@ -1,7 +1,6 @@
-package io.github.gunkim.realworld.domain.entity
+package io.github.gunkim.realworld.domain.article
 
-import io.github.gunkim.realworld.domain.base.DomainEntity
-import io.github.gunkim.realworld.domain.vo.TagId
+import io.github.gunkim.realworld.domain.common.DomainEntity
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.Id

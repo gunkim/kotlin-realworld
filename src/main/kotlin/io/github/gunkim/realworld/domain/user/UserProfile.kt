@@ -1,8 +1,6 @@
-package io.github.gunkim.realworld.domain.entity
+package io.github.gunkim.realworld.domain.user
 
-import io.github.gunkim.realworld.domain.base.DomainEntity
-import io.github.gunkim.realworld.domain.vo.UserId
-import io.github.gunkim.realworld.domain.vo.UserName
+import io.github.gunkim.realworld.domain.common.DomainEntity
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 

@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.domain.base
+package io.github.gunkim.realworld.domain.common
 
 import org.springframework.data.domain.AfterDomainEventPublication
 import org.springframework.data.domain.DomainEvents
