@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 class UserRegistrationService(
     private val userRepository: UserRepository,
 ) {
-    @Transactional
+    @Transactional(readOnly = true)
     fun registerUser(request: UserRegistrationRequest): UserRegistrationResponse = request.run {
         val savedUser = userRepository.save(User.create(username, email, password))
 
