@@ -11,7 +11,7 @@ class User(
     @Embedded
     val email: Email,
     password: String,
-    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToOne(cascade = [CascadeType.ALL])
     val profile: UserProfile,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) : AggregateRoot<User, UserId>() {
