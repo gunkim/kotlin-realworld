@@ -1,8 +1,6 @@
-package io.github.gunkim.realworld.web
+package io.github.gunkim.realworld.application.user
 
-import io.github.gunkim.realworld.application.UserRegistrationRequest
-import io.github.gunkim.realworld.application.UserRegistrationResponse
-import io.github.gunkim.realworld.application.UserRegistrationService
+import io.github.gunkim.realworld.domain.user.UserRegistrationService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,12 +15,8 @@ class UserController(
     fun registration(
         @RequestBody
         request: UserRegistrationRequest,
-    ): UserBaseResponse<UserRegistrationResponse> {
-        val response = userRegistrationService.registerUser(request)
-        return UserBaseResponse(response)
+    ): UserRegistrationResponse {
+        val registeredUser = userRegistrationService.registerUser(request)
+        return UserRegistrationResponse.from(registeredUser)
     }
 }
-
-data class UserBaseResponse<T>(
-    val user: T,
-)

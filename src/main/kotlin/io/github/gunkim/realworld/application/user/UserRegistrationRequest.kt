@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.application
+package io.github.gunkim.realworld.application.user
 
 import io.github.gunkim.realworld.domain.user.Email
 import io.github.gunkim.realworld.domain.user.UserName
