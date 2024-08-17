@@ -27,7 +27,7 @@ class JwtProvider {
             .add("alg", "HS256")
             .and()
             .claims()
-            .add("userId", userId)
+            .add(USER_ID_PAYLOAD_PARAMETER, userId)
             .and()
             .issuer(ISSUER)
             .issuedAt(Date.from(now.toInstant(ZoneOffset.UTC)))
@@ -45,13 +45,14 @@ class JwtProvider {
         .verifyWith(SECRET_KEY)
         .build()
         .parseSignedClaims(jws)
-        .payload["userId"].toString().toLong()
+        .payload[USER_ID_PAYLOAD_PARAMETER].toString().toLong()
 
     companion object {
         //TODO: It seems better to separate all the key signature information here as properties.
         private const val SECRET_KEY_STRING = "s7tT5+Z/jfY47K3JqKDl8xhAyqTDynkxNoB/qBcIZd8="
         private val SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY_STRING))
         private const val ISSUER = "짱구"
+        private const val USER_ID_PAYLOAD_PARAMETER = "userId"
 
         private const val EXPIRATION_MINUTES = 30L
     }
