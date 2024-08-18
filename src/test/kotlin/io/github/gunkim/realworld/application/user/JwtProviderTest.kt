@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.application.user
 
+import io.github.gunkim.realworld.application.JwtProvider
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec

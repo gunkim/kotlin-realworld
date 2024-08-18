@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.domain.user
 
-import io.github.gunkim.realworld.application.user.UserRegistrationRequest
+import io.github.gunkim.realworld.web.request.UserRegistrationRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

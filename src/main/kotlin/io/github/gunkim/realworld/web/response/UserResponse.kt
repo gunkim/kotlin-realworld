@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.application.user
+package io.github.gunkim.realworld.web.response
 
 data class UserResponse(
     val email: String,
