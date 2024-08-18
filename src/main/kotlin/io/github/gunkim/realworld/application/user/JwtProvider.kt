@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.application.user
 
+import io.github.gunkim.realworld.domain.user.UserId
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
@@ -16,7 +17,7 @@ class JwtProvider {
      * @param userId the ID of the user for whom the JWT token is being created
      * @return the generated JWT token as a string
      */
-    fun create(userId: Long): String {
+    fun create(userId: UserId): String {
         val now = LocalDateTime.now()
         val expirationTime = now.plusMinutes(EXPIRATION_MINUTES)
 
@@ -27,7 +28,7 @@ class JwtProvider {
             .add("alg", "HS256")
             .and()
             .claims()
-            .add(USER_ID_PAYLOAD_PARAMETER, userId)
+            .add(USER_ID_PAYLOAD_PARAMETER, userId.value)
             .and()
             .issuer(ISSUER)
             .issuedAt(Date.from(now.toInstant(ZoneOffset.UTC)))

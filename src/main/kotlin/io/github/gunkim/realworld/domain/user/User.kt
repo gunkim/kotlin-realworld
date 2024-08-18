@@ -9,6 +9,7 @@ class User(
     @Id
     override val id: UserId?,
     @Embedded
+    @Column(unique = true)
     val email: Email,
     password: String,
     @OneToOne(cascade = [CascadeType.ALL])
