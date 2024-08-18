@@ -36,12 +36,6 @@ class UserController(
 
         userService.authenticate(user, request.password)
 
-        return UserResponse(
-            user.email.value,
-            jwtProvider.create(user.id!!),
-            user.profile.name.value,
-            user.profile.bio,
-            user.profile.image
-        )
+        return UserResponse.from(user, jwtProvider.create(user.id!!))
     }
 }
