@@ -10,8 +10,10 @@ class UserRegistrationService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    @Transactional(readOnly = true)
+    @Transactional
     fun registerUser(request: UserRegistrationRequest): User = request.run {
+        require(userRepository.findByEmail(email) == null) { "User already exists" }
+
         val encodedPassword = passwordEncoder.encode(password)
         return userRepository.save(User.create(username, email, encodedPassword))
     }
