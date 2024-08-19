@@ -8,6 +8,7 @@ import io.github.gunkim.realworld.web.model.AuthenticatedUser
 import io.github.gunkim.realworld.web.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.web.request.UserRegistrationRequest
 import io.github.gunkim.realworld.web.response.UserResponse
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -40,7 +41,7 @@ class UserController(
 
     @GetMapping
     fun get(
-        @JsonRequest("user")
+        @AuthenticationPrincipal
         authenticatedUser: AuthenticatedUser,
     ): UserResponse {
         val user = userService.findUserById(authenticatedUser.id)
