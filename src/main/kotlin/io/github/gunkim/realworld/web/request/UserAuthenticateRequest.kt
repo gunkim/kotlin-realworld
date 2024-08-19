@@ -1,6 +1,10 @@
 package io.github.gunkim.realworld.web.request
 
-data class UserAuthenticateRequest(
-    val email: String,
+import io.github.gunkim.realworld.domain.user.Email
+
+class UserAuthenticateRequest(
+    email: String,
     val password: String,
-)
+) {
+    val email = Email(email)
+}
