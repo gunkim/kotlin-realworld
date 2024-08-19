@@ -32,7 +32,6 @@ class UserController(
         request: UserAuthenticateRequest,
     ): UserResponse {
         val user = userService.findUserByEmail(Email(request.email))
-            ?: throw IllegalArgumentException("User not found")
 
         userService.authenticate(user, request.password)
 

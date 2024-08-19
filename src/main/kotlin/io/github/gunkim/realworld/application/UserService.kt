@@ -14,8 +14,9 @@ class UserService(
     private val passwordEncoder: PasswordEncoder,
 ) {
     @Transactional(readOnly = true)
-    fun findUserByEmail(email: Email): User? {
+    fun findUserByEmail(email: Email): User {
         return userRepository.findByEmail(email)
+            ?: throw IllegalArgumentException("User not found")
     }
 
     @Transactional
