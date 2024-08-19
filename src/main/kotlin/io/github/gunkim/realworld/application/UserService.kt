@@ -33,4 +33,9 @@ class UserService(
     @Transactional(readOnly = true)
     fun findUserById(id: UserId): User = userRepository.findById(id)
         ?: throw IllegalArgumentException("User not found")
+
+    @Transactional
+    fun update(user: User) {
+        userRepository.save(user)
+    }
 }

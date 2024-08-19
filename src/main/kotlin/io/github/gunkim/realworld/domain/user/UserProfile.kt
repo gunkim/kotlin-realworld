@@ -32,6 +32,12 @@ class UserProfile(
         return id.hashCode()
     }
 
+    fun updateWhenNotNull(name: UserName?, image: String?, bio: String?) {
+        name?.let { this.name = it }
+        image?.let { this.image = it }
+        bio?.let { this.bio = it }
+    }
+
     companion object {
         fun create(userId: UserId, name: UserName) = UserProfile(
             userId,

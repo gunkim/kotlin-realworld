@@ -23,4 +23,17 @@ Content-Type: application/json
 
 ### Get Current User
 GET http://localhost:8080/api/users
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJmZjFjY2UzNC01ZGQxLTQ3YzYtYjBiMi04ZjdkMTUxMGY2ZDciLCJpYXQiOjE3MjQxMjAzODEsImV4cCI6MTcyNDEyMjE4MX0.cvF-_9t26iadMrSBQF4A-n47CGC4vRlVMU0PTiW4PeThqN5HJoJUe2ZIGyeuKE0M79qIAF_JOSYfu0AOl01tcanbClFDZ1-kC6hD0VYGJ44wj13L2ApCkyshHuHg7umJ4jyRw_Km9Dqtf5TPuNPStVNS6xysH2h5pVGBrzHA_nP4HA3jmb6PJ2FUwUWm0sirUWPAUX4400XytnDUQi5qemMPUdcbyYGtytLWDGeAoPau2o5T6VyGRz0LeGxw5QIHt1lFFpQwEXyMsmV-Ftz3a0WUc7qSH2XxGCUCJJG1NC68fHRw6S3RIy-qqYh6Rsn5tb9yS9vUnav8jJ0mmHTyAg
+
+### Update User
+PUT http://localhost:8080/api/user
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJmZjFjY2UzNC01ZGQxLTQ3YzYtYjBiMi04ZjdkMTUxMGY2ZDciLCJpYXQiOjE3MjQxMjAzODEsImV4cCI6MTcyNDEyMjE4MX0.cvF-_9t26iadMrSBQF4A-n47CGC4vRlVMU0PTiW4PeThqN5HJoJUe2ZIGyeuKE0M79qIAF_JOSYfu0AOl01tcanbClFDZ1-kC6hD0VYGJ44wj13L2ApCkyshHuHg7umJ4jyRw_Km9Dqtf5TPuNPStVNS6xysH2h5pVGBrzHA_nP4HA3jmb6PJ2FUwUWm0sirUWPAUX4400XytnDUQi5qemMPUdcbyYGtytLWDGeAoPau2o5T6VyGRz0LeGxw5QIHt1lFFpQwEXyMsmV-Ftz3a0WUc7qSH2XxGCUCJJG1NC68fHRw6S3RIy-qqYh6Rsn5tb9yS9vUnav8jJ0mmHTyAg
+
+{
+  "user": {
+    "email": "jake@jake.jake",
+    "bio": "I like to skateboard",
+    "image": "https://i.stack.imgur.com/xHWG8.jpg"
+  }
+}

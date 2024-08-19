@@ -10,7 +10,7 @@ class User(
     override val id: UserId?,
     @Embedded
     @Column(unique = true)
-    val email: Email,
+    var email: Email,
     password: String,
     @OneToOne(cascade = [CascadeType.ALL])
     val profile: UserProfile,
@@ -36,6 +36,19 @@ class User(
 
     override fun hashCode(): Int {
         return id.hashCode()
+    }
+
+    fun updateWhenNotNull(
+        email: Email?,
+        password: String?,
+        username: UserName? = null,
+        image: String? = null,
+        bio: String? = null,
+    ) {
+        email?.let { this.email = it }
+        password?.let { this.password = it }
+
+        this.profile.updateWhenNotNull(username, image, bio)
     }
 
     companion object {
