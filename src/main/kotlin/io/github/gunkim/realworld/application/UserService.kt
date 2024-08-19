@@ -4,7 +4,6 @@ import io.github.gunkim.realworld.domain.user.Email
 import io.github.gunkim.realworld.domain.user.User
 import io.github.gunkim.realworld.domain.user.UserId
 import io.github.gunkim.realworld.domain.user.UserRepository
-import io.github.gunkim.realworld.persistence.UserJpaRepository
 import io.github.gunkim.realworld.web.request.UserRegistrationRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -14,13 +13,10 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val userJpaRepository: UserJpaRepository,
 ) {
     @Transactional(readOnly = true)
-    fun findUserByEmail(email: Email): User {
-        return userRepository.findByEmail(email)
-            ?: throw IllegalArgumentException("User not found")
-    }
+    fun findUserByEmail(email: Email): User = userRepository.findByEmail(email)
+        ?: throw IllegalArgumentException("User not found")
 
     @Transactional
     fun registerUser(request: UserRegistrationRequest): User = request.run {
@@ -34,8 +30,7 @@ class UserService(
         require(passwordEncoder.matches(password, user.password)) { "Password does not match" }
     }
 
-    fun findUserById(id: UserId): User {
-        return userRepository.findById(id)
-            ?: throw IllegalArgumentException("User not found")
-    }
+    @Transactional(readOnly = true)
+    fun findUserById(id: UserId): User = userRepository.findById(id)
+        ?: throw IllegalArgumentException("User not found")
 }
