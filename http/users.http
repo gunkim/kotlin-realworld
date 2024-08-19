@@ -1,0 +1,26 @@
+### Registration
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "user": {
+    "username": "gunkim",
+    "password": "test",
+    "email": "gunkim.dev@gmail.com"
+  }
+}
+
+### Authentication
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "gunkim.dev@gmail.com",
+    "password": "test"
+  }
+}
+
+### Get Current User
+GET http://localhost:8080/api/users
+Authorization: Bearer {{token}}
