@@ -11,3 +11,9 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+# JWT Secret Key Pair
+jwt:
+  secret:
+    private: classpath:realworld.priv
+    public: classpath:realworld.pub

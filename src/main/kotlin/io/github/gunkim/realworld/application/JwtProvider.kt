@@ -2,59 +2,59 @@ package io.github.gunkim.realworld.application
 
 import io.github.gunkim.realworld.domain.user.UserId
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.io.Decoders
-import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
 
 @Component
-class JwtProvider {
+class JwtProvider(
+    @Value("\${jwt.secret.private}")
+    private val rsaPrivateKey: RSAPrivateKey,
+    @Value("\${jwt.secret.public}")
+    private val rsaPublicKey: RSAPublicKey,
+) {
     /**
-     * Creates a JWT token for the given user ID.
+     * Creates a JSON Web Token (JWT) with the specified user ID.
      *
-     * @param userId the ID of the user for whom the JWT token is being created
-     * @return the generated JWT token as a string
+     * @param userId the ID of the user
+     * @return the JWT string
      */
     fun create(userId: UserId): String {
         val now = LocalDateTime.now()
         val expirationTime = now.plusMinutes(EXPIRATION_MINUTES)
 
         return Jwts.builder()
-            .signWith(SECRET_KEY)
+            .signWith(rsaPrivateKey)
             .header()
             .add("typ", "JWT")
-            .add("alg", "HS256")
+            .add("alg", "RS256")
             .and()
             .claims()
             .add(USER_ID_PAYLOAD_PARAMETER, userId.value)
             .and()
-            .issuer(ISSUER)
             .issuedAt(Date.from(now.toInstant(ZoneOffset.UTC)))
             .expiration(Date.from(expirationTime.toInstant(ZoneOffset.UTC)))
             .compact()
     }
 
     /**
-     * Parses a JSON Web Signature (JWS) and retrieves the user ID from its payload.
+     * Parses a JSON Web Token (JWT) and extracts the user ID from the payload.
      *
-     * @param jws the JWS string to parse
-     * @return the user ID extracted from the JWS payload as a Long
+     * @param jws the JWT string to parse
+     * @return the user ID extracted from the payload
      */
     fun parse(jws: String) = Jwts.parser()
-        .verifyWith(SECRET_KEY)
+        .verifyWith(rsaPublicKey)
         .build()
         .parseSignedClaims(jws)
         .payload[USER_ID_PAYLOAD_PARAMETER].toString().toLong()
 
     companion object {
-        //TODO: It seems better to separate all the key signature information here as properties.
-        private const val SECRET_KEY_STRING = "s7tT5+Z/jfY47K3JqKDl8xhAyqTDynkxNoB/qBcIZd8="
-        private val SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY_STRING))
-        private const val ISSUER = "짱구"
         private const val USER_ID_PAYLOAD_PARAMETER = "userId"
-
         private const val EXPIRATION_MINUTES = 30L
     }
 }
