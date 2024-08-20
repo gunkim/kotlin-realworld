@@ -61,5 +61,14 @@ class User(
                 UserProfile.create(userId, name)
             )
         }
+
+        fun create(id: UserId, name: UserName, email: Email, password: String): User {
+            return User(
+                id,
+                email,
+                password,
+                UserProfile.create(id, name)
+            )
+        }
     }
 }
