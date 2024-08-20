@@ -8,14 +8,14 @@ import io.kotest.matchers.shouldBe
 @DisplayName("EncodedPassword is")
 class EncodedPasswordTest : StringSpec({
     "should create an EncodedPassword instance with a password of at least 8 characters length" {
-        val encoder: (String) -> String = String::toUpperCase
+        val encoder: (String) -> String = String::uppercase
         val password = "securepass"
         val encodedPassword = EncodedPassword.of(password, encoder)
         encodedPassword.value shouldBe password.uppercase()
     }
 
     "should fail to create an EncodedPassword instance when the length of the password is less than 8 characters" {
-        val encoder: (String) -> String = String::toUpperCase
+        val encoder: (String) -> String = String::uppercase
         val password = "short"
         shouldThrow<IllegalArgumentException> {
             EncodedPassword.of(password, encoder)
