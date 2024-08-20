@@ -3,6 +3,7 @@ package io.github.gunkim.realworld.web.api
 import io.github.gunkim.realworld.application.JwtProvider
 import io.github.gunkim.realworld.application.UserService
 import io.github.gunkim.realworld.config.request.JsonRequest
+import io.github.gunkim.realworld.domain.user.EncodedPassword
 import io.github.gunkim.realworld.domain.user.User
 import io.github.gunkim.realworld.web.model.AuthenticatedUser
 import io.github.gunkim.realworld.web.request.UserUpdateRequest
@@ -30,7 +31,7 @@ class UserUpdateController(
         val user = userService.findUserById(authenticatedUser.id)
 
         request.apply {
-            val encodedPassword = password?.let { passwordEncoder.encode(it) }
+            val encodedPassword = password?.let { EncodedPassword.of(it, passwordEncoder::encode) }
             user.updateWhenNotNull(email, encodedPassword, username, image, bio)
 
             userService.update(user)

@@ -11,12 +11,12 @@ class User(
     @Embedded
     @Column(unique = true)
     var email: Email,
-    password: String,
+    encodedPassword: EncodedPassword,
     @OneToOne(cascade = [CascadeType.ALL])
     val profile: UserProfile,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) : AggregateRoot<User, UserId>() {
-    var password = password
+    var password = encodedPassword
         protected set
     var updatedAt: LocalDateTime? = null
 
@@ -40,33 +40,33 @@ class User(
 
     fun updateWhenNotNull(
         email: Email?,
-        password: String?,
+        encodedPassword: EncodedPassword?,
         username: UserName? = null,
-        image: String? = null,
+        image: Image? = null,
         bio: String? = null,
     ) {
         email?.let { this.email = it }
-        password?.let { this.password = it }
+        encodedPassword?.let { this.password = it }
 
         this.profile.updateWhenNotNull(username, image, bio)
     }
 
     companion object {
-        fun create(name: UserName, email: Email, password: String): User {
+        fun create(name: UserName, email: Email, encodedPassword: EncodedPassword): User {
             val userId = UserId()
             return User(
                 userId,
                 email,
-                password,
+                encodedPassword,
                 UserProfile.create(userId, name)
             )
         }
 
-        fun create(id: UserId, name: UserName, email: Email, password: String): User {
+        fun create(id: UserId, name: UserName, email: Email, encodedPassword: EncodedPassword): User {
             return User(
                 id,
                 email,
-                password,
+                encodedPassword,
                 UserProfile.create(id, name)
             )
         }

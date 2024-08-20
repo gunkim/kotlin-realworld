@@ -1,6 +1,7 @@
 package io.github.gunkim.realworld.domain.user
 
 import io.github.gunkim.realworld.domain.common.DomainEntity
+import jakarta.persistence.Embedded
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 
@@ -10,12 +11,14 @@ class UserProfile(
     override val id: UserId?,
     name: UserName,
     bio: String?,
-    image: String?,
+    image: Image?,
 ) : DomainEntity<UserProfile, UserId>() {
     var name = name
         protected set
     var bio = bio
         protected set
+
+    @Embedded
     var image = image
         protected set
 
@@ -32,7 +35,7 @@ class UserProfile(
         return id.hashCode()
     }
 
-    fun updateWhenNotNull(name: UserName?, image: String?, bio: String?) {
+    fun updateWhenNotNull(name: UserName?, image: Image?, bio: String?) {
         name?.let { this.name = it }
         image?.let { this.image = it }
         bio?.let { this.bio = it }

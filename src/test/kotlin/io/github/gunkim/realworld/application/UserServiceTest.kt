@@ -20,7 +20,7 @@ private val testEmail = Email("test@example.com")
 private val testPassword = "test"
 
 private fun createTestUser(email: Email = testEmail, password: String = testPassword): User {
-    return User.create(UserName("TestUser2"), email, passwordEncoder.encode(password))
+    return User.create(UserName("TestUser2"), email, EncodedPassword.of(password, passwordEncoder::encode))
 }
 
 @DisplayName("UserService is")
