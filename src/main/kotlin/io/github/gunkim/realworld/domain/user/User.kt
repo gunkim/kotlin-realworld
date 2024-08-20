@@ -52,23 +52,18 @@ class User(
     }
 
     companion object {
-        fun create(name: UserName, email: Email, encodedPassword: EncodedPassword): User {
-            val userId = UserId()
-            return User(
-                userId,
-                email,
-                encodedPassword,
-                UserProfile.create(name)
-            )
-        }
+        fun create(id: UserId, name: UserName, email: Email, encodedPassword: EncodedPassword) = User(
+            id,
+            email,
+            encodedPassword,
+            UserProfile.create(name)
+        )
 
-        fun create(id: UserId, name: UserName, email: Email, encodedPassword: EncodedPassword): User {
-            return User(
-                id,
-                email,
-                encodedPassword,
-                UserProfile.create(name)
-            )
-        }
+        fun create(name: UserName, email: Email, encodedPassword: EncodedPassword) = create(
+            UserId(),
+            name,
+            email,
+            encodedPassword
+        )
     }
 }
