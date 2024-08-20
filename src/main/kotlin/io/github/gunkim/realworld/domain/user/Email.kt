@@ -9,4 +9,4 @@ import jakarta.persistence.Embeddable
 data class Email(
     @Column(name = "email")
     val value: String,
-) : ValueObject<ArticleId>()
+) : ValueObject<Email>()

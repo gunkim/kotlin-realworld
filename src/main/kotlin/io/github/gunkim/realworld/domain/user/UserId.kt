@@ -10,4 +10,4 @@ import java.util.*
 data class UserId(
     @Column(name = "id")
     val value: UUID = UUID.randomUUID(),
-) : ValueObject<ArticleId>()
+) : ValueObject<UserId>()

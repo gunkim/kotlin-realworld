@@ -9,4 +9,4 @@ import java.util.*
 class TagId(
     @Column(name = "id")
     val value: UUID = UUID.randomUUID(),
-) : ValueObject<ArticleId>()
+) : ValueObject<TagId>()

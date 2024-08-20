@@ -9,4 +9,4 @@ import java.util.*
 data class CommentId(
     @Column(name = "id")
     val value: UUID,
-) : ValueObject<ArticleId>()
+) : ValueObject<CommentId>()
