@@ -1,6 +1,5 @@
-package io.github.gunkim.realworld.application.user
+package io.github.gunkim.realworld.application
 
-import io.github.gunkim.realworld.application.JwtProvider
 import io.github.gunkim.realworld.domain.user.UserId
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
@@ -18,6 +17,13 @@ private val publicKey: RSAPublicKey = keyPair.public as RSAPublicKey
 
 private val TEST_USER_ID = UserId(UUID.randomUUID())
 
+private fun generateKeyPair(): KeyPair {
+    val keyPairGenerator = KeyPairGenerator.getInstance("RSA").apply {
+        initialize(2048)
+    }
+    return keyPairGenerator.generateKeyPair()
+}
+
 @DisplayName("JwtProvider is")
 class JwtProviderTest : StringSpec({
     val sut = JwtProvider(privateKey, publicKey)
@@ -33,10 +39,3 @@ class JwtProviderTest : StringSpec({
         sut.parse(jws) shouldBe TEST_USER_ID
     }
 })
-
-private fun generateKeyPair(): KeyPair {
-    val keyPairGenerator = KeyPairGenerator.getInstance("RSA").apply {
-        initialize(2048)
-    }
-    return keyPairGenerator.generateKeyPair()
-}
