@@ -47,11 +47,14 @@ class JwtProvider(
      * @param jws the JWT string to parse
      * @return the user ID extracted from the payload
      */
-    fun parse(jws: String) = Jwts.parser()
+    fun parse(jws: String): UserId = Jwts.parser()
         .verifyWith(rsaPublicKey)
         .build()
         .parseSignedClaims(jws)
-        .payload[USER_ID_PAYLOAD_PARAMETER].toString().toLong()
+        .payload[USER_ID_PAYLOAD_PARAMETER]
+        .toString()
+        .let(UUID::fromString)
+        .let(::UserId)
 
     companion object {
         private const val USER_ID_PAYLOAD_PARAMETER = "userId"
