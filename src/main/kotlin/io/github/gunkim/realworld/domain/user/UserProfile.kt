@@ -1,18 +1,15 @@
 package io.github.gunkim.realworld.domain.user
 
-import io.github.gunkim.realworld.domain.common.DomainEntity
+import io.github.gunkim.realworld.domain.common.ValueObject
+import jakarta.persistence.Embeddable
 import jakarta.persistence.Embedded
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
 
-@Entity
+@Embeddable
 class UserProfile(
-    @Id
-    override val id: UserId?,
     name: UserName,
     bio: String?,
     image: Image?,
-) : DomainEntity<UserProfile, UserId>() {
+) : ValueObject<UserProfile>() {
     var name = name
         protected set
     var bio = bio
@@ -22,19 +19,6 @@ class UserProfile(
     var image = image
         protected set
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as UserProfile
-
-        return id == other.id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-
     fun updateWhenNotNull(name: UserName?, image: Image?, bio: String?) {
         name?.let { this.name = it }
         image?.let { this.image = it }
@@ -42,8 +26,7 @@ class UserProfile(
     }
 
     companion object {
-        fun create(userId: UserId, name: UserName) = UserProfile(
-            userId,
+        fun create(name: UserName) = UserProfile(
             name,
             null,
             null

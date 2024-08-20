@@ -12,7 +12,7 @@ class User(
     @Column(unique = true)
     var email: Email,
     encodedPassword: EncodedPassword,
-    @OneToOne(cascade = [CascadeType.ALL])
+    @Embedded
     val profile: UserProfile,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) : AggregateRoot<User, UserId>() {
@@ -58,7 +58,7 @@ class User(
                 userId,
                 email,
                 encodedPassword,
-                UserProfile.create(userId, name)
+                UserProfile.create(name)
             )
         }
 
@@ -67,7 +67,7 @@ class User(
                 id,
                 email,
                 encodedPassword,
-                UserProfile.create(id, name)
+                UserProfile.create(name)
             )
         }
     }
