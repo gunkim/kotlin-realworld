@@ -17,7 +17,7 @@ class User(
     var email: Email,
     encodedPassword: EncodedPassword,
     @Embedded
-    val profile: UserProfile,
+    val profile: Profile,
     @CreatedDate
     val createdAt: LocalDateTime = LocalDateTime.now(),
     updatedAt: LocalDateTime? = null,
@@ -47,7 +47,7 @@ class User(
             id,
             email,
             encodedPassword,
-            UserProfile.create(name)
+            Profile.create(name)
         )
 
         fun create(name: UserName, email: Email, encodedPassword: EncodedPassword) = create(

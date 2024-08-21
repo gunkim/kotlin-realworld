@@ -5,11 +5,11 @@ import jakarta.persistence.Embeddable
 import jakarta.persistence.Embedded
 
 @Embeddable
-class UserProfile(
+class Profile(
     name: UserName,
     bio: String?,
     image: Image?,
-) : ValueObject<UserProfile>() {
+) : ValueObject<Profile>() {
     var name = name
         protected set
     var bio = bio
@@ -26,7 +26,7 @@ class UserProfile(
     }
 
     companion object {
-        fun create(name: UserName) = UserProfile(
+        fun create(name: UserName) = Profile(
             name,
             null,
             null
