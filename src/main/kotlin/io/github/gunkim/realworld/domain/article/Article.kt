@@ -2,18 +2,24 @@ package io.github.gunkim.realworld.domain.article
 
 import io.github.gunkim.realworld.domain.common.AggregateRoot
 import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 
 @Entity
+@EntityListeners(AuditingEntityListener::class)
 class Article(
     @Id
     override val id: ArticleId,
     title: String,
     description: String,
     body: String,
-    val createdAt: LocalDateTime,
     tags: MutableSet<Tag> = mutableSetOf(),
     comments: MutableSet<Comment> = mutableSetOf(),
+    @CreatedDate
+    val createdAt: LocalDateTime,
+    updatedAt: LocalDateTime? = null,
 ) : AggregateRoot<Article, ArticleId>() {
     var title = title
         protected set
@@ -21,7 +27,9 @@ class Article(
         protected set
     var body = body
         protected set
-    var updatedAt: LocalDateTime? = null
+
+    @LastModifiedDate
+    var updatedAt = updatedAt
         protected set
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
@@ -40,23 +48,5 @@ class Article(
     fun addComment(comment: Comment) {
         _comments.add(comment)
         comment.addArticle(this)
-    }
-
-    @PreUpdate
-    fun preUpdate() {
-        this.updatedAt = LocalDateTime.now()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Article
-
-        return id == other.id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
     }
 }

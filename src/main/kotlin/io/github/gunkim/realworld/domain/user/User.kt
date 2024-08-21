@@ -2,9 +2,13 @@ package io.github.gunkim.realworld.domain.user
 
 import io.github.gunkim.realworld.domain.common.AggregateRoot
 import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 
 @Entity(name = "users")
+@EntityListeners(AuditingEntityListener::class)
 class User(
     @Id
     override val id: UserId?,
@@ -14,29 +18,16 @@ class User(
     encodedPassword: EncodedPassword,
     @Embedded
     val profile: UserProfile,
+    @CreatedDate
     val createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime? = null,
 ) : AggregateRoot<User, UserId>() {
     var password = encodedPassword
         protected set
-    var updatedAt: LocalDateTime? = null
 
-    @PreUpdate
-    fun preUpdate() {
-        this.updatedAt = LocalDateTime.now()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as User
-
-        return id == other.id
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    @LastModifiedDate
+    var updatedAt: LocalDateTime? = updatedAt
+        protected set
 
     fun updateWhenNotNull(
         email: Email?,
