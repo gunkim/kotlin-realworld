@@ -7,10 +7,15 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     open-in-view: false
+    hibernate:
+      ddl-auto: validate
   h2:
     console:
       enabled: true
       path: /h2-console
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
 
 # JWT Secret Key Pair
 jwt:
