@@ -15,7 +15,7 @@ import jakarta.persistence.Embeddable
  * @throws IllegalArgumentException if the encoded password value has a length less than 8 characters.
  */
 @Embeddable
-class EncodedPassword private constructor(
+data class EncodedPassword private constructor(
     @Column(name = "password")
     val value: String,
 ) : ValueObject<EncodedPassword>() {
