@@ -75,6 +75,10 @@ class User(
         _followings.removeIf { it.followee == user.id }
     }
 
+    fun isFollowing(id: UserId) = _followings.any { it.followee == id }
+
+    fun isFollowedBy(id: UserId) = _followers.any { it.follower == id }
+
     override fun toString(): String {
         return "User(id=$id, email=$email, profile=$profile, createdAt=$createdAt, password=$password, followings=$_followings, followers=$_followers, updatedAt=$updatedAt)"
     }

@@ -1,6 +1,11 @@
 package io.github.gunkim.realworld.application
 
-import io.github.gunkim.realworld.domain.user.*
+import io.github.gunkim.realworld.domain.user.Email
+import io.github.gunkim.realworld.domain.user.EncodedPassword
+import io.github.gunkim.realworld.domain.user.User
+import io.github.gunkim.realworld.domain.user.UserId
+import io.github.gunkim.realworld.domain.user.UserName
+import io.github.gunkim.realworld.domain.user.UserRepository
 import io.github.gunkim.realworld.web.request.UserRegistrationRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -35,4 +40,8 @@ class UserService(
     fun update(user: User) {
         userRepository.save(user)
     }
+
+    @Transactional(readOnly = true)
+    fun findUserByName(username: UserName) = userRepository.findByProfileName(username)
+        ?: throw IllegalArgumentException("User not found")
 }

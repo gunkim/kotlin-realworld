@@ -37,3 +37,8 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJmZjFjY
     "image": "https://i.stack.imgur.com/xHWG8.jpg"
   }
 }
+
+###
+GET http://localhost:8080/api/profiles/gunkim
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJmZDMyYTI5ZC04MWM2LTQ3ZjgtYmUwYy1iYTY3NzdkZjVhYWUiLCJpYXQiOjE3MjQ1NjEzNjIsImV4cCI6MTcyNDU2MzE2Mn0.CTY3W-8-7l2YrzLaO5Z2G59OJEICuDs27sLAb55kHtE_nI5BCsg8mVAcG_rRJBSvjCZlCIKmBCEzaxjNZx6Nf9n5eax4SplPKh1JxxfKdtTFLsrxGnW5gvvPpkkTAK8F3fa7UO9__Mx6XrqghWseKWdjxlFHhJoQIZe2ijlOlwA2ayZO2CkNeli8pfZ_I3rTKnuj0aNvsBKgJLC1LKBD-tMzEK4q98aKS4cUVJatKqpeHfy_XI6UEai4UnNel6I63EZmBF8YgxpE_jViMgJ0e9dvko0_Na9MG0c4q9ifRoCx5wxSIvE9lJYi1MYh75pxW0OEexrSqLD5E5KMVsBQvw

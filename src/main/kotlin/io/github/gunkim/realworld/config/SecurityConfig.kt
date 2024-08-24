@@ -1,10 +1,12 @@
 package io.github.gunkim.realworld.config
 
 import io.github.gunkim.realworld.config.security.CustomJwtAuthenticationConverter
+import java.security.interfaces.RSAPublicKey
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.*
@@ -12,7 +14,6 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.SecurityFilterChain
-import java.security.interfaces.RSAPublicKey
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +43,7 @@ class SecurityConfig(
      */
     private fun configureAuthorization(it: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
         it.requestMatchers("/api/users/**").permitAll()
+        it.requestMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
 
         // H2 Console
         it.requestMatchers(PathRequest.toH2Console()).permitAll()
