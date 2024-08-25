@@ -1,21 +1,16 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    show-sql: true
-    open-in-view: false
-    hibernate:
-      ddl-auto: validate
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  sql:
-    init:
-      schema-locations: classpath:schema.sql
+  profiles:
+    active: local-h2
+    group:
+      local-h2:
+        - datasource
+        - local-h2-datasource
+      local-mysql:
+        - datasource
+        - local-mysql-datasource
+      dev-mysql:
+        - datasource
+        - dev-mysql-datasource
 
 # JWT Secret Key Pair
 jwt:
