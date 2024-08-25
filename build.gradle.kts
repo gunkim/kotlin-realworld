@@ -28,6 +28,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("com.mysql:mysql-connector-j:9.0.0")
 
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
