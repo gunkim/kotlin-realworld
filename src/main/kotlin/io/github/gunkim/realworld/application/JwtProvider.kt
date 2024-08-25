@@ -2,13 +2,14 @@ package io.github.gunkim.realworld.application
 
 import io.github.gunkim.realworld.domain.user.UserId
 import io.jsonwebtoken.Jwts
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.*
+import java.util.Date
+import java.util.UUID
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
 @Component
 class JwtProvider(
@@ -29,10 +30,6 @@ class JwtProvider(
 
         return Jwts.builder()
             .signWith(rsaPrivateKey)
-            .header()
-            .add("typ", "JWT")
-            .add("alg", "RS256")
-            .and()
             .claims()
             .add(USER_ID_PAYLOAD_PARAMETER, userId.value)
             .and()
