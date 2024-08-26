@@ -1,16 +1,15 @@
+
 spring:
   profiles:
     active: local-h2
     group:
       local-h2:
-        - datasource
         - local-h2-datasource
       local-mysql:
-        - datasource
         - local-mysql-datasource
       dev-mysql:
-        - datasource
         - dev-mysql-datasource
+    include: datasource
 
 # JWT Secret Key Pair
 jwt:
