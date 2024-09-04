@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/profiles")
-class ProfileController(
+class ProfilesController(
     private val userService: UserService,
     private val userFollowService: UserFollowService,
     private val userFollowFindService: UserFollowFindService,

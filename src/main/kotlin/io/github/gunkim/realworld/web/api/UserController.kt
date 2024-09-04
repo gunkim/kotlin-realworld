@@ -3,48 +3,40 @@ package io.github.gunkim.realworld.web.api
 import io.github.gunkim.realworld.application.JwtProvider
 import io.github.gunkim.realworld.application.UserService
 import io.github.gunkim.realworld.config.request.JsonRequest
+import io.github.gunkim.realworld.domain.user.EncodedPassword
 import io.github.gunkim.realworld.domain.user.User
 import io.github.gunkim.realworld.web.model.AuthenticatedUser
-import io.github.gunkim.realworld.web.request.UserAuthenticateRequest
-import io.github.gunkim.realworld.web.request.UserRegistrationRequest
+import io.github.gunkim.realworld.web.request.UserUpdateRequest
 import io.github.gunkim.realworld.web.response.UserResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 class UserController(
     private val userService: UserService,
     private val jwtProvider: JwtProvider,
+    private val passwordEncoder: PasswordEncoder,
 ) {
-    @PostMapping
-    fun registration(
+    @PutMapping
+    fun update(
         @JsonRequest("user")
-        request: UserRegistrationRequest,
-    ): UserResponse {
-        val registeredUser = userService.registerUser(request)
-        return createUserResponse(registeredUser)
-    }
-
-    @PostMapping("/login")
-    fun authenticate(
-        @JsonRequest("user")
-        request: UserAuthenticateRequest,
-    ): UserResponse {
-        val user = userService.findUserByEmail(request.email)
-        userService.authenticate(user, request.password)
-        return createUserResponse(user)
-    }
-
-    @GetMapping
-    fun get(
+        request: UserUpdateRequest,
         @AuthenticationPrincipal
         authenticatedUser: AuthenticatedUser,
     ): UserResponse {
         val user = userService.findUserById(authenticatedUser.id)
+
+        request.apply {
+            val encodedPassword = password?.let { EncodedPassword.of(it, passwordEncoder::encode) }
+            user.updateWhenNotNull(email, encodedPassword, username, image, bio)
+
+            userService.update(user)
+        }
+
         return createUserResponse(user)
     }
 
