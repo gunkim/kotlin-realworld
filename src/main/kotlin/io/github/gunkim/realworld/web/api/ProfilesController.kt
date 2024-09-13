@@ -3,6 +3,7 @@ package io.github.gunkim.realworld.web.api
 import io.github.gunkim.realworld.application.UserFollowFindService
 import io.github.gunkim.realworld.application.UserService
 import io.github.gunkim.realworld.domain.user.User
+import io.github.gunkim.realworld.domain.user.UserFollow
 import io.github.gunkim.realworld.domain.user.UserFollowService
 import io.github.gunkim.realworld.domain.user.UserName
 import io.github.gunkim.realworld.web.model.AuthenticatedUser
@@ -42,7 +43,7 @@ class ProfilesController(
         val me = userService.findUserById(authenticatedUser.id)
         val user = userService.findUserByName(UserName(username))
 
-        userFollowService.follow(me, user)
+        userFollowService.follow(UserFollow.of(me, user))
     }
 
     @DeleteMapping("/{username}/follow")

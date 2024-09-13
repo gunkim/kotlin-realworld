@@ -8,10 +8,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserFollowService(
     private val userFollowRepository: UserFollowRepository,
 ) {
-    fun follow(follower: User, followee: User) {
-        UserFollow.of(follower, followee).let {
-            userFollowRepository.save(it)
-        }
+    fun follow(userFollow: UserFollow) {
+        userFollowRepository.save(userFollow)
     }
 
     fun unfollow(follower: User, followee: User) {
