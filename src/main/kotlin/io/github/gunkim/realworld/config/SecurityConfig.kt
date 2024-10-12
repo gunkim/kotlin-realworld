@@ -1,15 +1,14 @@
 package io.github.gunkim.realworld.config
 
 import io.github.gunkim.realworld.config.security.CustomJwtAuthenticationConverter
-import java.security.interfaces.RSAPublicKey
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.*
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
@@ -17,23 +16,22 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(
-    @Value("\${jwt.secret.public}")
-    private val publicKey: RSAPublicKey,
+class SecurityConfiguration(
+    private val symmetricKey: SymmetricKeyProvider,
 ) {
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain =
-        http.csrf(CsrfConfigurer<HttpSecurity>::disable)
-            .cors(CorsConfigurer<HttpSecurity>::disable)
-            .sessionManagement(SessionManagementConfigurer<HttpSecurity>::disable)
-            .headers(::configureHeaders)
-            .authorizeHttpRequests(::configureAuthorization)
-            .oauth2ResourceServer(::configureJwt)
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http.csrf { it.disable() }
+            .cors { it.disable() }
+            .sessionManagement { it.disable() }
+            .headers { configureHeaders(it) }
+            .authorizeHttpRequests { configureAuthorization(it) }
+            .oauth2ResourceServer { configureJwt(it) }
             .build()
 
     @Bean
     fun jwtDecoder(): JwtDecoder {
-        return NimbusJwtDecoder.withPublicKey(publicKey).build()
+        return NimbusJwtDecoder.withSecretKey(symmetricKey.key).build()
     }
 
     /**

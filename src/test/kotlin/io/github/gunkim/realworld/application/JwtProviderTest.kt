@@ -1,32 +1,21 @@
 package io.github.gunkim.realworld.application
 
+import io.github.gunkim.realworld.config.SymmetricKeyProvider
 import io.github.gunkim.realworld.domain.user.UserId
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
-import java.util.*
+import java.util.UUID
 
-private val keyPair: KeyPair = generateKeyPair()
-private val privateKey: RSAPrivateKey = keyPair.private as RSAPrivateKey
-private val publicKey: RSAPublicKey = keyPair.public as RSAPublicKey
+private val symmetricKey: String = UUID.randomUUID().toString()
+private val symmetricKeyProvider = SymmetricKeyProvider(symmetricKey)
 
 private val TEST_USER_ID = UserId(UUID.randomUUID())
 
-private fun generateKeyPair(): KeyPair {
-    val keyPairGenerator = KeyPairGenerator.getInstance("RSA").apply {
-        initialize(2048)
-    }
-    return keyPairGenerator.generateKeyPair()
-}
-
 @DisplayName("JwtProvider is")
 class JwtProviderTest : StringSpec({
-    val sut = JwtProvider(privateKey, publicKey)
+    val sut = JwtProvider(symmetricKeyProvider)
 
     "should create JWT token successfully" {
         shouldNotThrow<IllegalStateException> {
