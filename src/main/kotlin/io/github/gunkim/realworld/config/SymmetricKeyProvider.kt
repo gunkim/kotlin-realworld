@@ -7,7 +7,11 @@ import javax.crypto.spec.SecretKeySpec
 @Component
 class SymmetricKeyProvider(
     @Value("\${jwt.secret.key}")
-    private val symmetricKey: String,
+    symmetricKey: String,
 ) {
-    val key: SecretKeySpec = SecretKeySpec(symmetricKey.toByteArray(), "HmacSHA256")
+    val key: SecretKeySpec = SecretKeySpec(symmetricKey.toByteArray(), ALGORITHM)
+
+    companion object {
+        private const val ALGORITHM = "HmacSHA256"
+    }
 }
