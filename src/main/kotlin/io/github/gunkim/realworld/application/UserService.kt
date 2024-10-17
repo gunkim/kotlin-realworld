@@ -6,7 +6,7 @@ import io.github.gunkim.realworld.domain.user.User
 import io.github.gunkim.realworld.domain.user.UserId
 import io.github.gunkim.realworld.domain.user.UserName
 import io.github.gunkim.realworld.domain.user.UserRepository
-import io.github.gunkim.realworld.web.request.UserRegistrationRequest
+import io.github.gunkim.realworld.application.usecase.request.UserRegistrationRequest
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

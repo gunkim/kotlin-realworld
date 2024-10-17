@@ -1,7 +1,7 @@
 package io.github.gunkim.realworld.application
 
 import io.github.gunkim.realworld.domain.user.*
-import io.github.gunkim.realworld.web.request.UserRegistrationRequest
+import io.github.gunkim.realworld.application.usecase.request.UserRegistrationRequest
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName

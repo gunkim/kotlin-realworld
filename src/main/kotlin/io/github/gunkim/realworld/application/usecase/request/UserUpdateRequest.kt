@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.request
+package io.github.gunkim.realworld.application.usecase.request
 
 import io.github.gunkim.realworld.domain.user.Email
 import io.github.gunkim.realworld.domain.user.Image
