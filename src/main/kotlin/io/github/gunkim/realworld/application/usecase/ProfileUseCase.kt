@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Transactional
 class ProfileUseCase(
     private val userService: UserService,
     private val userFollowService: UserFollowService,
@@ -26,7 +27,6 @@ class ProfileUseCase(
         return ProfileResponse.of(user, isFollowing)
     }
 
-    @Transactional
     fun follow(authenticatedUser: AuthenticatedUser, username: UserName) {
         val me = userService.findUserById(authenticatedUser.id)
         val user = userService.findUserByName(username)
@@ -34,7 +34,6 @@ class ProfileUseCase(
         userFollowService.follow(UserFollow.of(me, user))
     }
 
-    @Transactional
     fun unfollow(authenticatedUser: AuthenticatedUser, username: UserName) {
         val me = userService.findUserById(authenticatedUser.id)
         val user = userService.findUserByName(username)

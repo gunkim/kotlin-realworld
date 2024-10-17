@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Transactional
 class UserUseCase(
     private val jwtProvider: JwtProvider,
     private val userService: UserService,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    @Transactional
     fun update(
         authenticatedUser: AuthenticatedUser,
         request: UserUpdateRequest,
