@@ -2,13 +2,13 @@ package io.github.gunkim.realworld.application.usecase
 
 import io.github.gunkim.realworld.application.JwtProvider
 import io.github.gunkim.realworld.application.UserService
-import io.github.gunkim.realworld.domain.user.EncodedPassword
-import io.github.gunkim.realworld.domain.user.User
-import io.github.gunkim.realworld.web.model.AuthenticatedUser
 import io.github.gunkim.realworld.application.usecase.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.application.usecase.request.UserRegistrationRequest
 import io.github.gunkim.realworld.application.usecase.request.UserUpdateRequest
 import io.github.gunkim.realworld.application.usecase.response.UserResponse
+import io.github.gunkim.realworld.domain.user.EncodedPassword
+import io.github.gunkim.realworld.domain.user.User
+import io.github.gunkim.realworld.web.model.AuthenticatedUser
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -26,10 +26,9 @@ class UserUseCase(
     ): UserResponse {
         val user = userService.findUserById(authenticatedUser.id)
 
-        request.apply {
+        with(request) {
             val encodedPassword = password?.let { EncodedPassword.of(it, passwordEncoder::encode) }
             user.updateWhenNotNull(email, encodedPassword, username, image, bio)
-
             userService.update(user)
         }
 
