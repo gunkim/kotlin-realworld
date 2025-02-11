@@ -1,7 +1,6 @@
 package io.github.gunkim.realworld.application
 
 import io.github.gunkim.realworld.config.SymmetricKeyProvider
-import io.github.gunkim.realworld.domain.user.UserId
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
@@ -11,7 +10,7 @@ import java.util.UUID
 private val symmetricKey: String = UUID.randomUUID().toString()
 private val symmetricKeyProvider = SymmetricKeyProvider(symmetricKey)
 
-private val TEST_USER_ID = UserId(UUID.randomUUID())
+private val TEST_USER_ID = UUID.randomUUID()
 
 @DisplayName("JwtProvider is")
 class JwtProviderTest : StringSpec({
