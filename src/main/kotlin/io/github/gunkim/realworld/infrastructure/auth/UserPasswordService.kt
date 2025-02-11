@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.application
+package io.github.gunkim.realworld.infrastructure.auth
 
 import io.github.gunkim.realworld.domain.user.model.UserPasswordManager
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
