@@ -1,7 +1,9 @@
 package io.github.gunkim.realworld.application
 
 import io.github.gunkim.realworld.domain.user.*
-import io.github.gunkim.realworld.application.usecase.request.UserRegistrationRequest
+import io.github.gunkim.realworld.web.model.request.UserRegistrationRequest
+import io.github.gunkim.realworld.domain.user.model.User
+import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
@@ -68,7 +70,7 @@ class UserServiceTest : StringSpec({
     }
     "should find user by id" {
         val userId = UserId(UUID.randomUUID())
-        every { mockUserRepository.findById(userId) } returns createTestUser(
+        every { mockUserRepository.findByUuid(userId) } returns createTestUser(
             Email("test2@example.com"), "test2"
         )
         shouldNotThrow<IllegalArgumentException> {
@@ -77,7 +79,7 @@ class UserServiceTest : StringSpec({
     }
     "should throw an exception when no user found for the id" {
         val userId = UserId(UUID.randomUUID())
-        every { mockUserRepository.findById(userId) } returns null
+        every { mockUserRepository.findByUuid(userId) } returns null
         shouldThrow<IllegalArgumentException> {
             sut.findUserById(userId)
         }.message shouldBe "User not found"

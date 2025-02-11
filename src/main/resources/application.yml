@@ -10,7 +10,6 @@ spring:
         - dev-mysql-datasource
     include: datasource
 
-# JWT Secret Key Pair
 jwt:
   secret:
-    key: classpath:realworld.key
+    key: QzVGR0EyREMyNzRBQkQyRTNBNTZGQjVGMzlEOTY3MjVDM0M3QTcwNkQ1QUJBRTcw

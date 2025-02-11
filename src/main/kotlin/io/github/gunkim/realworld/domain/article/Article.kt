@@ -1,52 +1,94 @@
 package io.github.gunkim.realworld.domain.article
 
-import io.github.gunkim.realworld.domain.common.AggregateRoot
-import jakarta.persistence.*
-import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.time.LocalDateTime
+import io.github.gunkim.realworld.domain.DateAuditable
+import io.github.gunkim.realworld.domain.Editable
+import io.github.gunkim.realworld.domain.user.model.User
+import java.time.Instant
+import java.util.UUID
 
-@Entity
-@EntityListeners(AuditingEntityListener::class)
-class Article(
-    @Id
-    override val id: ArticleId,
-    title: String,
-    description: String,
-    body: String,
-    tags: MutableSet<Tag> = mutableSetOf(),
-    comments: MutableSet<Comment> = mutableSetOf(),
-    @CreatedDate
-    val createdAt: LocalDateTime,
-    updatedAt: LocalDateTime? = null,
-) : AggregateRoot<Article, ArticleId>() {
-    var title = title
-        protected set
-    var description = description
-        protected set
-    var body = body
-        protected set
+interface Article : Editable<Article>, DateAuditable {
+    val uuid: UUID
+    val title: String
+    val description: String
+    val body: String
+    val author: User
+    val comments: List<Comment>
+    val tags: List<Tag>
 
-    @LastModifiedDate
-    var updatedAt = updatedAt
-        protected set
+    override fun edit(): Article = this
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    private val _tags = tags.toMutableSet()
-    val tags: Set<Tag> get() = _tags.toSet()
+    interface Editor : Article {
+        override var title: String
+        override var description: String
+        override var body: String
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    private val _comments = comments.toMutableSet()
-    val comments: Set<Comment> get() = _comments.toSet()
+        override fun edit(): Article = this
+    }
+}
 
-    fun addTag(tag: Tag) {
-        _tags.add(tag)
-        tag.addArticle(this)
+interface Comment : Editable<Comment>, DateAuditable {
+    val uuid: UUID
+    val body: String
+    val author: User
+
+    override fun edit(): Comment = this
+
+    interface Editor : Comment {
+        override var body: String
+
+        override fun edit(): Comment = this
     }
 
-    fun addComment(comment: Comment) {
-        _comments.add(comment)
-        comment.addArticle(this)
+    companion object {
+        class Model(
+            override val uuid: UUID,
+            override var body: String,
+            override val author: User,
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+        ) : Editor
+
+        fun create(
+            uuid: UUID = UUID.randomUUID(),
+            body: String,
+            author: User,
+            createdAt: Instant? = null,
+            updatedAt: Instant? = null,
+        ): Comment {
+            val now = Instant.now()
+
+            return Model(
+                uuid = uuid,
+                body = body,
+                author = author,
+                createdAt = createdAt ?: now,
+                updatedAt = updatedAt ?: now
+            )
+        }
+    }
+}
+
+interface Tag : DateAuditable {
+    val name: String
+
+    companion object {
+        class Model(
+            override val name: String,
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+        ) : Tag
+
+        fun create(
+            name: String,
+            createdAt: Instant? = null,
+            updatedAt: Instant? = null,
+        ): Tag {
+            val now = Instant.now()
+            return Model(
+                name = name,
+                createdAt = createdAt ?: now,
+                updatedAt = updatedAt ?: now
+            )
+        }
     }
 }
