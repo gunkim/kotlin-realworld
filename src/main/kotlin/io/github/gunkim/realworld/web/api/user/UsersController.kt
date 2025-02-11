@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.web.api.user
 
-import io.github.gunkim.realworld.application.JwtProvider
+import io.github.gunkim.realworld.infrastructure.auth.JwtProvider
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService

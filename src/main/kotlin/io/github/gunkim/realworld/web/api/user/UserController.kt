@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.web.api.user
 
-import io.github.gunkim.realworld.application.JwtProvider
+import io.github.gunkim.realworld.application.AuthenticationService
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.user.service.UpdateUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
@@ -24,7 +24,7 @@ interface UserResource {
 
 @RestController
 class UserController(
-    private val jwtProvider: JwtProvider,
+    private val authenticationService: AuthenticationService,
     private val updateUserService: UpdateUserService,
 ) : UserResource {
     override fun update(
@@ -39,7 +39,7 @@ class UserController(
             request.password,
             request.bio
         )
-        val token = jwtProvider.create(updatedUser.uuid)
+        val token = authenticationService.createToken(updatedUser.uuid)
         return UserResponse.from(updatedUser, token)
     }
 }
