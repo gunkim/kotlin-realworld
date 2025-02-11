@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.model.response
+package io.github.gunkim.realworld.web.api.user.model.response
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT

@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.config.security
 
-import io.github.gunkim.realworld.web.model.AuthenticatedUser
+import io.github.gunkim.realworld.share.AuthenticatedUser
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 

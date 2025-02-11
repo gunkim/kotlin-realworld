@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.model
+package io.github.gunkim.realworld.share
 
 import java.util.UUID
 

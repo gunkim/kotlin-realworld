@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.model.request
+package io.github.gunkim.realworld.web.api.user.model.request
 
 import java.net.URL
 

@@ -1,11 +1,11 @@
-package io.github.gunkim.realworld.web.api
+package io.github.gunkim.realworld.web.api.user
 
 import io.github.gunkim.realworld.application.JwtProvider
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.user.service.UpdateUserService
-import io.github.gunkim.realworld.web.model.AuthenticatedUser
-import io.github.gunkim.realworld.web.model.request.UserUpdateRequest
-import io.github.gunkim.realworld.web.model.response.UserResponse
+import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.user.model.request.UserUpdateRequest
+import io.github.gunkim.realworld.web.api.user.model.response.UserResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping

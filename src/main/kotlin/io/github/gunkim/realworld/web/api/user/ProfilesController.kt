@@ -1,9 +1,9 @@
-package io.github.gunkim.realworld.web.api
+package io.github.gunkim.realworld.web.api.user
 
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.domain.user.service.GetUserService
-import io.github.gunkim.realworld.web.model.AuthenticatedUser
-import io.github.gunkim.realworld.web.model.response.ProfileResponse
+import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
