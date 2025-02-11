@@ -7,7 +7,6 @@ import io.github.gunkim.realworld.web.model.AuthenticatedUser
 import io.github.gunkim.realworld.web.model.request.UserUpdateRequest
 import io.github.gunkim.realworld.web.model.response.UserResponse
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -26,7 +25,6 @@ interface UserResource {
 @RestController
 class UserController(
     private val jwtProvider: JwtProvider,
-    private val passwordEncoder: PasswordEncoder,
     private val updateUserService: UpdateUserService,
 ) : UserResource {
     override fun update(
