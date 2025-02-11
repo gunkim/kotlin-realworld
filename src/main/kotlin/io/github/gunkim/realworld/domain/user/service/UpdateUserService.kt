@@ -4,7 +4,6 @@ import io.github.gunkim.realworld.domain.UserFindable
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserPasswordManager
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
-import java.net.URL
 import java.util.UUID
 import org.springframework.stereotype.Service
 
@@ -17,7 +16,7 @@ class UpdateUserService(
         uuid: UUID,
         email: String?,
         username: String?,
-        image: URL?,
+        image: String?,
         password: String?,
         bio: String?,
     ): User {

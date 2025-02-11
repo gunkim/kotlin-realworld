@@ -5,7 +5,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.net.URL
 import java.time.Instant
 import java.util.UUID
 
@@ -17,7 +16,7 @@ class UserJpaEntity(
     override val uuid: UUID,
     name: String,
     bio: String?,
-    image: URL?,
+    image: String?,
     email: String,
     password: String,
     override val createdAt: Instant,
@@ -33,7 +32,7 @@ class UserJpaEntity(
             field = value
             updatedAt = Instant.now()
         }
-    override var image: URL? = image
+    override var image: String? = image
         set(value) {
             field = value
             updatedAt = Instant.now()

@@ -5,14 +5,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME
 import com.fasterxml.jackson.annotation.JsonTypeName
 import io.github.gunkim.realworld.domain.user.model.User
-import java.net.URL
 
 @JsonTypeName("profile")
 @JsonTypeInfo(include = WRAPPER_OBJECT, use = NAME)
 data class ProfileResponse(
     val username: String,
     val bio: String?,
-    val image: URL?,
+    val image: String?,
     val following: Boolean,
 ) {
     companion object {

@@ -12,7 +12,7 @@ interface User : Editable<User>, DateAuditable {
     val password: String
     val name: String
     val bio: String?
-    val image: URL?
+    val image: String?
 
     override fun edit(): Editor
 
@@ -20,7 +20,7 @@ interface User : Editable<User>, DateAuditable {
         override var email: String
         override var name: String
         override var bio: String?
-        override var image: URL?
+        override var image: String?
         override var password: String
 
         override var updatedAt: Instant
@@ -35,7 +35,7 @@ interface User : Editable<User>, DateAuditable {
             override var password: String,
             override var name: String,
             override var bio: String?,
-            override var image: URL?,
+            override var image: String?,
             override val createdAt: Instant,
             override var updatedAt: Instant,
         ) : Editor
@@ -46,7 +46,7 @@ interface User : Editable<User>, DateAuditable {
             password: String,
             name: String,
             bio: String? = null,
-            image: URL? = null,
+            image: String? = null,
             createdAt: Instant? = null,
             updatedAt: Instant? = null,
         ): User {
