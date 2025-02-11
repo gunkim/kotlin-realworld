@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.domain.user.exception
 
-import io.github.gunkim.realworld.core.DomainException
+import io.github.gunkim.realworld.share.DomainException
 import java.util.UUID
 
 class UserNotFoundException(message: String) : DomainException(message) {

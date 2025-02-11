@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.core
+package io.github.gunkim.realworld.share
 
 open class DomainException(
     override val message: String,
