@@ -1,10 +1,10 @@
-package io.github.gunkim.realworld.application.usecase.response
+package io.github.gunkim.realworld.web.model.response
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME
 import com.fasterxml.jackson.annotation.JsonTypeName
-import io.github.gunkim.realworld.domain.user.User
+import io.github.gunkim.realworld.domain.user.model.User
 import java.net.URL
 
 @JsonTypeName("profile")
@@ -17,9 +17,9 @@ data class ProfileResponse(
 ) {
     companion object {
         fun of(user: User, following: Boolean) = ProfileResponse(
-            username = user.profile.name.value,
-            bio = user.profile.bio,
-            image = user.profile.image?.value,
+            username = user.name,
+            bio = user.bio,
+            image = user.image,
             following = following,
         )
     }

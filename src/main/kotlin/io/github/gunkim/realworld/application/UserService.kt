@@ -1,13 +1,10 @@
 package io.github.gunkim.realworld.application
 
-import io.github.gunkim.realworld.application.usecase.request.UserRegistrationRequest
-import io.github.gunkim.realworld.domain.user.Email
-import io.github.gunkim.realworld.domain.user.EncodedPassword
-import io.github.gunkim.realworld.domain.user.User
-import io.github.gunkim.realworld.domain.user.UserId
-import io.github.gunkim.realworld.domain.user.UserName
-import io.github.gunkim.realworld.domain.user.UserRepository
-import org.springframework.security.crypto.password.PasswordEncoder
+import io.github.gunkim.realworld.domain.user.exception.UserNotFoundException
+import io.github.gunkim.realworld.domain.user.model.User
+import io.github.gunkim.realworld.domain.user.repository.UserRepository
+import io.github.gunkim.realworld.domain.user.service.CreateUserService
+import java.util.UUID
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,32 +12,23 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder,
+    private val createUserService: CreateUserService,
 ) {
-    fun authenticate(user: User, rawPassword: String) {
-        require(passwordEncoder.matches(rawPassword, user.password.value)) { "Password does not match" }
-    }
-
-    fun registerUser(request: UserRegistrationRequest): User = request.run {
+    fun registerUser(
+        username: String,
+        email: String,
+        password: String,
+    ): User {
         require(userRepository.findByEmail(email) == null) { "User already exists" }
 
-        val encodedPassword = EncodedPassword.of(password, passwordEncoder::encode)
-        return userRepository.save(User.create(username, email, encodedPassword))
-    }
-
-    fun update(user: User) {
-        userRepository.save(user)
+        return createUserService.createUser(email, username, password)
     }
 
     @Transactional(readOnly = true)
-    fun findUserByEmail(email: Email): User = userRepository.findByEmail(email)
-        ?: throw IllegalArgumentException("User not found")
+    fun findUserByEmail(email: String): User = userRepository.findByEmail(email)
+        ?: throw UserNotFoundException.fromEmail(email)
 
     @Transactional(readOnly = true)
-    fun findUserById(id: UserId): User = userRepository.findById(id)
-        ?: throw IllegalArgumentException("User not found")
-
-    @Transactional(readOnly = true)
-    fun findUserByName(username: UserName) = userRepository.findByProfileName(username)
-        ?: throw IllegalArgumentException("User not found")
+    fun findUserById(uuid: UUID): User = userRepository.findByUuid(uuid)
+        ?: throw UserNotFoundException.fromUUID(uuid)
 }

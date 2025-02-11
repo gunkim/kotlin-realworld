@@ -1,7 +1,7 @@
 package io.github.gunkim.realworld.web.model
 
-import io.github.gunkim.realworld.domain.user.UserId
+import java.util.UUID
 
 data class AuthenticatedUser(
-    val id: UserId,
+    val uuid: UUID,
 )
