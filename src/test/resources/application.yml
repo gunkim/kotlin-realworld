@@ -11,8 +11,3 @@ spring:
 jwt:
   secret:
     key: QzVGR0EyREMyNzRBQkQyRTNBNTZGQjVGMzlEOTY3MjVDM0M3QTcwNkQ1QUJBRTcw
-
-logging:
-  level:
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: DEBUG
