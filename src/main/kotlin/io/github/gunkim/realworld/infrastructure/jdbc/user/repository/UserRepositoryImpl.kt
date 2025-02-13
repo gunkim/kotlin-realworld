@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.user.repository
 
+import io.github.gunkim.realworld.domain.user.exception.UserNotFoundException
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.repository.UserReadRepository
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
+@Transactional
 class UserRepositoryImpl(
     private val userDao: UserDao,
     private val followDao: FollowDao,
@@ -24,22 +26,24 @@ class UserRepositoryImpl(
     }
 
     override fun follow(uuid: UUID, targetUuid: UUID) {
-        // TODO: According to the original design intention, it is more appropriate to execute a SELECT query with the UUID condition using a native query rather than retrieving the user here.
-        val id = userDao.findByUuid(uuid)?.userId ?: throw IllegalArgumentException()
-        val targetId = userDao.findByUuid(targetUuid)?.userId ?: throw IllegalArgumentException()
+        val followerId = getUserIdOrThrow(uuid)
+        val followeeId = getUserIdOrThrow(targetUuid)
 
-        followDao.save(FollowJpaEntity.of(id, targetId))
+        followDao.save(FollowJpaEntity.of(followeeId, followerId))
     }
 
-    @Transactional
     override fun unfollow(uuid: UUID, targetUuid: UUID) {
-        // TODO: According to the original design intention, it is more appropriate to execute a SELECT query with the UUID condition using a native query rather than retrieving the user here.
-        val id = userDao.findByUuid(uuid)?.userId ?: throw IllegalArgumentException()
-        val targetId = userDao.findByUuid(targetUuid)?.userId ?: throw IllegalArgumentException()
+        val followerId = getUserIdOrThrow(uuid)
+        val followeeId = getUserIdOrThrow(targetUuid)
 
         followDao.deleteByFolloweeIdAndFollowerId(
-            followingId = id,
-            followerId = targetId
+            followingId = followeeId,
+            followerId = followerId
         )
+    }
+
+    private fun getUserIdOrThrow(uuid: UUID): Int {
+        return userDao.findByUuid(uuid)?.userId
+            ?: throw UserNotFoundException.fromUUID(uuid)
     }
 }
