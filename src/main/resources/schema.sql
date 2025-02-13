@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS users
 (
     user_id    INT                 NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    uuid       UUID NOT NULL,
+    uuid       UUID                NOT NULL,
     email      VARCHAR(255) UNIQUE NOT NULL,
     name       VARCHAR(255) UNIQUE NOT NULL,
     password   VARCHAR(255)        NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users
 
 CREATE TABLE IF NOT EXISTS article
 (
-    article_id  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    article_id  INT  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     uuid        UUID NOT NULL,
     title       VARCHAR(255),
     description VARCHAR(255),
@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS article
 
 CREATE TABLE IF NOT EXISTS comment
 (
-    comment_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    comment_id INT  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     uuid       UUID NOT NULL,
-    article_id INT NOT NULL,
+    article_id INT  NOT NULL,
     body       VARCHAR(255),
     author_id  INT,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
@@ -61,4 +61,4 @@ CREATE TABLE IF NOT EXISTS user_follow
 );
 
 -- Add Indexs
-CREATE INDEX idx_users_uuid ON users(uuid);
+CREATE INDEX idx_users_uuid ON users (uuid);
