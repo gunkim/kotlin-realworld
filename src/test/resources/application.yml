@@ -1,0 +1,18 @@
+# TODO: It is necessary to clean up the properties.
+spring:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+jwt:
+  secret:
+    key: QzVGR0EyREMyNzRBQkQyRTNBNTZGQjVGMzlEOTY3MjVDM0M3QTcwNkQ1QUJBRTcw
+
+logging:
+  level:
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
