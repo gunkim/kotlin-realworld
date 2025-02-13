@@ -1,3 +1,4 @@
+-- Add Tables
 CREATE TABLE IF NOT EXISTS users
 (
     user_id    INT                 NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -58,3 +59,6 @@ CREATE TABLE IF NOT EXISTS user_follow
     CONSTRAINT fk_user_follow_followee FOREIGN KEY (followee_id) REFERENCES users (user_id),
     CONSTRAINT fk_user_follow_follower FOREIGN KEY (follower_id) REFERENCES users (user_id)
 );
+
+-- Add Indexs
+CREATE INDEX idx_users_uuid ON users(uuid);
