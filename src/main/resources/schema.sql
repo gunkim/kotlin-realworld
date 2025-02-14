@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS article
 (
     article_id  INT  NOT NULL PRIMARY KEY AUTO_INCREMENT,
     uuid        UUID NOT NULL,
+    slug        VARCHAR(255),
     title       VARCHAR(255),
     description VARCHAR(255),
     body        VARCHAR(255),
@@ -23,6 +24,18 @@ CREATE TABLE IF NOT EXISTS article
     created_at  TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP(6),
     CONSTRAINT fk_article_author FOREIGN KEY (author_id) REFERENCES users (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS article_favorite
+(
+    favorite_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    article_id  INT NOT NULL,
+    user_id     INT NOT NULL,
+    created_at  TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP(6),
+    CONSTRAINT fk_favorite_article FOREIGN KEY (article_id) REFERENCES article (article_id),
+    CONSTRAINT fk_favorite_user FOREIGN KEY (user_id) REFERENCES users (user_id),
+    CONSTRAINT unique_article_favorite UNIQUE (article_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS comment
