@@ -1,20 +1,19 @@
 package io.github.gunkim.realworld.infrastructure.auth
 
-import io.github.gunkim.realworld.config.SymmetricKeyProvider
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import java.util.UUID
+import javax.crypto.spec.SecretKeySpec
 
-private val symmetricKey: String = UUID.randomUUID().toString()
-private val symmetricKeyProvider = SymmetricKeyProvider(symmetricKey)
+private val key = SecretKeySpec(UUID.randomUUID().toString().toByteArray(), "HmacSHA256")
 
 private val TEST_USER_ID = UUID.randomUUID()
 
 @DisplayName("JwtProvider is")
 class JwtProviderTest : StringSpec({
-    val sut = JwtProvider(symmetricKeyProvider)
+    val sut = JwtProvider(key)
 
     "should create JWT token successfully" {
         shouldNotThrow<IllegalStateException> {

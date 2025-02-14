@@ -1,23 +1,23 @@
 package io.github.gunkim.realworld.infrastructure.auth
 
-import io.github.gunkim.realworld.config.SymmetricKeyProvider
 import io.jsonwebtoken.Jwts
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Date
 import java.util.UUID
 import org.springframework.stereotype.Component
+import javax.crypto.spec.SecretKeySpec
 
 @Component
 class JwtProvider(
-    private val symmetricKey: SymmetricKeyProvider,
+    private val secretKey: SecretKeySpec,
 ) {
     fun create(uuid: UUID): String {
         val now = LocalDateTime.now()
         val expirationTime = now.plusMinutes(EXPIRATION_MINUTES)
 
         return Jwts.builder()
-            .signWith(symmetricKey.key)
+            .signWith(secretKey)
             .claims()
             .add(USER_ID_PAYLOAD_PARAMETER, uuid)
             .and()
@@ -27,7 +27,7 @@ class JwtProvider(
     }
 
     fun parse(jws: String): UUID = Jwts.parser()
-        .verifyWith(symmetricKey.key)
+        .verifyWith(secretKey)
         .build()
         .parseSignedClaims(jws)
         .payload[USER_ID_PAYLOAD_PARAMETER]

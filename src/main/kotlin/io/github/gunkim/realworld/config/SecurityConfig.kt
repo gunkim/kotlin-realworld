@@ -13,11 +13,12 @@ import org.springframework.security.config.annotation.web.configurers.oauth2.ser
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.security.web.SecurityFilterChain
+import javax.crypto.spec.SecretKeySpec
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
-    private val symmetricKey: SymmetricKeyProvider,
+    private val secretKey: SecretKeySpec,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -31,7 +32,7 @@ class SecurityConfiguration(
 
     @Bean
     fun jwtDecoder(): JwtDecoder {
-        return NimbusJwtDecoder.withSecretKey(symmetricKey.key).build()
+        return NimbusJwtDecoder.withSecretKey(secretKey).build()
     }
 
     /**
