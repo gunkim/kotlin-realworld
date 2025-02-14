@@ -40,8 +40,12 @@ class SecurityConfiguration(
      * @param it The AuthorizationManagerRequestMatcherRegistry instance to configure
      */
     private fun configureAuthorization(it: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
+        // users
         it.requestMatchers("/api/users/**").permitAll()
         it.requestMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
+
+        // articles
+        it.requestMatchers("/api/articles/**").permitAll()
 
         // H2 Console
         it.requestMatchers(PathRequest.toH2Console()).permitAll()

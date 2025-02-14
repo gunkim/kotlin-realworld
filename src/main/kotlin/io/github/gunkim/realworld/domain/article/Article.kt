@@ -8,6 +8,7 @@ import java.util.UUID
 
 interface Article : Editable<Article>, DateAuditable {
     val uuid: UUID
+    val slug: String
     val title: String
     val description: String
     val body: String
@@ -18,11 +19,54 @@ interface Article : Editable<Article>, DateAuditable {
     override fun edit(): Article = this
 
     interface Editor : Article {
+        override var slug: String
         override var title: String
         override var description: String
         override var body: String
 
         override fun edit(): Article = this
+    }
+
+    companion object {
+        class Model(
+            override val uuid: UUID,
+            override var slug: String,
+            override var title: String,
+            override var description: String,
+            override var body: String,
+            override val author: User,
+            override val comments: List<Comment>,
+            override val tags: List<Tag>,
+            override val createdAt: Instant,
+            override val updatedAt: Instant,
+        ) : Editor
+
+        fun create(
+            uuid: UUID = UUID.randomUUID(),
+            slug: String,
+            title: String,
+            description: String,
+            body: String,
+            author: User,
+            comments: List<Comment> = listOf(),
+            tags: List<Tag> = listOf(),
+            createdAt: Instant? = null,
+        ): Article {
+            val now = Instant.now()
+
+            return Model(
+                uuid = uuid,
+                slug = slug,
+                title = title,
+                description = description,
+                body = body,
+                author = author,
+                comments = comments,
+                tags = tags,
+                createdAt = createdAt ?: now,
+                updatedAt = now
+            )
+        }
     }
 }
 

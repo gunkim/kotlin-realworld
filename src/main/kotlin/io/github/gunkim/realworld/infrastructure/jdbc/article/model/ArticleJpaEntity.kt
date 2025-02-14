@@ -18,8 +18,9 @@ import java.util.UUID
 class ArticleJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val articleId: Int?,
+    val articleId: Int? = null,
     override val uuid: UUID,
+    slug: String,
     title: String,
     description: String,
     body: String,
@@ -30,10 +31,15 @@ class ArticleJpaEntity(
     @JoinColumn(name = "articleId", nullable = false)
     override val tags: List<TagJpaEntity> = listOf(),
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    override val comments: List<CommentJpaEntity>,
+    override val comments: List<CommentJpaEntity> = listOf(),
     override val createdAt: Instant,
     override var updatedAt: Instant = Instant.now(),
 ) : Article.Editor {
+    override var slug: String = slug
+        set(value) {
+            field = value
+            updatedAt = Instant.now()
+        }
     override var title: String = title
         set(value) {
             field = value

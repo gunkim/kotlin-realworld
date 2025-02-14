@@ -6,6 +6,7 @@ import io.github.gunkim.realworld.domain.user.service.UpdateUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.user.model.request.UserUpdateRequest
 import io.github.gunkim.realworld.web.api.user.model.response.UserResponse
+import java.util.UUID
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping

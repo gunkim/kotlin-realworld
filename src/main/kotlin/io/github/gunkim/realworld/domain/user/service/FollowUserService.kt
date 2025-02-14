@@ -26,4 +26,6 @@ class FollowUserService(
 
         return userRepository.existsFollowingIdAndFollowerUsername(uuid, targetUser.uuid)
     }
+
+    fun getFollowingUserUuids(userUuid: UUID): List<UUID> = userRepository.findFollowingUserUuids(userUuid)
 }

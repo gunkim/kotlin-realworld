@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
 import java.time.Instant
 
 //TODO : Refactoring
@@ -12,11 +13,14 @@ import java.time.Instant
 class TagJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val tagId: Int?,
+    val tagId: Int? = null,
     override val name: String,
     override val createdAt: Instant = Instant.now(),
     override val updatedAt: Instant = createdAt,
 ) : Tag {
+    @ManyToOne
+    val article: ArticleJpaEntity? = null
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

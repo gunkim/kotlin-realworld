@@ -40,6 +40,8 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
     testImplementation("io.mockk:mockk:1.13.12")
+
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
 }
 
 tasks.withType<KotlinCompile> {
