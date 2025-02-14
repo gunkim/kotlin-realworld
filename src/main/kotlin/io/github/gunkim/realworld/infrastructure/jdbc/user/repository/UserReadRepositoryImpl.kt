@@ -31,4 +31,8 @@ class UserReadRepositoryImpl(
 
         return followDao.existsByFolloweeIdAndFollowerId(id, targetId)
     }
+
+    override fun findFollowingUserUuids(uuid: UUID): List<UUID> {
+        return userDao.findAllByFollowerUserUuid(uuid)
+    }
 }

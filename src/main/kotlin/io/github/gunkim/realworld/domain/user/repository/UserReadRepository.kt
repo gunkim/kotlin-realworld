@@ -8,4 +8,6 @@ interface UserReadRepository {
     fun findByUuid(uuid: UUID): User?
     fun findByUserName(name: String): User?
     fun existsFollowingIdAndFollowerUsername(uuid: UUID, targetUuid: UUID): Boolean
+
+    fun findFollowingUserUuids(uuid: UUID): List<UUID>
 }
