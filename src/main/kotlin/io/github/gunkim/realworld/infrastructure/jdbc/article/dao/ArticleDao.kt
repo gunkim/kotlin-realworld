@@ -52,4 +52,6 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
         """
     )
     fun getFavoritesArticles(userUuid: UUID): List<UUID>
+
+    fun findBySlug(slug: String): ArticleJpaEntity?
 }
