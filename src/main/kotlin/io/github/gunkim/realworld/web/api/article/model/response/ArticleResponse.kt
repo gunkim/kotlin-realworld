@@ -1,6 +1,9 @@
 package io.github.gunkim.realworld.web.api.article.model.response
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME
+import com.fasterxml.jackson.annotation.JsonTypeName
 import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
 import java.time.Instant
@@ -19,7 +22,12 @@ data class ArticleResponse(
     val author: ProfileResponse,
 ) {
     companion object {
-        fun from(article: Article, favoritesCount: Int, favorited: Boolean, authorFollowing: Boolean) = ArticleResponse(
+        fun from(
+            article: Article,
+            favoritesCount: Int,
+            favorited: Boolean = false,
+            authorFollowing: Boolean = false,
+        ) = ArticleResponse(
             slug = article.slug,
             title = article.title,
             description = article.description,
@@ -33,6 +41,11 @@ data class ArticleResponse(
                 article.author,
                 authorFollowing
             )
+        )
+
+        fun noAuthenticated(article: Article, favoritesCount: Int) = from(
+            article = article,
+            favoritesCount = favoritesCount
         )
     }
 }

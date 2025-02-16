@@ -21,4 +21,8 @@ class GetArticleService(
             offset = offset
         )
     }
+
+    fun getArticle(slug: String): Article {
+        return articleReadRepository.findBySlug(slug)
+    }
 }

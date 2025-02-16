@@ -7,10 +7,12 @@ import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.request.GetArticlesRequest
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
+import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponseWrapper
 import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
 import java.util.UUID
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -21,6 +23,9 @@ interface ArticleResource {
         request: GetArticlesRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser?,
     ): ArticlesResponse
+
+    @GetMapping("/{slug}")
+    fun getArticle(@PathVariable slug: String): ArticleResponseWrapper
 }
 
 @RestController
@@ -40,6 +45,21 @@ class ArticlesController(
             limit = request.limit,
         )
         return articlesResponse(articles, authenticatedUser)
+    }
+
+    override fun getArticle(slug: String): ArticleResponseWrapper {
+        val article = getArticleService.getArticle(slug)
+        val articleUuids = listOf(article.uuid)
+        val favoritesCountMap = if (articleUuids.isEmpty()) {
+            emptyList()
+        } else {
+            favoriteArticleService.getFavoritesCount(articleUuids)
+        }
+
+        return ArticleResponse.noAuthenticated(
+            article,
+            favoritesCountMap.firstOrNull { it.getUuid() == article.uuid }?.getCount() ?: 0
+        ).let(::ArticleResponseWrapper)
     }
 
     private fun articlesResponse(
