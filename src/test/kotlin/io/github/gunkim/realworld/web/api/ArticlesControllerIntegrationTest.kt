@@ -65,6 +65,7 @@ class ArticlesControllerIntegrationTest(
                 jsonPath("$.articles[0].title") { value(articles[0].title) }
                 jsonPath("$.articles[0].description") { value(articles[0].description) }
                 jsonPath("$.articles[0].slug") { value(articles[0].slug) }
+                jsonPath("$.articlesCount") { value(articles.size) }
                 jsonPath("$.articles[0].createdAt") { exists() }
                 jsonPath("$.articles[0].updatedAt") { exists() }
             }.andDo { print() }

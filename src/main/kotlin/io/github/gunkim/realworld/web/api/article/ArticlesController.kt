@@ -74,7 +74,7 @@ class ArticlesController(
         }
         val (favoritedArticleUuids, followingUserUuids) = getUserContext(authenticatedUser)
 
-        return ArticlesResponse(articles.map { article ->
+        return ArticlesResponse.create(articles.map { article ->
             ArticleResponse.from(
                 article,
                 favoritesCountMap.firstOrNull { it.getUuid() == article.uuid }?.getCount() ?: 0,
