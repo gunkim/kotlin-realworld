@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS comment
 CREATE TABLE IF NOT EXISTS tag
 (
     tag_id     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    name       VARCHAR(255),
+    name       VARCHAR(255) unique,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP(6)
 );
