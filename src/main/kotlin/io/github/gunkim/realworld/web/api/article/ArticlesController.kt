@@ -164,20 +164,3 @@ class ArticlesController(
         }
     }
 }
-
-class SlugGenerator {
-    fun generateSlug(title: String): String {
-        return "%s-%s".format(
-            title
-                .lowercase() // 1. 소문자로 변환
-                .replace(Regex("[^a-z0-9\\s-]"), "") // 2. 특수문자 제거 (하이픈과 공백 제외)
-                .replace(Regex("\\s+"), "-") // 3. 공백을 하이픈으로 변환
-                .replace(Regex("-+"), "-") // 4. 연속된 하이픈을 하나로
-                .trim('-'), generateRandomString()
-        )
-    }
-
-    private fun generateRandomString(): String {
-        return UUID.randomUUID().toString().take(8)
-    }
-}
