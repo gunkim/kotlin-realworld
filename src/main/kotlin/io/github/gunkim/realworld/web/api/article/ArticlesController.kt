@@ -1,21 +1,16 @@
 package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.config.request.JsonRequest
-import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.domain.article.Slug
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
-import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.article.service.UpdateArticleService
-import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.GetArticlesRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
-import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponseWrapper
 import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
-import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
@@ -56,9 +51,8 @@ interface ArticleResource {
 class ArticlesController(
     private val getArticleService: GetArticleService,
     private val createArticleService: CreateArticleService,
-    private val favoriteArticleService: FavoriteArticleService,
-    private val followUserService: FollowUserService,
     private val updateArticleService: UpdateArticleService,
+    private val articleResponseAssembler: ArticleResponseAssembler,
 ) : ArticleResource {
     override fun getArticles(
         request: GetArticlesRequest,
@@ -70,22 +64,13 @@ class ArticlesController(
             offset = request.offset,
             limit = request.limit,
         )
-        return articlesResponse(articles, authenticatedUser)
+        return articleResponseAssembler.assembleArticlesResponse(articles, authenticatedUser)
     }
 
     override fun getArticle(slug: String): ArticleResponseWrapper {
         val article = getArticleService.getArticle(Slug(slug))
-        val articleUuids = listOf(article.uuid)
-        val favoritesCountMap = if (articleUuids.isEmpty()) {
-            emptyList()
-        } else {
-            favoriteArticleService.getFavoritesCount(articleUuids)
-        }
-
-        return ArticleResponse.noAuthenticated(
-            article,
-            favoritesCountMap.firstOrNull { it.getUuid() == article.uuid }?.getCount() ?: 0
-        ).let(::ArticleResponseWrapper)
+        return articleResponseAssembler.assembleArticleResponse(article, null)
+            .let(::ArticleResponseWrapper)
     }
 
     override fun createArticle(
@@ -99,8 +84,7 @@ class ArticlesController(
             request.tagList,
             authenticatedUser.uuid
         )
-
-        return ArticleResponse.create(article)
+        return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
             .let(::ArticleResponseWrapper)
     }
 
@@ -115,52 +99,7 @@ class ArticlesController(
             description = request.description,
             body = request.body,
         )
-        val articleUuids = listOf(article.uuid)
-        val favoritesCountMap = if (articleUuids.isEmpty()) {
-            emptyList()
-        } else {
-            favoriteArticleService.getFavoritesCount(articleUuids)
-        }
-        val (favoritedArticleUuids, followingUserUuids) = getUserContext(authenticatedUser)
-
-        return ArticleResponse.from(
-            article,
-            favoritesCountMap.firstOrNull { it.getUuid() == article.uuid }?.getCount() ?: 0,
-            favoritedArticleUuids.contains(article.uuid),
-            followingUserUuids.contains(article.author.uuid)
-        ).let(::ArticleResponseWrapper)
-    }
-
-    private fun articlesResponse(
-        articles: List<Article>,
-        authenticatedUser: AuthenticatedUser?,
-    ): ArticlesResponse {
-        val articleUuids = articles.map(Article::uuid)
-        val favoritesCountMap = if (articleUuids.isEmpty()) {
-            emptyList()
-        } else {
-            favoriteArticleService.getFavoritesCount(articleUuids)
-        }
-        val (favoritedArticleUuids, followingUserUuids) = getUserContext(authenticatedUser)
-
-        return ArticlesResponse.create(articles.map { article ->
-            ArticleResponse.from(
-                article,
-                favoritesCountMap.firstOrNull { it.getUuid() == article.uuid }?.getCount() ?: 0,
-                favoritedArticleUuids.contains(article.uuid),
-                followingUserUuids.contains(article.author.uuid)
-            )
-        })
-    }
-
-    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<List<UUID>, List<UUID>> {
-        return if (authenticatedUser != null) {
-            val userUuid = authenticatedUser.uuid
-            val favoritedArticleUuids = favoriteArticleService.getFavoritesArticles(userUuid)
-            val followingUserUuids = followUserService.getFollowingUserUuids(userUuid)
-            favoritedArticleUuids to followingUserUuids
-        } else {
-            emptyList<UUID>() to emptyList()
-        }
+        return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
+            .let(::ArticleResponseWrapper)
     }
 }
