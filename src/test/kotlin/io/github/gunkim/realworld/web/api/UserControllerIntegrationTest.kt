@@ -1,20 +1,15 @@
 package io.github.gunkim.realworld.web.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.user.model.request.UserUpdateRequest
-import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.put
 
 @DisplayName("User Controller - Integration Test")
-class UserControllerIntegrationTest(
-    @Autowired private val objectMapper: ObjectMapper,
-) : IntegrationTest() {
+class UserControllerIntegrationTest : IntegrationTest() {
     private lateinit var authorizationToken: String
 
     override suspend fun beforeEachTest(testCase: TestCase) {
@@ -39,7 +34,7 @@ class UserControllerIntegrationTest(
                 bio = "Updated Bio"
             )
             val requestBody = mapOf("user" to updateRequest)
-            val requestJson = objectMapper.writeValueAsString(requestBody)
+            val requestJson = toJsonString(requestBody)
 
             mockMvc.put("/api/user") {
                 header(HttpHeaders.AUTHORIZATION, authorizationToken)

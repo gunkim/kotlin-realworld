@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.share
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.application.AuthenticationService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
@@ -33,13 +34,16 @@ abstract class IntegrationTest : FreeSpec() {
     protected lateinit var mockMvc: MockMvc
 
     @Autowired
-    protected lateinit var createUserService: CreateUserService
+    private lateinit var createUserService: CreateUserService
 
     @Autowired
-    protected lateinit var authenticationUserService: AuthenticateUserService
+    private lateinit var authenticationUserService: AuthenticateUserService
 
     @Autowired
-    protected lateinit var authenticationService: AuthenticationService
+    private lateinit var authenticationService: AuthenticationService
+
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
     init {
         extensions(SpringTestExtension(SpringTestLifecycleMode.Root))
@@ -74,6 +78,8 @@ abstract class IntegrationTest : FreeSpec() {
 
         return user to authenticationService.createToken(user.uuid).let(::toToken)
     }
+
+    protected fun toJsonString(any: Any) = objectMapper.writeValueAsString(any)
 
     private fun toToken(token: String) = "$BEARER_TOKEN_PREFIX$token"
 

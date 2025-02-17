@@ -1,6 +1,5 @@
 package io.github.gunkim.realworld.web.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.user.model.User
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.post
 @DisplayName("Articles Controller - Integration Test")
 class ArticlesControllerIntegrationTest(
     private val createArticleService: CreateArticleService,
-    private val objectMapper: ObjectMapper,
 ) : IntegrationTest() {
     lateinit var token: String
     lateinit var articles: List<Article>
@@ -85,7 +83,7 @@ class ArticlesControllerIntegrationTest(
             )
 
             val requestBody = mapOf("article" to request)
-            val requestJson = objectMapper.writeValueAsString(requestBody)
+            val requestJson = toJsonString(requestBody)
 
             mockMvc.post("/api/articles") {
                 contentType = org.springframework.http.MediaType.APPLICATION_JSON

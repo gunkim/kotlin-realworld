@@ -1,23 +1,18 @@
 package io.github.gunkim.realworld.web.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.user.model.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.web.api.user.model.request.UserRegistrationRequest
-import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @DisplayName("Users Controller - Integration Test")
-class UsersControllerIntegrationTest(
-    @Autowired private val objectMapper: ObjectMapper,
-) : IntegrationTest() {
+class UsersControllerIntegrationTest : IntegrationTest() {
     private lateinit var authorizationToken: String
     private lateinit var user: User
     val rawPassword = "password"
@@ -48,7 +43,7 @@ class UsersControllerIntegrationTest(
         "POST /api/users/login - Allow user login with valid credentials" {
             val request = UserAuthenticateRequest(email = user.email, password = rawPassword)
             val requestBody = mapOf("user" to request)
-            val requestJson = objectMapper.writeValueAsString(requestBody)
+            val requestJson = toJsonString(requestBody)
 
             mockMvc.post("/api/users/login") {
                 contentType = MediaType.APPLICATION_JSON
@@ -68,7 +63,7 @@ class UsersControllerIntegrationTest(
                 password = "test-password"
             )
             val requestBody = mapOf("user" to request)
-            val requestJson = objectMapper.writeValueAsString(requestBody)
+            val requestJson = toJsonString(requestBody)
 
             mockMvc.post("/api/users") {
                 contentType = MediaType.APPLICATION_JSON
