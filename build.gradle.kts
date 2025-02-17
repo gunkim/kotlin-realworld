@@ -41,6 +41,7 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
     testImplementation("io.mockk:mockk:1.13.12")
 
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
 }
 

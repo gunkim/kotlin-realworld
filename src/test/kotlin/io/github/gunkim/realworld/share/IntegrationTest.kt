@@ -4,8 +4,10 @@ import io.github.gunkim.realworld.application.AuthenticationService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
 import io.github.gunkim.realworld.domain.user.service.CreateUserService
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
 import io.kotest.extensions.spring.SpringTestExtension
 import io.kotest.extensions.spring.SpringTestLifecycleMode
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional
  * Integration tests implemented by inheriting this class are designed to reuse the Spring Context. This speeds up the integration tests.
  * When using the database, each test case is rolled back after execution to maintain a clean database state.
  */
+
+val logger = KotlinLogging.logger { }
 
 @Transactional
 @SpringBootTest
@@ -39,6 +43,18 @@ abstract class IntegrationTest : FreeSpec() {
 
     init {
         extensions(SpringTestExtension(SpringTestLifecycleMode.Root))
+    }
+
+    final override suspend fun beforeEach(testCase: TestCase) {
+        beforeEachTest(testCase)
+        printLog(testCase)
+    }
+
+    fun printLog(testCase: TestCase) {
+        logger.info { "Running test: ${testCase.name.testName}" }
+    }
+
+    suspend fun beforeEachTest(testCase: TestCase) {
     }
 
     /**

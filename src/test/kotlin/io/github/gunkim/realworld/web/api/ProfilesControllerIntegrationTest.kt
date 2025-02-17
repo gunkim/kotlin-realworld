@@ -20,7 +20,7 @@ class ProfilesControllerIntegrationTest(
     private lateinit var profileUser: User
     private lateinit var token: String
 
-    override suspend fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEachTest(testCase: TestCase) {
         setupTestUsers("password")
     }
 

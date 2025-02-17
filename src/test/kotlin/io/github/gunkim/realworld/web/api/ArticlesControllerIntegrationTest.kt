@@ -6,7 +6,6 @@ import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
-import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
 import org.springframework.http.HttpHeaders
@@ -23,7 +22,7 @@ class ArticlesControllerIntegrationTest(
     lateinit var author: User
     lateinit var authUser: User
 
-    override suspend fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEachTest(testCase: TestCase) {
         val (authUser, token) = createUser("gunkim.author@gmail.com", "gunkim", "password")
         val (author, _) = createUser("gunkim@gmail.com", "author gunkim", "password")
         val articles = listOf(
@@ -35,7 +34,6 @@ class ArticlesControllerIntegrationTest(
                 authorUuid = author.uuid
             )
         )
-
         this.token = token
         this.authUser = authUser
         this.articles = articles

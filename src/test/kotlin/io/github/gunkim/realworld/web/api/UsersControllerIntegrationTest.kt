@@ -22,7 +22,7 @@ class UsersControllerIntegrationTest(
     private lateinit var user: User
     val rawPassword = "password"
 
-    override suspend fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEachTest(testCase: TestCase) {
         val (user, token) = createUser(
             email = "gunkim@example.com",
             username = "gunkim",

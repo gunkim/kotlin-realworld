@@ -17,7 +17,7 @@ class UserControllerIntegrationTest(
 ) : IntegrationTest() {
     private lateinit var authorizationToken: String
 
-    override suspend fun beforeEach(testCase: TestCase) {
+    override suspend fun beforeEachTest(testCase: TestCase) {
         val rawPassword = "password"
 
         val (_, authToken) = createUser(
