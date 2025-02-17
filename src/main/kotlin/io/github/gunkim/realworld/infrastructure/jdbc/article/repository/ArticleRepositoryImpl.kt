@@ -20,8 +20,8 @@ class ArticleRepositoryImpl(
         val existingTags = tagDao.findByNameIn(article.tags.map { it.name })
         val existingTagNames = existingTags.map { it.name }.toSet()
 
-        val newTags = tagDao.saveAll(article.tags.filterNot { existingTagNames.contains(it.name) }
-            .map { TagJpaEntity.from(it.name) })
+        val newTags = article.tags.filterNot { existingTagNames.contains(it.name) }
+            .map { TagJpaEntity.from(it.name) }
 
         val allTags = existingTags + newTags
         return articleDao.save(ArticleJpaEntity.from(article, allTags))
