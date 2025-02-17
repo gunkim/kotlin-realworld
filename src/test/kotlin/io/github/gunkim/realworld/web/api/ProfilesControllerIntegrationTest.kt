@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
-@Tags("Integration Test")
 @DisplayName("Profiles Controller - Integration Test")
 class ProfilesControllerIntegrationTest(
     @Autowired private val followUserService: FollowUserService,

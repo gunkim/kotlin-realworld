@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.put
 
-@Tags("Integration Test")
 @DisplayName("User Controller - Integration Test")
 class UserControllerIntegrationTest(
     @Autowired private val objectMapper: ObjectMapper,

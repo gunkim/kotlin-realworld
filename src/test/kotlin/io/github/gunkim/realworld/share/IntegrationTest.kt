@@ -4,6 +4,7 @@ import io.github.gunkim.realworld.application.AuthenticationService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
 import io.github.gunkim.realworld.domain.user.service.CreateUserService
+import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.extensions.spring.SpringTestExtension
 import io.kotest.extensions.spring.SpringTestLifecycleMode
@@ -18,9 +19,11 @@ import org.springframework.transaction.annotation.Transactional
  * Integration tests implemented by inheriting this class are designed to reuse the Spring Context. This speeds up the integration tests.
  * When using the database, each test case is rolled back after execution to maintain a clean database state.
  */
+
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
+@Tags("Integration Test")
 abstract class IntegrationTest : FreeSpec() {
     @Autowired
     protected lateinit var mockMvc: MockMvc

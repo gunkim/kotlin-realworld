@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
-@Tags("Integration Test")
 @DisplayName("Articles Controller - Integration Test")
 class ArticlesControllerIntegrationTest(
     private val createArticleService: CreateArticleService,
