@@ -12,5 +12,5 @@ interface ArticleReadRepository {
 
     fun getCountAllByArticleUuids(articleUuids: List<UUID>): List<ArticleCountProjection>
     fun getFavoritesArticles(userUuid: UUID): List<UUID>
-    fun findBySlug(slug: String): Article
+    fun findBySlug(slug: Slug): Article?
 }

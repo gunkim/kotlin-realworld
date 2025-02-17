@@ -1,14 +1,15 @@
 package io.github.gunkim.realworld.domain.article.service
 
 import io.github.gunkim.realworld.domain.article.Article
-import io.github.gunkim.realworld.domain.article.ArticleReadRepository
+import io.github.gunkim.realworld.domain.article.ArticleFindable
 import io.github.gunkim.realworld.domain.article.ArticleRepository
+import io.github.gunkim.realworld.domain.article.Slug
 import org.springframework.stereotype.Service
 
 @Service
 class GetArticleService(
-    private val articleRepository: ArticleRepository
-) {
+    override val articleRepository: ArticleRepository,
+) : ArticleFindable {
     fun getArticles(
         tag: String?,
         author: String?,
@@ -23,7 +24,7 @@ class GetArticleService(
         )
     }
 
-    fun getArticle(slug: String): Article {
-        return articleRepository.findBySlug(slug)
+    fun getArticle(slug: Slug): Article {
+        return findBySlug(slug)
     }
 }

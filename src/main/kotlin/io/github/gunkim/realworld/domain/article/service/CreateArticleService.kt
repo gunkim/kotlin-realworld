@@ -3,6 +3,7 @@ package io.github.gunkim.realworld.domain.article.service
 import io.github.gunkim.realworld.domain.UserFindable
 import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.domain.article.ArticleRepository
+import io.github.gunkim.realworld.domain.article.Slug
 import io.github.gunkim.realworld.domain.article.Tag
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import java.util.UUID
@@ -24,7 +25,7 @@ class CreateArticleService(
 
         return articleRepository.save(
             Article.create(
-                slug = title,
+                slug = Slug.fromTitle(title),
                 title = title,
                 description = description,
                 body = body,

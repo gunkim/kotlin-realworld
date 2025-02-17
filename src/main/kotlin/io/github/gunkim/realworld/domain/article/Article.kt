@@ -8,7 +8,7 @@ import java.util.UUID
 
 interface Article : Editable<Article>, DateAuditable {
     val uuid: UUID
-    val slug: String
+    val slug: Slug
     val title: String
     val description: String
     val body: String
@@ -16,21 +16,21 @@ interface Article : Editable<Article>, DateAuditable {
     val comments: List<Comment>
     val tags: List<Tag>
 
-    override fun edit(): Article = this
+    override fun edit(): Editor
 
     interface Editor : Article {
-        override var slug: String
+        override var slug: Slug
         override var title: String
         override var description: String
         override var body: String
 
-        override fun edit(): Article = this
+        override fun edit(): Editor = this
     }
 
     companion object {
         class Model(
             override val uuid: UUID,
-            override var slug: String,
+            override var slug: Slug,
             override var title: String,
             override var description: String,
             override var body: String,
@@ -43,7 +43,7 @@ interface Article : Editable<Article>, DateAuditable {
 
         fun create(
             uuid: UUID = UUID.randomUUID(),
-            slug: String,
+            slug: Slug,
             title: String,
             description: String,
             body: String,

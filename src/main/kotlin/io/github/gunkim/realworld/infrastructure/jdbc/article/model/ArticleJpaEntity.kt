@@ -1,9 +1,11 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
 import io.github.gunkim.realworld.domain.article.Article
+import io.github.gunkim.realworld.domain.article.Slug
 import io.github.gunkim.realworld.domain.article.Tag
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -45,9 +47,13 @@ class ArticleJpaEntity(
     override val tags: List<Tag>
         get() = articleTagJpaEntities.map { Tag.create(it.tag.name) }
 
-    override var slug: String = slug
+    @Column(name = "slug")
+    var slugValue: String = slug
+
+    override var slug: Slug
+        get() = Slug(slugValue)
         set(value) {
-            field = value
+            slugValue = value.value
             updatedAt = Instant.now()
         }
     override var title: String = title
@@ -107,7 +113,7 @@ class ArticleJpaEntity(
             ArticleJpaEntity(
                 articleId = if (this is ArticleJpaEntity) articleId else null,
                 uuid = uuid,
-                slug = slug,
+                slug = slug.value,
                 title = title,
                 description = description,
                 body = body,

@@ -25,7 +25,7 @@ data class ArticleResponse(
             favorited: Boolean = false,
             authorFollowing: Boolean = false,
         ) = ArticleResponse(
-            slug = article.slug,
+            slug = article.slug.value,
             title = article.title,
             description = article.description,
             body = article.body,

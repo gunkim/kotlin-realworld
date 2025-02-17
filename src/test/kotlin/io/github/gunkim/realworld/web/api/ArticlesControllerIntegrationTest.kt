@@ -52,7 +52,7 @@ class ArticlesControllerIntegrationTest(
                 jsonPath("$.articles[0].tagList[1]") { value(articles[0].tags[1].name) }
                 jsonPath("$.articles[0].title") { value(articles[0].title) }
                 jsonPath("$.articles[0].description") { value(articles[0].description) }
-                jsonPath("$.articles[0].slug") { value(articles[0].slug) }
+                jsonPath("$.articles[0].slug") { value(articles[0].slug.value) }
                 jsonPath("$.articlesCount") { value(articles.size) }
                 jsonPath("$.articles[0].createdAt") { exists() }
                 jsonPath("$.articles[0].updatedAt") { exists() }
@@ -70,7 +70,7 @@ class ArticlesControllerIntegrationTest(
                     jsonPath("$.article.tagList[1]") { value(articles[0].tags[1].name) }
                     jsonPath("$.article.title") { value(articles[0].title) }
                     jsonPath("$.article.description") { value(articles[0].description) }
-                    jsonPath("$.article.slug") { value(articles[0].slug) }
+                    jsonPath("$.article.slug") { value(articles[0].slug.value) }
                 }.andDo { print() }
         }
 
@@ -91,13 +91,13 @@ class ArticlesControllerIntegrationTest(
                 content = requestJson
             }.andExpect {
                 status { isCreated() }
+                jsonPath("$.article.slug") { exists() }
                 jsonPath("$.article.title") { value(request.title) }
                 jsonPath("$.article.description") { value(request.description) }
                 jsonPath("$.article.body") { value(request.body) }
                 jsonPath("$.article.tagList[0]") { value(request.tagList[0]) }
                 jsonPath("$.article.tagList[1]") { value(request.tagList[1]) }
                 jsonPath("$.article.author.username") { value(authUser.name) }
-                jsonPath("$.article.slug") { exists() }
                 jsonPath("$.article.createdAt") { exists() }
                 jsonPath("$.article.updatedAt") { exists() }
             }.andDo { print() }
