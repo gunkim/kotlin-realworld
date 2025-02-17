@@ -1,19 +1,25 @@
 package io.github.gunkim.realworld.web.api.article
 
+import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.article.Article
+import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.GetArticlesRequest
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponseWrapper
 import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
 import java.util.UUID
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/articles")
@@ -26,11 +32,19 @@ interface ArticleResource {
 
     @GetMapping("/{slug}")
     fun getArticle(@PathVariable slug: String): ArticleResponseWrapper
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createArticle(
+        @JsonRequest("article") request: CreateArticleRequest,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+    ): ArticleResponseWrapper
 }
 
 @RestController
 class ArticlesController(
     private val getArticleService: GetArticleService,
+    private val createArticleService: CreateArticleService,
     private val favoriteArticleService: FavoriteArticleService,
     private val followUserService: FollowUserService,
 ) : ArticleResource {
@@ -60,6 +74,22 @@ class ArticlesController(
             article,
             favoritesCountMap.firstOrNull { it.getUuid() == article.uuid }?.getCount() ?: 0
         ).let(::ArticleResponseWrapper)
+    }
+
+    override fun createArticle(
+        request: CreateArticleRequest,
+        authenticatedUser: AuthenticatedUser,
+    ): ArticleResponseWrapper {
+        val article = createArticleService.createArticle(
+            request.title,
+            request.description,
+            request.body,
+            request.tagList,
+            authenticatedUser.uuid
+        )
+
+        return ArticleResponse.create(article)
+            .let(::ArticleResponseWrapper)
     }
 
     private fun articlesResponse(

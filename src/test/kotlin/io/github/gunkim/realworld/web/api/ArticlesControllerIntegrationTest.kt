@@ -1,26 +1,31 @@
 package io.github.gunkim.realworld.web.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
+import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 
 @Tags("Integration Test")
 @DisplayName("Articles Controller - Integration Test")
 class ArticlesControllerIntegrationTest(
     private val createArticleService: CreateArticleService,
+    private val objectMapper: ObjectMapper,
 ) : IntegrationTest() {
     lateinit var token: String
     lateinit var articles: List<Article>
     lateinit var author: User
+    lateinit var authUser: User
 
     override suspend fun beforeEach(testCase: TestCase) {
-        val (_, token) = createUser("gunkim.author@gmail.com", "gunkim", "password")
+        val (authUser, token) = createUser("gunkim.author@gmail.com", "gunkim", "password")
         val (author, _) = createUser("gunkim@gmail.com", "author gunkim", "password")
         val articles = listOf(
             createArticleService.createArticle(
@@ -33,6 +38,7 @@ class ArticlesControllerIntegrationTest(
         )
 
         this.token = token
+        this.authUser = authUser
         this.articles = articles
         this.author = author
     }
@@ -71,6 +77,35 @@ class ArticlesControllerIntegrationTest(
                     jsonPath("$.article.description") { value(articles[0].description) }
                     jsonPath("$.article.slug") { value(articles[0].slug) }
                 }.andDo { print() }
+        }
+
+        "POST /api/articles - Create an article" {
+            val request = CreateArticleRequest(
+                title = "New Article",
+                description = "New Article Description",
+                body = "This is the body of the new article.",
+                tagList = listOf("tag1", "tag3")
+            )
+
+            val requestBody = mapOf("article" to request)
+            val requestJson = objectMapper.writeValueAsString(requestBody)
+
+            mockMvc.post("/api/articles") {
+                contentType = org.springframework.http.MediaType.APPLICATION_JSON
+                header(HttpHeaders.AUTHORIZATION, token)
+                content = requestJson
+            }.andExpect {
+                status { isCreated() }
+                jsonPath("$.article.title") { value(request.title) }
+                jsonPath("$.article.description") { value(request.description) }
+                jsonPath("$.article.body") { value(request.body) }
+                jsonPath("$.article.tagList[0]") { value(request.tagList[0]) }
+                jsonPath("$.article.tagList[1]") { value(request.tagList[1]) }
+                jsonPath("$.article.author.username") { value(authUser.name) }
+                jsonPath("$.article.slug") { exists() }
+                jsonPath("$.article.createdAt") { exists() }
+                jsonPath("$.article.updatedAt") { exists() }
+            }.andDo { print() }
         }
     }
 }
