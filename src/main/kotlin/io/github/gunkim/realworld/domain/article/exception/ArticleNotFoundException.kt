@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.domain.article.exception
 
-import io.github.gunkim.realworld.domain.article.Slug
+import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.share.DomainException
 
 class ArticleNotFoundException(

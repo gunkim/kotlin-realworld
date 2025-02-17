@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.web.api
 
-import io.github.gunkim.realworld.domain.article.Article
+import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest

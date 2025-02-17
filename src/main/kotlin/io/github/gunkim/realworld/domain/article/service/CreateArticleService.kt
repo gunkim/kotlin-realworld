@@ -1,10 +1,10 @@
 package io.github.gunkim.realworld.domain.article.service
 
 import io.github.gunkim.realworld.domain.UserFindable
-import io.github.gunkim.realworld.domain.article.Article
-import io.github.gunkim.realworld.domain.article.ArticleRepository
-import io.github.gunkim.realworld.domain.article.Slug
-import io.github.gunkim.realworld.domain.article.Tag
+import io.github.gunkim.realworld.domain.article.model.Article
+import io.github.gunkim.realworld.domain.article.model.Slug
+import io.github.gunkim.realworld.domain.article.model.Tag
+import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import java.util.UUID
 import org.springframework.stereotype.Service

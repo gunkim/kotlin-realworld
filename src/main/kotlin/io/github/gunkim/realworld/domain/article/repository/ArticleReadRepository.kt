@@ -1,5 +1,8 @@
-package io.github.gunkim.realworld.domain.article
+package io.github.gunkim.realworld.domain.article.repository
 
+import io.github.gunkim.realworld.domain.article.model.Article
+import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
+import io.github.gunkim.realworld.domain.article.model.Slug
 import java.util.UUID
 
 interface ArticleReadRepository {

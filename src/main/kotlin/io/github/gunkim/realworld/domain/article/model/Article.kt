@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.domain.article
+package io.github.gunkim.realworld.domain.article.model
 
 import io.github.gunkim.realworld.domain.DateAuditable
 import io.github.gunkim.realworld.domain.Editable

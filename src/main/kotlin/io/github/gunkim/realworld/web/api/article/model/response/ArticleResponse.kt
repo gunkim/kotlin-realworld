@@ -1,7 +1,7 @@
 package io.github.gunkim.realworld.web.api.article.model.response
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import io.github.gunkim.realworld.domain.article.Article
+import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
 import java.time.Instant
 

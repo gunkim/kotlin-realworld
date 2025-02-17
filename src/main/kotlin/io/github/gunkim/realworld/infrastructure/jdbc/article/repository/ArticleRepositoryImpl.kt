@@ -1,8 +1,8 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.repository
 
-import io.github.gunkim.realworld.domain.article.Article
-import io.github.gunkim.realworld.domain.article.ArticleReadRepository
-import io.github.gunkim.realworld.domain.article.ArticleRepository
+import io.github.gunkim.realworld.domain.article.model.Article
+import io.github.gunkim.realworld.domain.article.repository.ArticleReadRepository
+import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.ArticleDao
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.TagDao
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity

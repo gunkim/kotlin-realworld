@@ -1,7 +1,7 @@
 package io.github.gunkim.realworld.domain.article.service
 
-import io.github.gunkim.realworld.domain.article.ArticleCountProjection
-import io.github.gunkim.realworld.domain.article.ArticleRepository
+import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
+import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
 import java.util.UUID
 import org.springframework.stereotype.Service
 

@@ -1,8 +1,8 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
-import io.github.gunkim.realworld.domain.article.Article
-import io.github.gunkim.realworld.domain.article.Slug
-import io.github.gunkim.realworld.domain.article.Tag
+import io.github.gunkim.realworld.domain.article.model.Article
+import io.github.gunkim.realworld.domain.article.model.Slug
+import io.github.gunkim.realworld.domain.article.model.Tag
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column

@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
-import io.github.gunkim.realworld.domain.article.Comment
+import io.github.gunkim.realworld.domain.article.model.Comment
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType

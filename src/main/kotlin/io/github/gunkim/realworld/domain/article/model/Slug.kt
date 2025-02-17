@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.domain.article
+package io.github.gunkim.realworld.domain.article.model
 
 import java.util.UUID
 

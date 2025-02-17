@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
-import io.github.gunkim.realworld.domain.article.Tag
+import io.github.gunkim.realworld.domain.article.model.Tag
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType

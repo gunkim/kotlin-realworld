@@ -1,9 +1,9 @@
 package io.github.gunkim.realworld.domain.article.service
 
-import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.domain.article.ArticleFindable
-import io.github.gunkim.realworld.domain.article.ArticleRepository
-import io.github.gunkim.realworld.domain.article.Slug
+import io.github.gunkim.realworld.domain.article.model.Article
+import io.github.gunkim.realworld.domain.article.model.Slug
+import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
 import org.springframework.stereotype.Service
 
 private fun Article.Editor.setTitleAndSlug(
