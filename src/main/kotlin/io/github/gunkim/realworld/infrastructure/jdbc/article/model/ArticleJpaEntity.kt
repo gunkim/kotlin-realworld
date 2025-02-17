@@ -1,7 +1,9 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
 import io.github.gunkim.realworld.domain.article.Article
+import io.github.gunkim.realworld.domain.article.Tag
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -27,14 +29,22 @@ class ArticleJpaEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authorId", nullable = false)
     override val author: UserJpaEntity,
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "articleId", nullable = false)
-    override val tags: List<TagJpaEntity> = listOf(),
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    val articleTagJpaEntities: List<ArticleTagJpaEntity> = listOf(),
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
     override val comments: List<CommentJpaEntity> = listOf(),
     override val createdAt: Instant,
     override var updatedAt: Instant = Instant.now(),
 ) : Article.Editor {
+    init {
+        articleTagJpaEntities.forEach {
+            it.article = this
+        }
+    }
+
+    override val tags: List<Tag>
+        get() = articleTagJpaEntities.map { Tag.create(it.tag.name) }
+
     override var slug: String = slug
         set(value) {
             field = value
@@ -90,5 +100,21 @@ class ArticleJpaEntity(
         result = 31 * result + tags.hashCode()
         result = 31 * result + comments.hashCode()
         return result
+    }
+
+    companion object {
+        fun from(article: Article, tags: List<TagJpaEntity>): ArticleJpaEntity = with(article) {
+            ArticleJpaEntity(
+                articleId = if (this is ArticleJpaEntity) articleId else null,
+                uuid = uuid,
+                slug = slug,
+                title = title,
+                description = description,
+                body = body,
+                articleTagJpaEntities = tags.map { ArticleTagJpaEntity(tag = it) },
+                author = UserJpaEntity.from(author),
+                createdAt = Instant.now()
+            )
+        }
     }
 }

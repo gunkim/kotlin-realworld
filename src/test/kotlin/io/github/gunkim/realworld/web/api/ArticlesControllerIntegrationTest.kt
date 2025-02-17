@@ -1,24 +1,19 @@
 package io.github.gunkim.realworld.web.api
 
 import io.github.gunkim.realworld.domain.article.Article
+import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.user.model.User
-import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.ArticleDao
-import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity
-import io.github.gunkim.realworld.infrastructure.jdbc.article.model.TagJpaEntity
-import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
-import java.time.Instant
-import java.util.UUID
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.get
 
 @Tags("Integration Test")
 @DisplayName("Articles Controller - Integration Test")
 class ArticlesControllerIntegrationTest(
-    private val articleDao: ArticleDao,
+    private val createArticleService: CreateArticleService,
 ) : IntegrationTest() {
     lateinit var token: String
     lateinit var articles: List<Article>
@@ -27,21 +22,13 @@ class ArticlesControllerIntegrationTest(
     override suspend fun beforeEach(testCase: TestCase) {
         val (_, token) = createUser("gunkim.author@gmail.com", "gunkim", "password")
         val (author, _) = createUser("gunkim@gmail.com", "author gunkim", "password")
-        val articles = articleDao.saveAll(
-            listOf(
-                ArticleJpaEntity(
-                    uuid = UUID.randomUUID(),
-                    slug = "article-1",
-                    title = "Article 1",
-                    description = "Description 1",
-                    body = "Body 1",
-                    tags = listOf(
-                        TagJpaEntity(name = "tag1"),
-                        TagJpaEntity(name = "tag2"),
-                    ),
-                    author = UserJpaEntity.from(author),
-                    createdAt = Instant.now(),
-                )
+        val articles = listOf(
+            createArticleService.createArticle(
+                title = "Article Title",
+                description = "Article Description",
+                body = "Article Body",
+                tagList = listOf("tag1", "tag2"),
+                authorUuid = author.uuid
             )
         )
 

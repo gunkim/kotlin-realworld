@@ -17,7 +17,8 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
         """
         SELECT DISTINCT a 
         FROM article a 
-        LEFT JOIN a.tags t 
+        LEFT JOIN a.articleTagJpaEntities at
+        INNER JOIN at.tag t
         WHERE (:tag IS NULL OR t.name = :tag)
           AND (:author IS NULL OR a.author.name = :author)
         """

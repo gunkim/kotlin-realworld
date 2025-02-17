@@ -2,11 +2,12 @@ package io.github.gunkim.realworld.domain.article.service
 
 import io.github.gunkim.realworld.domain.article.Article
 import io.github.gunkim.realworld.domain.article.ArticleReadRepository
+import io.github.gunkim.realworld.domain.article.ArticleRepository
 import org.springframework.stereotype.Service
 
 @Service
 class GetArticleService(
-    private val articleReadRepository: ArticleReadRepository,
+    private val articleRepository: ArticleRepository
 ) {
     fun getArticles(
         tag: String?,
@@ -14,7 +15,7 @@ class GetArticleService(
         limit: Int = 20,
         offset: Int = 0,
     ): List<Article> {
-        return articleReadRepository.find(
+        return articleRepository.find(
             tag = tag,
             author = author,
             limit = limit,
@@ -23,6 +24,6 @@ class GetArticleService(
     }
 
     fun getArticle(slug: String): Article {
-        return articleReadRepository.findBySlug(slug)
+        return articleRepository.findBySlug(slug)
     }
 }

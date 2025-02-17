@@ -112,27 +112,16 @@ interface Comment : Editable<Comment>, DateAuditable {
     }
 }
 
-interface Tag : DateAuditable {
+interface Tag {
     val name: String
 
     companion object {
         class Model(
             override val name: String,
-            override val createdAt: Instant,
-            override val updatedAt: Instant,
         ) : Tag
 
-        fun create(
-            name: String,
-            createdAt: Instant? = null,
-            updatedAt: Instant? = null,
-        ): Tag {
-            val now = Instant.now()
-            return Model(
-                name = name,
-                createdAt = createdAt ?: now,
-                updatedAt = updatedAt ?: now
-            )
-        }
+        fun create(name: String): Tag = Model(
+            name = name,
+        )
     }
 }

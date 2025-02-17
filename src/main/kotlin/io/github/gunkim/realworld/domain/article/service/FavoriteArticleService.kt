@@ -1,16 +1,16 @@
 package io.github.gunkim.realworld.domain.article.service
 
 import io.github.gunkim.realworld.domain.article.ArticleCountProjection
-import io.github.gunkim.realworld.domain.article.ArticleReadRepository
+import io.github.gunkim.realworld.domain.article.ArticleRepository
 import java.util.UUID
 import org.springframework.stereotype.Service
 
 @Service
 class FavoriteArticleService(
-    private val articleReadRepository: ArticleReadRepository,
+    private val articleRepository: ArticleRepository,
 ) {
     fun getFavoritesCount(articleUuids: List<UUID>): List<ArticleCountProjection> =
-        articleReadRepository.getCountAllByArticleUuids(articleUuids)
+        articleRepository.getCountAllByArticleUuids(articleUuids)
 
-    fun getFavoritesArticles(userUuid: UUID): List<UUID> = articleReadRepository.getFavoritesArticles(userUuid)
+    fun getFavoritesArticles(userUuid: UUID): List<UUID> = articleRepository.getFavoritesArticles(userUuid)
 }

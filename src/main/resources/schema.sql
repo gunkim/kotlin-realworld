@@ -54,11 +54,21 @@ CREATE TABLE IF NOT EXISTS comment
 CREATE TABLE IF NOT EXISTS tag
 (
     tag_id     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    article_id INT,
     name       VARCHAR(255),
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP(6),
-    CONSTRAINT fk_tag_article FOREIGN KEY (article_id) REFERENCES article (article_id)
+    updated_at TIMESTAMP(6)
+);
+
+CREATE TABLE IF NOT EXISTS article_tag
+(
+    article_tag_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    article_id     INT NOT NULL,
+    tag_id         INT NOT NULL,
+    created_at     TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP(6),
+    CONSTRAINT fk_article_tag_article FOREIGN KEY (article_id) REFERENCES article (article_id),
+    CONSTRAINT fk_article_tag_tag FOREIGN KEY (tag_id) REFERENCES tag (tag_id),
+    CONSTRAINT unique_article_tag UNIQUE (article_id, tag_id)
 );
 
 CREATE TABLE IF NOT EXISTS user_follow
