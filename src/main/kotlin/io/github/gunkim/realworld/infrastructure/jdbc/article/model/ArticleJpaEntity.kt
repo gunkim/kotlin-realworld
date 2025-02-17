@@ -28,10 +28,10 @@ class ArticleJpaEntity(
     title: String,
     description: String,
     body: String,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorId", nullable = false)
     override val author: UserJpaEntity,
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val articleTagJpaEntities: List<ArticleTagJpaEntity> = listOf(),
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
     override val comments: List<CommentJpaEntity> = listOf(),
@@ -82,34 +82,36 @@ class ArticleJpaEntity(
 
         if (articleId != other.articleId) return false
         if (uuid != other.uuid) return false
+        if (author != other.author) return false
+        if (articleTagJpaEntities != other.articleTagJpaEntities) return false
+        if (comments != other.comments) return false
+        if (createdAt != other.createdAt) return false
+        if (updatedAt != other.updatedAt) return false
+        if (slugValue != other.slugValue) return false
         if (title != other.title) return false
         if (description != other.description) return false
         if (body != other.body) return false
-        if (createdAt != other.createdAt) return false
-        if (updatedAt != other.updatedAt) return false
-        if (author != other.author) return false
-        if (tags != other.tags) return false
-        if (comments != other.comments) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = articleId.hashCode()
+        var result = articleId ?: 0
         result = 31 * result + uuid.hashCode()
+        result = 31 * result + author.hashCode()
+        result = 31 * result + articleTagJpaEntities.hashCode()
+        result = 31 * result + comments.hashCode()
+        result = 31 * result + createdAt.hashCode()
+        result = 31 * result + updatedAt.hashCode()
+        result = 31 * result + slugValue.hashCode()
         result = 31 * result + title.hashCode()
         result = 31 * result + description.hashCode()
         result = 31 * result + body.hashCode()
-        result = 31 * result + createdAt.hashCode()
-        result = 31 * result + updatedAt.hashCode()
-        result = 31 * result + author.hashCode()
-        result = 31 * result + tags.hashCode()
-        result = 31 * result + comments.hashCode()
         return result
     }
 
     companion object {
-        fun from(article: Article, tags: List<TagJpaEntity>): ArticleJpaEntity = with(article) {
+        fun from(article: Article, tags: List<Tag>): ArticleJpaEntity = with(article) {
             ArticleJpaEntity(
                 articleId = if (this is ArticleJpaEntity) articleId else null,
                 uuid = uuid,
@@ -117,7 +119,7 @@ class ArticleJpaEntity(
                 title = title,
                 description = description,
                 body = body,
-                articleTagJpaEntities = tags.map { ArticleTagJpaEntity(tag = it) },
+                articleTagJpaEntities = tags.map(ArticleTagJpaEntity.Companion::from),
                 author = UserJpaEntity.from(author),
                 createdAt = Instant.now()
             )

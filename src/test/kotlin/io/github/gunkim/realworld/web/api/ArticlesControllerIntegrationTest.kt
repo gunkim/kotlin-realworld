@@ -5,11 +5,13 @@ import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
+import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
 import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 @DisplayName("Articles Controller - Integration Test")
 class ArticlesControllerIntegrationTest(
@@ -101,6 +103,30 @@ class ArticlesControllerIntegrationTest(
                 jsonPath("$.article.createdAt") { exists() }
                 jsonPath("$.article.updatedAt") { exists() }
             }.andDo { print() }
+        }
+
+        "PUT /api/articles/:slug - Update an article" {
+            val request = UpdateArticleRequest(
+                title = "Updated Title",
+                description = "Updated Description",
+                body = "Updated Body"
+            )
+
+            val requestBody = mapOf("article" to request)
+            val requestJson = toJsonString(requestBody)
+
+            mockMvc.put("/api/articles/${articles[0].slug}") {
+                contentType = org.springframework.http.MediaType.APPLICATION_JSON
+                header(HttpHeaders.AUTHORIZATION, token)
+                content = requestJson
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.article.title") { value(request.title) }
+                jsonPath("$.article.description") { value(request.description) }
+                jsonPath("$.article.body") { value(request.body) }
+                jsonPath("$.article.tagList[0]") { value(articles[0].tags[0].name) }
+                jsonPath("$.article.tagList[1]") { value(articles[0].tags[1].name) }
+            }
         }
     }
 }

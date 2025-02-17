@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
+import io.github.gunkim.realworld.domain.article.Tag
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -24,4 +25,21 @@ data class ArticleTagJpaEntity(
     val tag: TagJpaEntity,
     val createdAt: Instant = Instant.now(),
     val updatedAt: Instant? = null,
-)
+) : Tag {
+    override val name: String
+        get() = tag.name
+
+    companion object {
+        fun fromTagEntity(tag: TagJpaEntity) = ArticleTagJpaEntity(
+            tag = tag,
+        )
+
+        fun from(tag: Tag) = ArticleTagJpaEntity(
+            id = if (tag is ArticleTagJpaEntity) tag.id else null,
+            article = if (tag is ArticleTagJpaEntity) tag.article else null,
+            tag = if (tag is ArticleTagJpaEntity) tag.tag else TagJpaEntity.from(tag.name),
+            createdAt = if (tag is ArticleTagJpaEntity) tag.createdAt else Instant.now(),
+            updatedAt = if (tag is ArticleTagJpaEntity) tag.updatedAt else null,
+        )
+    }
+}
