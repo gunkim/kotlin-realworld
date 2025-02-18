@@ -1,11 +1,9 @@
 package io.github.gunkim.realworld.web.api.user
 
 import io.github.gunkim.realworld.config.request.JsonRequest
-import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
 import io.github.gunkim.realworld.domain.user.service.CreateUserService
 import io.github.gunkim.realworld.domain.user.service.GetUserService
-import io.github.gunkim.realworld.infrastructure.auth.JwtProvider
 import io.github.gunkim.realworld.web.api.user.model.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.web.api.user.model.request.UserRegistrationRequest
 import io.github.gunkim.realworld.web.api.user.model.response.UserResponse
@@ -30,10 +28,10 @@ interface UsersResource {
 
 @RestController
 class UsersController(
-    private val jwtProvider: JwtProvider,
-    private val getUserService: GetUserService,
-    private val createUserService: CreateUserService,
     private val authenticateUserService: AuthenticateUserService,
+    private val userResponseAssembler: UserResponseAssembler,
+    private val createUserService: CreateUserService,
+    private val getUserService: GetUserService,
 ) : UsersResource {
     override fun registration(request: UserRegistrationRequest): UserResponse {
         val registeredUser = createUserService.createUser(
@@ -41,17 +39,12 @@ class UsersController(
             username = request.username,
             encodedPassword = authenticateUserService.encodePassword(request.password),
         )
-        return createUserResponse(registeredUser)
+        return userResponseAssembler.assembleUserResponse(registeredUser)
     }
 
     override fun authenticate(request: UserAuthenticateRequest): UserResponse {
         val user = getUserService.getByEmail(request.email)
         authenticateUserService.authenticate(user, request.password)
-        return createUserResponse(user)
-    }
-
-    private fun createUserResponse(user: User): UserResponse {
-        val token = jwtProvider.create(user.uuid)
-        return UserResponse.from(user, token)
+        return userResponseAssembler.assembleUserResponse(user)
     }
 }
