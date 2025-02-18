@@ -48,6 +48,9 @@ class SecurityConfiguration(
         // articles
         it.requestMatchers("/api/articles/**").permitAll()
 
+        // tags
+        it.requestMatchers("/api/tags/**").permitAll()
+
         // H2 Console
         it.requestMatchers(PathRequest.toH2Console()).permitAll()
         it.anyRequest().authenticated()
