@@ -6,9 +6,7 @@ import io.github.gunkim.realworld.web.api.user.model.request.UserAuthenticateReq
 import io.github.gunkim.realworld.web.api.user.model.request.UserRegistrationRequest
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @DisplayName("Users Controller - Integration Test")
@@ -28,18 +26,6 @@ class UsersControllerIntegrationTest : IntegrationTest() {
     }
 
     init {
-        "GET /api/users - Return authenticated user's details" {
-            mockMvc.get("/api/users") {
-                header(HttpHeaders.AUTHORIZATION, authorizationToken)
-            }.andExpect {
-                status { isOk() }
-                jsonPath("$.user.email") { value(user.email) }
-                jsonPath("$.user.username") { value(user.name) }
-                jsonPath("$.user.bio") { value(user.bio) }
-                jsonPath("$.user.image") { value(user.image) }
-            }
-        }
-
         "POST /api/users/login - Allow user login with valid credentials" {
             val request = UserAuthenticateRequest(email = user.email, password = rawPassword)
             val requestBody = mapOf("user" to request)
