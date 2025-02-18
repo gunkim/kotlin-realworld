@@ -60,6 +60,12 @@ interface ArticleResource {
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper
+
+    @DeleteMapping("/{slug}/favorite")
+    fun unFavoriteArticle(
+        @PathVariable slug: String,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+    ): ArticleResponseWrapper
 }
 
 @RestController
@@ -127,8 +133,23 @@ class ArticlesController(
         deleteArticleUseCase.deleteArticle(slug, authenticatedUser.uuid)
     }
 
-    override fun favoriteArticles(slug: String, authenticatedUser: AuthenticatedUser): ArticleResponseWrapper {
+    override fun favoriteArticles(
+        slug: String,
+        authenticatedUser: AuthenticatedUser,
+    ): ArticleResponseWrapper {
         val article = favoriteArticleService.favoriteArticle(
+            slug = Slug(slug),
+            userUuid = authenticatedUser.uuid
+        )
+        return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
+            .let(::ArticleResponseWrapper)
+    }
+
+    override fun unFavoriteArticle(
+        slug: String,
+        authenticatedUser: AuthenticatedUser,
+    ): ArticleResponseWrapper {
+        val article = favoriteArticleService.unfavoriteArticle(
             slug = Slug(slug),
             userUuid = authenticatedUser.uuid
         )

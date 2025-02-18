@@ -43,6 +43,16 @@ class ArticleRepositoryImpl(
         )
     }
 
+    override fun unFavorite(article: Article, user: User) {
+        val articleEntity = ArticleJpaEntity.from(article, articleTagJpaEntities(article))
+        val userEntity = UserJpaEntity.from(user)
+
+        articleFavoriteDao.deleteByArticleIdAndUserId(
+            articleEntity.articleId!!,
+            userEntity.userId!!
+        )
+    }
+
     private fun articleTagJpaEntities(article: Article): List<ArticleTagJpaEntity> {
         if (article is ArticleJpaEntity) {
             return article.articleTagJpaEntities

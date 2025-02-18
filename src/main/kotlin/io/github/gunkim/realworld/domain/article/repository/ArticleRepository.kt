@@ -8,4 +8,5 @@ interface ArticleRepository : ArticleReadRepository {
     fun delete(article: Article)
 
     fun favorite(article: Article, user: User)
+    fun unFavorite(article: Article, user: User)
 }

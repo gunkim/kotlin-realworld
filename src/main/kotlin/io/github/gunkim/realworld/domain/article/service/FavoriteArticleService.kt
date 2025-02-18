@@ -29,4 +29,15 @@ class FavoriteArticleService(
         articleRepository.favorite(article, user)
         return article
     }
+
+    fun unfavoriteArticle(
+        slug: Slug,
+        userUuid: UUID,
+    ): Article {
+        val article = super.findBySlug(slug)
+        val user = getUserService.getUserByUUID(userUuid)
+
+        articleRepository.unFavorite(article, user)
+        return article
+    }
 }

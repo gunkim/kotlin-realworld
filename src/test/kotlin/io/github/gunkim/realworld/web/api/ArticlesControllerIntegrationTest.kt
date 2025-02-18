@@ -3,6 +3,7 @@ package io.github.gunkim.realworld.web.api
 import io.github.gunkim.realworld.domain.article.exception.ArticleNotFoundException
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
+import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.put
 class ArticlesControllerIntegrationTest(
     private val createArticleService: CreateArticleService,
     private val getArticleService: GetArticleService,
+    private val favoriteArticleService: FavoriteArticleService,
 ) : IntegrationTest() {
     lateinit var token: String
     lateinit var articles: List<Article>
@@ -164,6 +166,29 @@ class ArticlesControllerIntegrationTest(
                 jsonPath("$.article.createdAt") { exists() }
                 jsonPath("$.article.updatedAt") { exists() }
             }.andDo { print() }
+        }
+
+        "DELETE /api/articles/:slug/favorite" {
+            favoriteArticleService.favoriteArticle(
+                articles[0].slug,
+                authUser.uuid
+            )
+            mockMvc.delete("/api/articles/${articles[0].slug}/favorite") {
+                header(HttpHeaders.AUTHORIZATION, token)
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.article.favoritesCount") { value(0) }
+                jsonPath("$.article.favorited") { value(false) }
+                jsonPath("$.article.slug") { exists() }
+                jsonPath("$.article.title") { value(articles[0].title) }
+                jsonPath("$.article.description") { value(articles[0].description) }
+                jsonPath("$.article.body") { value(articles[0].body) }
+                jsonPath("$.article.tagList[0]") { value(articles[0].tags[0].name) }
+                jsonPath("$.article.tagList[1]") { value(articles[0].tags[1].name) }
+                jsonPath("$.article.author.username") { value(author.name) }
+                jsonPath("$.article.createdAt") { exists() }
+                jsonPath("$.article.updatedAt") { exists() }
+            }
         }
     }
 
