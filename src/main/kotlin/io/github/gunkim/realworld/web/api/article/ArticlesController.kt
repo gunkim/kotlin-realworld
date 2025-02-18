@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.web.api.article
 
+import io.github.gunkim.realworld.application.DeleteArticleUseCase
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
@@ -13,6 +14,7 @@ import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
 import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -45,6 +47,12 @@ interface ArticleResource {
         @JsonRequest("article") request: UpdateArticleRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper
+
+    @DeleteMapping("/{slug}")
+    fun deleteArticles(
+        @PathVariable slug: String,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+    )
 }
 
 @RestController
@@ -52,6 +60,7 @@ class ArticlesController(
     private val getArticleService: GetArticleService,
     private val createArticleService: CreateArticleService,
     private val updateArticleService: UpdateArticleService,
+    private val deleteArticleUseCase: DeleteArticleUseCase,
     private val articleResponseAssembler: ArticleResponseAssembler,
 ) : ArticleResource {
     override fun getArticles(
@@ -101,5 +110,12 @@ class ArticlesController(
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
             .let(::ArticleResponseWrapper)
+    }
+
+    override fun deleteArticles(
+        slug: String,
+        authenticatedUser: AuthenticatedUser,
+    ) {
+        deleteArticleUseCase.deleteArticle(slug, authenticatedUser.uuid)
     }
 }

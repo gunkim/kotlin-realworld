@@ -1,14 +1,20 @@
 package io.github.gunkim.realworld.web.api
 
+import io.github.gunkim.realworld.domain.article.exception.ArticleNotFoundException
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
+import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
+import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.Assertions.*
 import org.springframework.http.HttpHeaders
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
@@ -16,15 +22,17 @@ import org.springframework.test.web.servlet.put
 @DisplayName("Articles Controller - Integration Test")
 class ArticlesControllerIntegrationTest(
     private val createArticleService: CreateArticleService,
+    private val getArticleService: GetArticleService,
 ) : IntegrationTest() {
     lateinit var token: String
     lateinit var articles: List<Article>
     lateinit var author: User
     lateinit var authUser: User
+    lateinit var authorToken: String
 
     override suspend fun beforeEachTest(testCase: TestCase) {
         val (authUser, token) = createUser("gunkim.author@gmail.com", "gunkim", "password")
-        val (author, _) = createUser("gunkim@gmail.com", "author gunkim", "password")
+        val (author, authorToken) = createUser("gunkim@gmail.com", "author gunkim", "password")
         val articles = listOf(
             createArticleService.createArticle(
                 title = "Article Title",
@@ -38,6 +46,7 @@ class ArticlesControllerIntegrationTest(
         this.authUser = authUser
         this.articles = articles
         this.author = author
+        this.authorToken = authorToken
     }
 
     init {
@@ -126,7 +135,22 @@ class ArticlesControllerIntegrationTest(
                 jsonPath("$.article.body") { value(request.body) }
                 jsonPath("$.article.tagList[0]") { value(articles[0].tags[0].name) }
                 jsonPath("$.article.tagList[1]") { value(articles[0].tags[1].name) }
-            }
+            }.andDo { print() }
+        }
+
+        "DELETE /api/articles/:slug - Delete an article" {
+            mockMvc.delete("/api/articles/${articles[0].slug}") {
+                header(HttpHeaders.AUTHORIZATION, authorToken)
+            }.andExpect {
+                status { isOk() }
+                assertArticleDeletionThrowsException()
+            }.andDo { print() }
+        }
+    }
+
+    private fun assertArticleDeletionThrowsException() {
+        shouldThrow<ArticleNotFoundException> {
+            getArticleService.findBySlug(articles[0].slug)
         }
     }
 }

@@ -22,6 +22,10 @@ class ArticleRepositoryImpl(
         return articleDao.save(ArticleJpaEntity.from(article, allTags))
     }
 
+    override fun delete(article: Article) {
+        articleDao.delete(ArticleJpaEntity.from(article, articleTagJpaEntities(article)))
+    }
+
     private fun articleTagJpaEntities(article: Article): List<ArticleTagJpaEntity> {
         if (article is ArticleJpaEntity) {
             return article.articleTagJpaEntities
