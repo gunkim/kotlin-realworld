@@ -4,6 +4,7 @@ import io.github.gunkim.realworld.application.DeleteArticleUseCase
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
+import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.article.service.UpdateArticleService
 import io.github.gunkim.realworld.share.AuthenticatedUser
@@ -53,6 +54,12 @@ interface ArticleResource {
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     )
+
+    @PostMapping("/{slug}/favorite")
+    fun favoriteArticles(
+        @PathVariable slug: String,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+    ): ArticleResponseWrapper
 }
 
 @RestController
@@ -62,6 +69,7 @@ class ArticlesController(
     private val updateArticleService: UpdateArticleService,
     private val deleteArticleUseCase: DeleteArticleUseCase,
     private val articleResponseAssembler: ArticleResponseAssembler,
+    private val favoriteArticleService: FavoriteArticleService,
 ) : ArticleResource {
     override fun getArticles(
         request: GetArticlesRequest,
@@ -117,5 +125,14 @@ class ArticlesController(
         authenticatedUser: AuthenticatedUser,
     ) {
         deleteArticleUseCase.deleteArticle(slug, authenticatedUser.uuid)
+    }
+
+    override fun favoriteArticles(slug: String, authenticatedUser: AuthenticatedUser): ArticleResponseWrapper {
+        val article = favoriteArticleService.favoriteArticle(
+            slug = Slug(slug),
+            userUuid = authenticatedUser.uuid
+        )
+        return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
+            .let(::ArticleResponseWrapper)
     }
 }

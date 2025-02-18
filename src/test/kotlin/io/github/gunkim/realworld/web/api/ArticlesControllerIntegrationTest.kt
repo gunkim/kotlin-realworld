@@ -146,6 +146,25 @@ class ArticlesControllerIntegrationTest(
                 assertArticleDeletionThrowsException()
             }.andDo { print() }
         }
+
+        "POST /api/articles/:slug/favorite" {
+            mockMvc.post("/api/articles/${articles[0].slug}/favorite") {
+                header(HttpHeaders.AUTHORIZATION, token)
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.article.favoritesCount") { value(1) }
+                jsonPath("$.article.favorited") { value(true) }
+                jsonPath("$.article.slug") { exists() }
+                jsonPath("$.article.title") { value(articles[0].title) }
+                jsonPath("$.article.description") { value(articles[0].description) }
+                jsonPath("$.article.body") { value(articles[0].body) }
+                jsonPath("$.article.tagList[0]") { value(articles[0].tags[0].name) }
+                jsonPath("$.article.tagList[1]") { value(articles[0].tags[1].name) }
+                jsonPath("$.article.author.username") { value(author.name) }
+                jsonPath("$.article.createdAt") { exists() }
+                jsonPath("$.article.updatedAt") { exists() }
+            }.andDo { print() }
+        }
     }
 
     private fun assertArticleDeletionThrowsException() {
