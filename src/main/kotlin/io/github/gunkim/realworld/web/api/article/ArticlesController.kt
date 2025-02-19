@@ -34,6 +34,12 @@ interface ArticleResource {
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser?,
     ): ArticlesResponse
 
+    @GetMapping("/feed")
+    fun feedArticles(
+        @ModelAttribute request: PagingRequest,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+    ): ArticlesResponse
+
     @GetMapping("/{slug}")
     fun getArticle(@PathVariable slug: String): ArticleResponseWrapper
 
@@ -45,20 +51,20 @@ interface ArticleResource {
     ): ArticleResponseWrapper
 
     @PutMapping("/{slug}")
-    fun updateArticles(
+    fun updateArticle(
         @PathVariable slug: String,
         @JsonRequest("article") request: UpdateArticleRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper
 
     @DeleteMapping("/{slug}")
-    fun deleteArticles(
+    fun deleteArticle(
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     )
 
     @PostMapping("/{slug}/favorite")
-    fun favoriteArticles(
+    fun favoriteArticle(
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper
@@ -68,12 +74,6 @@ interface ArticleResource {
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper
-
-    @GetMapping("/feed")
-    fun feedArticles(
-        @ModelAttribute request: PagingRequest,
-        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): ArticlesResponse
 }
 
 @RestController
@@ -119,7 +119,7 @@ class ArticlesController(
             .let(::ArticleResponseWrapper)
     }
 
-    override fun updateArticles(
+    override fun updateArticle(
         slug: String,
         request: UpdateArticleRequest,
         authenticatedUser: AuthenticatedUser,
@@ -134,14 +134,14 @@ class ArticlesController(
             .let(::ArticleResponseWrapper)
     }
 
-    override fun deleteArticles(
+    override fun deleteArticle(
         slug: String,
         authenticatedUser: AuthenticatedUser,
     ) {
         deleteArticleUseCase.deleteArticle(slug, authenticatedUser.uuid)
     }
 
-    override fun favoriteArticles(
+    override fun favoriteArticle(
         slug: String,
         authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper {
