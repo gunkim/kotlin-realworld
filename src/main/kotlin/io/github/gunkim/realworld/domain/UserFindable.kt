@@ -10,4 +10,7 @@ internal interface UserFindable {
 
     fun getUserByUUID(uuid: UUID): User =
         userRepository.findByUuid(uuid) ?: throw UserNotFoundException.fromUUID(uuid)
+
+    fun getUserByName(userName: String): User =
+        userRepository.findByUserName(userName) ?: throw UserNotFoundException.fromUserName(userName)
 }

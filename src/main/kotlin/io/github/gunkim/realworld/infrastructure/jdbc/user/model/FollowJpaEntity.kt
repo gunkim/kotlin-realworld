@@ -17,11 +17,11 @@ class FollowJpaEntity(
     val updatedAt: Instant = Instant.now(),
 ) {
     companion object {
-        fun of(followingUserId: Int, followerUserId: Int) =
+        fun of(followeeId: Int, followerId: Int) =
             FollowJpaEntity(
                 followId = null,
-                followeeId = followingUserId,
-                followerId = followerUserId,
+                followeeId = followeeId,
+                followerId = followerId,
                 createdAt = Instant.now()
             )
     }

@@ -25,16 +25,16 @@ class UserRepositoryImpl(
         return userDao.save(UserJpaEntity.from(user))
     }
 
-    override fun follow(uuid: UUID, targetUuid: UUID) {
-        val followerId = getUserIdOrThrow(uuid)
-        val followeeId = getUserIdOrThrow(targetUuid)
+    override fun follow(followerUuid: UUID, followeeUuid: UUID) {
+        val followerId = getUserIdOrThrow(followerUuid)
+        val followeeId = getUserIdOrThrow(followeeUuid)
 
         followDao.save(FollowJpaEntity.of(followeeId, followerId))
     }
 
-    override fun unfollow(uuid: UUID, targetUuid: UUID) {
-        val followerId = getUserIdOrThrow(uuid)
-        val followeeId = getUserIdOrThrow(targetUuid)
+    override fun unfollow(followerUuid: UUID, followeeUuid: UUID) {
+        val followerId = getUserIdOrThrow(followerUuid)
+        val followeeId = getUserIdOrThrow(followeeUuid)
 
         followDao.deleteByFolloweeIdAndFollowerId(
             followingId = followeeId,

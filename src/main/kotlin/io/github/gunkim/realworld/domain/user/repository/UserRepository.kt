@@ -5,6 +5,6 @@ import java.util.UUID
 
 interface UserRepository : UserReadRepository {
     fun save(user: User): User
-    fun follow(uuid: UUID, targetUuid: UUID)
-    fun unfollow(uuid: UUID, targetUuid: UUID)
+    fun follow(followerUuid: UUID, followeeUuid: UUID)
+    fun unfollow(followerUuid: UUID, followeeUuid: UUID)
 }
