@@ -4,10 +4,10 @@ import io.github.gunkim.realworld.domain.article.exception.NotArticleAuthorExcep
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.user.model.User
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
-import java.util.UUID
 
 private fun createUser(email: String, password: String, name: String): User {
     return User.create(
@@ -36,16 +36,16 @@ class ArticleOwnershipServiceTest : StringSpec({
     "should succeed when the user is the author of the article" {
         val userAuthor = createUser(email, "<PASSWORD>!", "Gunkim")
         val authoredArticle = createArticle(title, userAuthor)
-        articleOwnershipService.validateOwnership(authoredArticle, userAuthor.uuid)
+        articleOwnershipService.validateOwnership(authoredArticle, userAuthor.id)
     }
 
     "should throw NotArticleAuthorException when the user is not the author of the article" {
         val userAuthor = createUser(email, "<PASSWORD>!", "Gunkim")
-        val otherUserUuid = UUID.randomUUID()
+        val otherUserId = UserId.create()
         val authoredArticle = createArticle(title, userAuthor)
 
         shouldThrow<NotArticleAuthorException> {
-            articleOwnershipService.validateOwnership(authoredArticle, otherUserUuid)
+            articleOwnershipService.validateOwnership(authoredArticle, otherUserId)
         }
     }
 })

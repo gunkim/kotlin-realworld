@@ -2,13 +2,13 @@ package io.github.gunkim.realworld.domain.article.service
 
 import io.github.gunkim.realworld.domain.article.exception.NotArticleAuthorException
 import io.github.gunkim.realworld.domain.article.model.Article
-import java.util.UUID
+import io.github.gunkim.realworld.domain.user.model.UserId
 import org.springframework.stereotype.Service
 
 @Service
 class ArticleOwnershipService {
-    fun validateOwnership(article: Article, authUuid: UUID) {
-        require(article.author.uuid == authUuid) {
+    fun validateOwnership(article: Article, authUuid: UserId) {
+        require(article.author.id == authUuid) {
             throw NotArticleAuthorException.fromArticleUuidAndAuthUuid(article.uuid, authUuid)
         }
     }

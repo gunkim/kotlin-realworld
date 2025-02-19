@@ -52,18 +52,18 @@ class ProfilesController(
         username: String,
         authenticatedUser: AuthenticatedUser,
     ) {
-        followUserService.followUser(authenticatedUser.uuid, username)
+        followUserService.followUser(authenticatedUser.userId, username)
     }
 
     override fun unfollow(
         username: String,
         authenticatedUser: AuthenticatedUser,
     ) {
-        followUserService.unfollowUser(authenticatedUser.uuid, username)
+        followUserService.unfollowUser(authenticatedUser.userId, username)
     }
 
     private fun isUserFollowing(authenticatedUser: AuthenticatedUser?, targetUsername: String): Boolean {
-        val userUuid = authenticatedUser?.uuid ?: return false
+        val userUuid = authenticatedUser?.userId ?: return false
         return followUserService.isFollowing(userUuid, targetUsername)
     }
 }

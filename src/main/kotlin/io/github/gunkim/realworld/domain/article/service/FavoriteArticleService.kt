@@ -5,6 +5,7 @@ import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.service.GetUserService
 import java.util.UUID
 import org.springframework.stereotype.Service
@@ -17,14 +18,14 @@ class FavoriteArticleService(
     fun getFavoritesCount(articleUuids: List<UUID>): List<ArticleCountProjection> =
         articleRepository.getCountAllByArticleUuids(articleUuids)
 
-    fun getFavoritesArticles(userUuid: UUID): List<UUID> = articleRepository.getFavoritesArticles(userUuid)
+    fun getFavoritesArticles(userId: UserId): List<UUID> = articleRepository.getFavoritesArticles(userId)
 
     fun favoriteArticle(
         slug: Slug,
-        userUuid: UUID,
+        favoritingId: UserId,
     ): Article {
         val article = super.findBySlug(slug)
-        val user = getUserService.getUserByUUID(userUuid)
+        val user = getUserService.getUserById(favoritingId)
 
         articleRepository.favorite(article, user)
         return article
@@ -32,10 +33,10 @@ class FavoriteArticleService(
 
     fun unfavoriteArticle(
         slug: Slug,
-        userUuid: UUID,
+        unavoritingId: UserId,
     ): Article {
         val article = super.findBySlug(slug)
-        val user = getUserService.getUserByUUID(userUuid)
+        val user = getUserService.getUserById(unavoritingId)
 
         articleRepository.unFavorite(article, user)
         return article

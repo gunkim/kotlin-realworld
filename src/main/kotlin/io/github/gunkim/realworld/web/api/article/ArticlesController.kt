@@ -113,7 +113,7 @@ class ArticlesController(
             request.description,
             request.body,
             request.tagList,
-            authenticatedUser.uuid
+            authenticatedUser.userId
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
             .let(::ArticleResponseWrapper)
@@ -138,7 +138,7 @@ class ArticlesController(
         slug: String,
         authenticatedUser: AuthenticatedUser,
     ) {
-        deleteArticleUseCase.deleteArticle(slug, authenticatedUser.uuid)
+        deleteArticleUseCase.deleteArticle(slug, authenticatedUser.userId)
     }
 
     override fun favoriteArticle(
@@ -147,7 +147,7 @@ class ArticlesController(
     ): ArticleResponseWrapper {
         val article = favoriteArticleService.favoriteArticle(
             slug = Slug(slug),
-            userUuid = authenticatedUser.uuid
+            favoritingId = authenticatedUser.userId
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
             .let(::ArticleResponseWrapper)
@@ -159,7 +159,7 @@ class ArticlesController(
     ): ArticleResponseWrapper {
         val article = favoriteArticleService.unfavoriteArticle(
             slug = Slug(slug),
-            userUuid = authenticatedUser.uuid
+            unavoritingId = authenticatedUser.userId
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
             .let(::ArticleResponseWrapper)
@@ -167,7 +167,7 @@ class ArticlesController(
 
     override fun feedArticles(request: PagingRequest, authenticatedUser: AuthenticatedUser): ArticlesResponse {
         val articles = getArticleService.feedArticles(
-            authUuid = authenticatedUser.uuid,
+            userId = authenticatedUser.userId,
             limit = request.limit,
             offset = request.offset
         )

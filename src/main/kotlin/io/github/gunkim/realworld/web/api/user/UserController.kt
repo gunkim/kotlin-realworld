@@ -36,7 +36,7 @@ class UserController(
     private val getUserService: GetUserService,
 ) : UserResource {
     override fun get(authenticatedUser: AuthenticatedUser): UserResponse {
-        val user = getUserService.getUserByUUID(authenticatedUser.uuid)
+        val user = getUserService.getUserById(authenticatedUser.userId)
         return userResponseAssembler.assembleUserResponse(user)
     }
 
@@ -45,7 +45,7 @@ class UserController(
         authenticatedUser: AuthenticatedUser,
     ): UserResponse {
         val updatedUser = updateUserService.updateUser(
-            authenticatedUser.uuid,
+            authenticatedUser.userId,
             request.email,
             request.username,
             request.image,

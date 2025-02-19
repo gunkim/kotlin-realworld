@@ -2,12 +2,24 @@ package io.github.gunkim.realworld.domain.user.model
 
 import io.github.gunkim.realworld.domain.DateAuditable
 import io.github.gunkim.realworld.domain.Editable
-import java.net.URL
+import io.github.gunkim.realworld.domain.EntityId
 import java.time.Instant
 import java.util.UUID
 
+data class UserId internal constructor(
+    override val value: UUID,
+) : EntityId {
+    override fun toString(): String {
+        return value.toString()
+    }
+
+    companion object {
+        fun create(): UserId = UserId(UUID.randomUUID())
+    }
+}
+
 interface User : Editable<User>, DateAuditable {
-    val uuid: UUID
+    val id: UserId
     val email: String
     val password: String
     val name: String
@@ -30,7 +42,7 @@ interface User : Editable<User>, DateAuditable {
 
     companion object {
         internal data class Model(
-            override val uuid: UUID,
+            override val id: UserId,
             override var email: String,
             override var password: String,
             override var name: String,
@@ -41,7 +53,7 @@ interface User : Editable<User>, DateAuditable {
         ) : Editor
 
         fun create(
-            uuid: UUID = UUID.randomUUID(),
+            id: UserId = UserId.create(),
             email: String,
             password: String,
             name: String,
@@ -53,7 +65,7 @@ interface User : Editable<User>, DateAuditable {
             val now = Instant.now()
 
             return Model(
-                uuid = uuid,
+                id = id,
                 email = email,
                 password = password,
                 name = name,

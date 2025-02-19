@@ -2,6 +2,7 @@ package io.github.gunkim.realworld.infrastructure.jdbc.user.repository
 
 import io.github.gunkim.realworld.domain.user.exception.UserNotFoundException
 import io.github.gunkim.realworld.domain.user.model.User
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.repository.UserReadRepository
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import io.github.gunkim.realworld.infrastructure.jdbc.user.dao.FollowDao
@@ -25,16 +26,16 @@ class UserRepositoryImpl(
         return userDao.save(UserJpaEntity.from(user))
     }
 
-    override fun follow(followerUuid: UUID, followeeUuid: UUID) {
-        val followerId = getUserIdOrThrow(followerUuid)
-        val followeeId = getUserIdOrThrow(followeeUuid)
+    override fun follow(followerId: UserId, followeeId: UserId) {
+        val followerId = getUserDatabaseIdOrThrow(followerId)
+        val followeeId = getUserDatabaseIdOrThrow(followeeId)
 
         followDao.save(FollowJpaEntity.of(followeeId, followerId))
     }
 
-    override fun unfollow(followerUuid: UUID, followeeUuid: UUID) {
-        val followerId = getUserIdOrThrow(followerUuid)
-        val followeeId = getUserIdOrThrow(followeeUuid)
+    override fun unfollow(followerId: UserId, followeeId: UserId) {
+        val followerId = getUserDatabaseIdOrThrow(followerId)
+        val followeeId = getUserDatabaseIdOrThrow(followeeId)
 
         followDao.deleteByFolloweeIdAndFollowerId(
             followingId = followeeId,
@@ -42,8 +43,8 @@ class UserRepositoryImpl(
         )
     }
 
-    private fun getUserIdOrThrow(uuid: UUID): Int {
-        return userDao.findByUuid(uuid)?.userId
-            ?: throw UserNotFoundException.fromUUID(uuid)
+    private fun getUserDatabaseIdOrThrow(userId: UserId): Int {
+        return userDao.findByUuid(userId.value)?.userId
+            ?: throw UserNotFoundException.fromId(userId)
     }
 }

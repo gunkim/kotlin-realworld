@@ -5,6 +5,7 @@ import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.model.Tag
 import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import java.util.UUID
 import org.springframework.stereotype.Service
@@ -19,9 +20,9 @@ class CreateArticleService(
         description: String,
         body: String,
         tagList: List<String>,
-        authorUuid: UUID,
+        authorId: UserId,
     ): Article {
-        val author = super.getUserByUUID(authorUuid)
+        val author = super.getUserById(authorId)
 
         return articleRepository.save(
             Article.create(

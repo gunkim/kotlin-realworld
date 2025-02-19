@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.config.security
 
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import java.util.UUID
 import org.springframework.core.convert.converter.Converter
@@ -14,7 +15,7 @@ class CustomJwtAuthenticationConverter : Converter<Jwt, AbstractAuthenticationTo
                 ?: throw IllegalArgumentException("userId is required")
         )
 
-        val authenticatedUser = AuthenticatedUser(uuid = id)
+        val authenticatedUser = AuthenticatedUser(userId = UserId(id))
         val authorities = JwtAuthenticationConverter().convert(jwt)?.authorities ?: emptyList()
 
         return CustomJwtAuthenticationToken(authenticatedUser, authorities)

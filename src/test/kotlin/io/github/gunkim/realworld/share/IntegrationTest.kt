@@ -76,7 +76,7 @@ abstract class IntegrationTest : FreeSpec() {
             encodedPassword = authenticationUserService.encodePassword(password)
         )
 
-        return user to authenticationService.createToken(user.uuid).let(::toToken)
+        return user to authenticationService.createToken(user.id).let(::toToken)
     }
 
     protected fun toJsonString(any: Any) = objectMapper.writeValueAsString(any)

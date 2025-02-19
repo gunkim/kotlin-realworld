@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.auth
 
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec
@@ -9,7 +10,7 @@ import javax.crypto.spec.SecretKeySpec
 
 private val key = SecretKeySpec(UUID.randomUUID().toString().toByteArray(), "HmacSHA256")
 
-private val TEST_USER_ID = UUID.randomUUID()
+private val TEST_USER_ID = UserId.create()
 
 @DisplayName("JwtProvider is")
 class JwtProviderTest : StringSpec({

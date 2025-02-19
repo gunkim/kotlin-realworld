@@ -4,6 +4,7 @@ import io.github.gunkim.realworld.domain.article.ArticleFindable
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
+import io.github.gunkim.realworld.domain.user.model.UserId
 import java.util.UUID
 import org.springframework.stereotype.Service
 
@@ -26,12 +27,12 @@ class GetArticleService(
     }
 
     fun feedArticles(
-        authUuid: UUID,
+        userId: UserId,
         limit: Int,
         offset: Int,
     ): List<Article> {
         return articleRepository.findFeedArticles(
-            userId = authUuid,
+            userId = userId,
             limit = limit,
             offset = offset
         )

@@ -10,7 +10,7 @@ class UserResponseAssembler(
     private val jwtProvider: JwtProvider,
 ) {
     fun assembleUserResponse(user: User): UserResponse {
-        val token = jwtProvider.create(user.uuid)
+        val token = jwtProvider.create(user.id)
         return UserResponse.from(user, token)
     }
 }

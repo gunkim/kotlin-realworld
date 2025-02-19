@@ -1,6 +1,7 @@
 package io.github.gunkim.realworld.domain.user.service
 
 import io.github.gunkim.realworld.domain.UserFindable
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import java.util.UUID
 import org.springframework.stereotype.Service
@@ -9,23 +10,23 @@ import org.springframework.stereotype.Service
 class FollowUserService(
     override val userRepository: UserRepository,
 ) : UserFindable {
-    fun followUser(followerUuid: UUID, followeeUsername: String) {
-        val targetUser = getUserByName(followeeUsername)
+    fun followUser(followerId: UserId, followeeUsername: String) {
+        val followee = getUserByName(followeeUsername)
 
-        userRepository.follow(followerUuid, targetUser.uuid)
+        userRepository.follow(followerId, followee.id)
     }
 
-    fun unfollowUser(uuid: UUID, targetUsername: String) {
-        val targetUser = getUserByName(targetUsername)
+    fun unfollowUser(followerId: UserId, followeeUsername: String) {
+        val followee = getUserByName(followeeUsername)
 
-        userRepository.unfollow(uuid, targetUser.uuid)
+        userRepository.unfollow(followerId, followee.id)
     }
 
-    fun isFollowing(uuid: UUID, targetUsername: String): Boolean {
-        val targetUser = getUserByName(targetUsername)
+    fun isFollowing(followerId: UserId, followeeUsername: String): Boolean {
+        val followee = getUserByName(followeeUsername)
 
-        return userRepository.existsFollowingIdAndFollowerUsername(uuid, targetUser.uuid)
+        return userRepository.existsFollowingIdAndFollowerUsername(followerId, followee.id)
     }
 
-    fun getFollowingUserUuids(userUuid: UUID): List<UUID> = userRepository.findFollowingUserUuids(userUuid)
+    fun getFollowingUserUuids(userId: UserId): List<UserId> = userRepository.findFollowingUserUuids(userId)
 }

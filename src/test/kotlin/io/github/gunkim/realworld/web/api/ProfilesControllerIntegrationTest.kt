@@ -3,7 +3,6 @@ package io.github.gunkim.realworld.web.api
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.IntegrationTest
-import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
 import org.springframework.beans.factory.annotation.Autowired
@@ -63,7 +62,7 @@ class ProfilesControllerIntegrationTest(
             }
         }
         "DELETE /api/profiles/:username/follow - Unfollow a profile" {
-            followUserService.followUser(authenticatedUser.uuid, profileUser.name)
+            followUserService.followUser(authenticatedUser.id, profileUser.name)
             mockMvc.delete(followEndpoint(profileUser.name)) {
                 header(HttpHeaders.AUTHORIZATION, token)
             }.andExpect {

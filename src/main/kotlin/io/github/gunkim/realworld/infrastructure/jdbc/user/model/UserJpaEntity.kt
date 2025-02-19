@@ -1,6 +1,7 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.user.model
 
 import io.github.gunkim.realworld.domain.user.model.User
+import io.github.gunkim.realworld.domain.user.model.UserId
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -13,7 +14,7 @@ class UserJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userId: Int?,
-    override val uuid: UUID,
+    val uuid: UUID,
     name: String,
     bio: String?,
     image: String?,
@@ -48,11 +49,14 @@ class UserJpaEntity(
             updatedAt = Instant.now()
         }
 
+    override val id: UserId
+        get() = UserId(uuid)
+
     companion object {
         fun from(user: User): UserJpaEntity = with(user) {
             UserJpaEntity(
                 userId = if (this is UserJpaEntity) userId else null,
-                uuid = uuid,
+                uuid = user.id.value,
                 name = name,
                 bio = bio,
                 image = image,
@@ -71,7 +75,7 @@ class UserJpaEntity(
         other as UserJpaEntity
 
         if (userId != other.userId) return false
-        if (uuid != other.uuid) return false
+        if (id != other.id) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
         if (name != other.name) return false
@@ -85,7 +89,7 @@ class UserJpaEntity(
 
     override fun hashCode(): Int {
         var result = userId.hashCode()
-        result = 31 * result + uuid.hashCode()
+        result = 31 * result + id.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()
         result = 31 * result + name.hashCode()

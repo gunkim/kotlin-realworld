@@ -1,13 +1,12 @@
 package io.github.gunkim.realworld.domain.user.repository
 
 import io.github.gunkim.realworld.domain.user.model.User
-import java.util.UUID
+import io.github.gunkim.realworld.domain.user.model.UserId
 
 interface UserReadRepository {
     fun findByEmail(email: String): User?
-    fun findByUuid(uuid: UUID): User?
+    fun findById(userId: UserId): User?
     fun findByUserName(name: String): User?
-    fun existsFollowingIdAndFollowerUsername(uuid: UUID, targetUuid: UUID): Boolean
-
-    fun findFollowingUserUuids(uuid: UUID): List<UUID>
+    fun existsFollowingIdAndFollowerUsername(followerId: UserId, followeeId: UserId): Boolean
+    fun findFollowingUserUuids(uuid: UserId): List<UserId>
 }

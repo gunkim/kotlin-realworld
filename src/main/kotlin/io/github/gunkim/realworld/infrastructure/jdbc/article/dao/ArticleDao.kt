@@ -62,8 +62,8 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
         FROM users u
              INNER JOIN user_follow uf ON uf.followerId = u.userId
              INNER JOIN article a ON a.author.userId = uf.followeeId
-        WHERE u.uuid = :userId
+        WHERE u.uuid = :userUuid
         """
     )
-    fun findFeedArticles(userId: UUID, pageable: Pageable): List<ArticleJpaEntity>
+    fun findFeedArticles(userUuid: UUID, pageable: Pageable): List<ArticleJpaEntity>
 }

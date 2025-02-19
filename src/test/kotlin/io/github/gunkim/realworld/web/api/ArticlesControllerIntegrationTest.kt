@@ -45,7 +45,7 @@ class ArticlesControllerIntegrationTest(
                 description = "Article Description",
                 body = "Article Body",
                 tagList = listOf("tag1", "tag2"),
-                authorUuid = author.uuid
+                authorId = author.id
             )
         )
         this.authToken = token
@@ -93,7 +93,7 @@ class ArticlesControllerIntegrationTest(
 
         "GET /api/articles/feed - Get feed articles" {
             followUserService.followUser(
-                authUser.uuid,
+                authUser.id,
                 author.name
             )
 
@@ -200,7 +200,7 @@ class ArticlesControllerIntegrationTest(
         "DELETE /api/articles/:slug/favorite" {
             favoriteArticleService.favoriteArticle(
                 articles[0].slug,
-                authUser.uuid
+                authUser.id
             )
             mockMvc.delete("/api/articles/${articles[0].slug}/favorite") {
                 header(HttpHeaders.AUTHORIZATION, authToken)

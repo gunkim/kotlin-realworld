@@ -2,6 +2,7 @@ package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
@@ -27,7 +28,7 @@ class ArticleResponseAssembler(
                 article,
                 favoritesCount,
                 favoritedArticleUuids.contains(article.uuid),
-                followingUserUuids.contains(article.author.uuid)
+                followingUserUuids.contains(article.author.id)
             )
         }
     }
@@ -46,17 +47,17 @@ class ArticleResponseAssembler(
                 article,
                 favoritesCount,
                 favoritedArticleUuids.contains(article.uuid),
-                followingUserUuids.contains(article.author.uuid)
+                followingUserUuids.contains(article.author.id)
             )
         }
         return ArticlesResponse.create(responses)
     }
 
-    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<List<UUID>, List<UUID>> {
+    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<List<UUID>, List<UserId>> {
         return if (authenticatedUser != null) {
-            val userUuid = authenticatedUser.uuid
-            val favoritedArticleUuids = favoriteArticleService.getFavoritesArticles(userUuid)
-            val followingUserUuids = followUserService.getFollowingUserUuids(userUuid)
+            val userId = authenticatedUser.userId
+            val favoritedArticleUuids = favoriteArticleService.getFavoritesArticles(userId)
+            val followingUserUuids = followUserService.getFollowingUserUuids(userId)
             favoritedArticleUuids to followingUserUuids
         } else {
             emptyList<UUID>() to emptyList()
