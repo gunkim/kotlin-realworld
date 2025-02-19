@@ -55,4 +55,15 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
     fun getFavoritesArticles(userUuid: UUID): List<UUID>
 
     fun findBySlugValue(slug: String): ArticleJpaEntity?
+
+    @Query(
+        """
+        SELECT a
+        FROM users u
+             INNER JOIN user_follow uf ON uf.followerId = u.userId
+             INNER JOIN article a ON a.author.userId = uf.followeeId
+        WHERE u.uuid = :userId
+        """
+    )
+    fun findFeedArticles(userId: UUID, pageable: Pageable): List<ArticleJpaEntity>
 }

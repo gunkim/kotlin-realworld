@@ -6,6 +6,7 @@ import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.user.model.User
+import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
@@ -25,12 +26,15 @@ class ArticlesControllerIntegrationTest(
     private val createArticleService: CreateArticleService,
     private val getArticleService: GetArticleService,
     private val favoriteArticleService: FavoriteArticleService,
+    private val followUserService: FollowUserService,
 ) : IntegrationTest() {
-    lateinit var token: String
-    lateinit var articles: List<Article>
-    lateinit var author: User
     lateinit var authUser: User
+    lateinit var authToken: String
+
+    lateinit var author: User
     lateinit var authorToken: String
+
+    lateinit var articles: List<Article>
 
     override suspend fun beforeEachTest(testCase: TestCase) {
         val (authUser, token) = createUser("gunkim.author@gmail.com", "gunkim", "password")
@@ -44,7 +48,7 @@ class ArticlesControllerIntegrationTest(
                 authorUuid = author.uuid
             )
         )
-        this.token = token
+        this.authToken = token
         this.authUser = authUser
         this.articles = articles
         this.author = author
@@ -54,7 +58,7 @@ class ArticlesControllerIntegrationTest(
     init {
         "GET /api/articles - Get all articles" {
             mockMvc.get("/api/articles") {
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(HttpHeaders.AUTHORIZATION, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.articles.length()") { value(articles.size) }
@@ -87,6 +91,31 @@ class ArticlesControllerIntegrationTest(
                 }.andDo { print() }
         }
 
+        "GET /api/articles/feed - Get feed articles" {
+            followUserService.followUser(
+                authUser.uuid,
+                author.name
+            )
+
+            mockMvc.get("/api/articles/feed") {
+                header(HttpHeaders.AUTHORIZATION, authToken)
+            }.andExpect {
+                status { isOk() }
+                jsonPath("$.articles.length()") { value(articles.size) }
+                jsonPath("$.articles[0].author.username") { value(author.name) }
+                jsonPath("$.articles[0].favoritesCount") { value(0) }
+                jsonPath("$.articles[0].body") { value(articles[0].body) }
+                jsonPath("$.articles[0].tagList[0]") { value(articles[0].tags[0].name) }
+                jsonPath("$.articles[0].tagList[1]") { value(articles[0].tags[1].name) }
+                jsonPath("$.articles[0].title") { value(articles[0].title) }
+                jsonPath("$.articles[0].description") { value(articles[0].description) }
+                jsonPath("$.articles[0].slug") { value(articles[0].slug.value) }
+                jsonPath("$.articlesCount") { value(articles.size) }
+                jsonPath("$.articles[0].createdAt") { exists() }
+                jsonPath("$.articles[0].updatedAt") { exists() }
+            }.andDo { print() }
+        }
+
         "POST /api/articles - Create an article" {
             val request = CreateArticleRequest(
                 title = "New Article",
@@ -100,7 +129,7 @@ class ArticlesControllerIntegrationTest(
 
             mockMvc.post("/api/articles") {
                 contentType = org.springframework.http.MediaType.APPLICATION_JSON
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(HttpHeaders.AUTHORIZATION, authToken)
                 content = requestJson
             }.andExpect {
                 status { isCreated() }
@@ -128,7 +157,7 @@ class ArticlesControllerIntegrationTest(
 
             mockMvc.put("/api/articles/${articles[0].slug}") {
                 contentType = org.springframework.http.MediaType.APPLICATION_JSON
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(HttpHeaders.AUTHORIZATION, authToken)
                 content = requestJson
             }.andExpect {
                 status { isOk() }
@@ -151,7 +180,7 @@ class ArticlesControllerIntegrationTest(
 
         "POST /api/articles/:slug/favorite" {
             mockMvc.post("/api/articles/${articles[0].slug}/favorite") {
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(HttpHeaders.AUTHORIZATION, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.article.favoritesCount") { value(1) }
@@ -174,7 +203,7 @@ class ArticlesControllerIntegrationTest(
                 authUser.uuid
             )
             mockMvc.delete("/api/articles/${articles[0].slug}/favorite") {
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(HttpHeaders.AUTHORIZATION, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.article.favoritesCount") { value(0) }

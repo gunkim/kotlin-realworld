@@ -25,6 +25,13 @@ class ArticleReadRepositoryImpl(
         return articleDao.findArticlesByTagAndAuthor(tag, author, pageable)
     }
 
+    override fun findFeedArticles(userId: UUID, limit: Int, offset: Int): List<Article> {
+        val page = offset / limit
+        val pageable = PageRequest.of(page, limit)
+
+        return articleDao.findFeedArticles(userId, pageable)
+    }
+
     override fun getCountAllByArticleUuids(articleUuids: List<UUID>): List<ArticleCountProjection> {
         return articleDao.getCountAllByArticleUuids(articleUuids)
     }

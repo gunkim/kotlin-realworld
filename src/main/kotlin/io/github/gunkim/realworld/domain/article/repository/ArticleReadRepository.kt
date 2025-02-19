@@ -13,7 +13,10 @@ interface ArticleReadRepository {
         offset: Int,
     ): List<Article>
 
+    fun findFeedArticles(userId: UUID, limit: Int, offset: Int): List<Article>
+
     fun getCountAllByArticleUuids(articleUuids: List<UUID>): List<ArticleCountProjection>
     fun getFavoritesArticles(userUuid: UUID): List<UUID>
+
     fun findBySlug(slug: Slug): Article?
 }

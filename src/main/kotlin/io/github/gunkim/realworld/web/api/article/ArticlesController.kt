@@ -8,6 +8,7 @@ import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.article.service.UpdateArticleService
 import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.share.PagingRequest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.GetArticlesRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -66,6 +68,12 @@ interface ArticleResource {
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticleResponseWrapper
+
+    @GetMapping("/feed")
+    fun feedArticles(
+        @ModelAttribute request: PagingRequest,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+    ): ArticlesResponse
 }
 
 @RestController
@@ -155,5 +163,14 @@ class ArticlesController(
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
             .let(::ArticleResponseWrapper)
+    }
+
+    override fun feedArticles(request: PagingRequest, authenticatedUser: AuthenticatedUser): ArticlesResponse {
+        val articles = getArticleService.feedArticles(
+            authUuid = authenticatedUser.uuid,
+            limit = request.limit,
+            offset = request.offset
+        )
+        return articleResponseAssembler.assembleArticlesResponse(articles, authenticatedUser)
     }
 }
