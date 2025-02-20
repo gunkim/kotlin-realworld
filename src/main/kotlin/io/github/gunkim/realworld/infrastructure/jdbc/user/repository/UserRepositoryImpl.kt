@@ -9,7 +9,6 @@ import io.github.gunkim.realworld.infrastructure.jdbc.user.dao.FollowDao
 import io.github.gunkim.realworld.infrastructure.jdbc.user.dao.UserDao
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.FollowJpaEntity
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
-import java.util.UUID
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -37,14 +36,14 @@ class UserRepositoryImpl(
         val followerId = getUserDatabaseIdOrThrow(followerId)
         val followeeId = getUserDatabaseIdOrThrow(followeeId)
 
-        followDao.deleteByFolloweeIdAndFollowerId(
+        followDao.deleteByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(
             followingId = followeeId,
             followerId = followerId
         )
     }
 
     private fun getUserDatabaseIdOrThrow(userId: UserId): Int {
-        return userDao.findByUuid(userId.value)?.userId
+        return userDao.findById(userId)?.userDatabaseId
             ?: throw UserNotFoundException.fromId(userId)
     }
 }

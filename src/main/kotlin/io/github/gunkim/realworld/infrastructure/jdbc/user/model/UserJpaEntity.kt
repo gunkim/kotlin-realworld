@@ -2,6 +2,10 @@ package io.github.gunkim.realworld.infrastructure.jdbc.user.model
 
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserId
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Column
+import jakarta.persistence.Convert
+import jakarta.persistence.Converter
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -9,19 +13,33 @@ import jakarta.persistence.Id
 import java.time.Instant
 import java.util.UUID
 
+@Converter(autoApply = true)
+class UserIdConverter : AttributeConverter<UserId, UUID> {
+    override fun convertToDatabaseColumn(attribute: UserId): UUID {
+        return attribute.value
+    }
+
+    override fun convertToEntityAttribute(dbData: UUID): UserId {
+        return dbData.let(::UserId)
+    }
+}
+
 @Entity(name = "users")
 class UserJpaEntity(
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val userId: Int?,
-    val uuid: UUID,
+    val userDatabaseId: Int? = null,
+    @Column(name = "uuid")
+    @Convert(converter = UserIdConverter::class)
+    override val id: UserId,
     name: String,
     bio: String?,
     image: String?,
     email: String,
     password: String,
     override val createdAt: Instant,
-    override var updatedAt: Instant = Instant.now(),
+    override var updatedAt: Instant,
 ) : User.Editor {
     override var name: String = name
         set(value) {
@@ -49,14 +67,11 @@ class UserJpaEntity(
             updatedAt = Instant.now()
         }
 
-    override val id: UserId
-        get() = UserId(uuid)
-
     companion object {
         fun from(user: User): UserJpaEntity = with(user) {
             UserJpaEntity(
-                userId = if (this is UserJpaEntity) userId else null,
-                uuid = user.id.value,
+                userDatabaseId = if (this is UserJpaEntity) userDatabaseId else null,
+                id = user.id,
                 name = name,
                 bio = bio,
                 image = image,
@@ -74,7 +89,7 @@ class UserJpaEntity(
 
         other as UserJpaEntity
 
-        if (userId != other.userId) return false
+        if (userDatabaseId != other.userDatabaseId) return false
         if (id != other.id) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
@@ -88,7 +103,7 @@ class UserJpaEntity(
     }
 
     override fun hashCode(): Int {
-        var result = userId.hashCode()
+        var result = userDatabaseId ?: 0
         result = 31 * result + id.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()

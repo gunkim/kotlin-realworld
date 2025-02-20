@@ -1,6 +1,7 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.dao
 
 import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
+import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity
 import java.util.UUID
 import org.springframework.data.domain.Pageable
@@ -48,11 +49,11 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
                  INNER JOIN
                  article_favorite af ON af.articleId = a.articleId
                  INNER JOIN
-                 users u ON u.userId = af.userId
-            WHERE u.uuid = :userUuid
+                 users u ON u.userDatabaseId = af.userId
+            WHERE u.id = :userId
         """
     )
-    fun getFavoritesArticles(userUuid: UUID): List<UUID>
+    fun getFavoritesArticles(userId: UserId): List<UUID>
 
     fun findBySlugValue(slug: String): ArticleJpaEntity?
 
@@ -60,10 +61,10 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
         """
         SELECT a
         FROM users u
-             INNER JOIN user_follow uf ON uf.followerId = u.userId
-             INNER JOIN article a ON a.author.userId = uf.followeeId
-        WHERE u.uuid = :userUuid
+             INNER JOIN user_follow uf ON uf.followerUserDatabaseId = u.userDatabaseId
+             INNER JOIN article a ON a.author.userDatabaseId = uf.followeeUserDatabaseId
+        WHERE u.id = :userId
         """
     )
-    fun findFeedArticles(userUuid: UUID, pageable: Pageable): List<ArticleJpaEntity>
+    fun findFeedArticles(userId: UserId, pageable: Pageable): List<ArticleJpaEntity>
 }

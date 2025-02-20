@@ -38,7 +38,7 @@ class ArticleRepositoryImpl(
         articleFavoriteDao.save(
             ArticleFavoriteJpaEntity.of(
                 articleEntity.articleId!!,
-                userEntity.userId!!
+                userEntity.userDatabaseId!!
             )
         )
     }
@@ -49,7 +49,7 @@ class ArticleRepositoryImpl(
 
         articleFavoriteDao.deleteByArticleIdAndUserId(
             articleEntity.articleId!!,
-            userEntity.userId!!
+            userEntity.userDatabaseId!!
         )
     }
 

@@ -30,7 +30,7 @@ class ArticleReadRepositoryImpl(
         val page = offset / limit
         val pageable = PageRequest.of(page, limit)
 
-        return articleDao.findFeedArticles(userId.value, pageable)
+        return articleDao.findFeedArticles(userId, pageable)
     }
 
     override fun getCountAllByArticleUuids(articleUuids: List<UUID>): List<ArticleCountProjection> {
@@ -38,7 +38,7 @@ class ArticleReadRepositoryImpl(
     }
 
     override fun getFavoritesArticles(userId: UserId): List<UUID> {
-        return articleDao.getFavoritesArticles(userId.value)
+        return articleDao.getFavoritesArticles(userId)
     }
 
     override fun findBySlug(slug: Slug): Article? =

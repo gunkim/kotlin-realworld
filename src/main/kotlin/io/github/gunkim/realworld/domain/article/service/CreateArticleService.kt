@@ -7,7 +7,6 @@ import io.github.gunkim.realworld.domain.article.model.Tag
 import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
-import java.util.UUID
 import org.springframework.stereotype.Service
 
 @Service
