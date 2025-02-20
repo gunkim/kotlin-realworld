@@ -16,13 +16,8 @@ import java.util.UUID
 
 @Converter(autoApply = true)
 class UserIdConverter : AttributeConverter<UserId, UUID> {
-    override fun convertToDatabaseColumn(attribute: UserId): UUID {
-        return attribute.value
-    }
-
-    override fun convertToEntityAttribute(dbData: UUID): UserId {
-        return dbData.let(::UserId)
-    }
+    override fun convertToDatabaseColumn(attribute: UserId): UUID = attribute.value
+    override fun convertToEntityAttribute(dbData: UUID): UserId = dbData.let(::UserId)
 }
 
 @Entity(name = "users")
