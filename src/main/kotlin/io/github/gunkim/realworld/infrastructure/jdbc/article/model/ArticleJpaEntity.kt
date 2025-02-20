@@ -37,8 +37,9 @@ class ArticleIdConverter : AttributeConverter<ArticleId, UUID> {
 @Entity(name = "article")
 class ArticleJpaEntity(
     @Id
+    @Column(name = "article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val articleId: Int? = null,
+    val databaseId: Int? = null,
     @Column(name = "uuid")
     @Convert(converter = ArticleIdConverter::class)
     override val id: ArticleId,
@@ -91,7 +92,7 @@ class ArticleJpaEntity(
 
         other as ArticleJpaEntity
 
-        if (articleId != other.articleId) return false
+        if (databaseId != other.databaseId) return false
         if (id != other.id) return false
         if (author != other.author) return false
         if (articleTagJpaEntities != other.articleTagJpaEntities) return false
@@ -107,7 +108,7 @@ class ArticleJpaEntity(
     }
 
     override fun hashCode(): Int {
-        var result = articleId ?: 0
+        var result = databaseId ?: 0
         result = 31 * result + id.hashCode()
         result = 31 * result + author.hashCode()
         result = 31 * result + articleTagJpaEntities.hashCode()
@@ -124,7 +125,7 @@ class ArticleJpaEntity(
     companion object {
         fun from(article: Article, tags: List<Tag>): ArticleJpaEntity = with(article) {
             ArticleJpaEntity(
-                articleId = if (this is ArticleJpaEntity) articleId else null,
+                databaseId = if (this is ArticleJpaEntity) databaseId else null,
                 id = id,
                 slug = slug,
                 title = title,

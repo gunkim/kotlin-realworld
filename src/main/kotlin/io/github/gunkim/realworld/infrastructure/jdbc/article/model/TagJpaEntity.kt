@@ -1,5 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -9,8 +10,9 @@ import java.time.Instant
 @Entity(name = "tag")
 data class TagJpaEntity(
     @Id
+    @Column(name = "tag_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val tagId: Int? = null,
+    val databaseId: Int? = null,
     val name: String,
     val createdAt: Instant,
     val updatedAt: Instant,

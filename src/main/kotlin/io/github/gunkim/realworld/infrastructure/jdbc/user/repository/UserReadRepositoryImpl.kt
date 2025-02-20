@@ -26,8 +26,8 @@ class UserReadRepositoryImpl(
 
     override fun existsFollowingIdAndFollowerUsername(followerId: UserId, followeeId: UserId): Boolean {
         // TODO: According to the original design intention, it is more appropriate to execute a SELECT query with the UUID condition using a native query rather than retrieving the user here.
-        val id = userDao.findById(followerId)?.userDatabaseId ?: throw IllegalArgumentException()
-        val targetId = userDao.findById(followeeId)?.userDatabaseId ?: throw IllegalArgumentException()
+        val id = userDao.findById(followerId)?.databaseId ?: throw IllegalArgumentException()
+        val targetId = userDao.findById(followeeId)?.databaseId ?: throw IllegalArgumentException()
 
         return followDao.existsByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(id, targetId)
     }

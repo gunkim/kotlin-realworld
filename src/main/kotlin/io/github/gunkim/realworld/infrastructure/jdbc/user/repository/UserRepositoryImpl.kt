@@ -26,24 +26,32 @@ class UserRepositoryImpl(
     }
 
     override fun follow(followerId: UserId, followeeId: UserId) {
-        val followerId = getUserDatabaseIdOrThrow(followerId)
-        val followeeId = getUserDatabaseIdOrThrow(followeeId)
-
-        followDao.save(FollowJpaEntity.of(followeeId, followerId))
-    }
-
-    override fun unfollow(followerId: UserId, followeeId: UserId) {
-        val followerId = getUserDatabaseIdOrThrow(followerId)
-        val followeeId = getUserDatabaseIdOrThrow(followeeId)
-
-        followDao.deleteByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(
-            followingId = followeeId,
-            followerId = followerId
+        val (followerDatabaseId, followeeDatabaseId) = resolveUserDatabaseIds(followerId, followeeId)
+        followDao.save(
+            FollowJpaEntity.of(
+                followeeId = followeeDatabaseId,
+                followerId = followerDatabaseId
+            )
         )
     }
 
+    override fun unfollow(followerId: UserId, followeeId: UserId) {
+        val (followerDatabaseId, followeeDatabaseId) = resolveUserDatabaseIds(followerId, followeeId)
+        followDao.deleteByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(
+            followingDatabaseId = followeeDatabaseId,
+            followerDatabaseId = followerDatabaseId
+        )
+    }
+
+    private fun resolveUserDatabaseIds(followerId: UserId, followeeId: UserId): Pair<Int, Int> {
+        val followerDatabaseId = getUserDatabaseIdOrThrow(followerId)
+        val followeeDatabaseId = getUserDatabaseIdOrThrow(followeeId)
+
+        return followerDatabaseId to followeeDatabaseId
+    }
+
     private fun getUserDatabaseIdOrThrow(userId: UserId): Int {
-        return userDao.findById(userId)?.userDatabaseId
+        return userDao.findById(userId)?.databaseId
             ?: throw UserNotFoundException.fromId(userId)
     }
 }

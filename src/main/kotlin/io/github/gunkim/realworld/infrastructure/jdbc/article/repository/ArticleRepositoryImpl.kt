@@ -37,8 +37,8 @@ class ArticleRepositoryImpl(
 
         articleFavoriteDao.save(
             ArticleFavoriteJpaEntity.of(
-                articleEntity.articleId!!,
-                userEntity.userDatabaseId!!
+                articleEntity.databaseId!!,
+                userEntity.databaseId!!
             )
         )
     }
@@ -47,9 +47,9 @@ class ArticleRepositoryImpl(
         val articleEntity = ArticleJpaEntity.from(article, articleTagJpaEntities(article))
         val userEntity = UserJpaEntity.from(user)
 
-        articleFavoriteDao.deleteByArticleIdAndUserId(
-            articleEntity.articleId!!,
-            userEntity.userDatabaseId!!
+        articleFavoriteDao.deleteByArticleDatabaseIdAndUserDatabaseId(
+            articleEntity.databaseId!!,
+            userEntity.databaseId!!
         )
     }
 

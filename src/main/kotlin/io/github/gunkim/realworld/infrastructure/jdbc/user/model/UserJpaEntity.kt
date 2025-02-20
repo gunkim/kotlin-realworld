@@ -25,7 +25,7 @@ class UserJpaEntity(
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val userDatabaseId: Int? = null,
+    val databaseId: Int? = null,
     @Column(name = "uuid")
     @Convert(converter = UserIdConverter::class)
     override val id: UserId,
@@ -61,7 +61,7 @@ class UserJpaEntity(
     companion object {
         fun from(user: User): UserJpaEntity = with(user) {
             UserJpaEntity(
-                userDatabaseId = if (this is UserJpaEntity) userDatabaseId else null,
+                databaseId = if (this is UserJpaEntity) databaseId else null,
                 id = user.id,
                 name = name,
                 bio = bio,
@@ -80,7 +80,7 @@ class UserJpaEntity(
 
         other as UserJpaEntity
 
-        if (userDatabaseId != other.userDatabaseId) return false
+        if (databaseId != other.databaseId) return false
         if (id != other.id) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
@@ -94,7 +94,7 @@ class UserJpaEntity(
     }
 
     override fun hashCode(): Int {
-        var result = userDatabaseId ?: 0
+        var result = databaseId ?: 0
         result = 31 * result + id.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()

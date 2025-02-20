@@ -12,7 +12,7 @@ class FollowJpaEntity(
     @Id
     @Column(name = "follow_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val followDatabaseId: Int?,
+    val databaseId: Int?,
     @Column(name = "followee_id")
     val followeeUserDatabaseId: Int,
     @Column(name = "follower_id")
@@ -23,7 +23,7 @@ class FollowJpaEntity(
     companion object {
         fun of(followeeId: Int, followerId: Int) =
             FollowJpaEntity(
-                followDatabaseId = null,
+                databaseId = null,
                 followeeUserDatabaseId = followeeId,
                 followerUserDatabaseId = followerId,
                 createdAt = Instant.now()

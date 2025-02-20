@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface FollowDao : JpaRepository<FollowJpaEntity, Long> {
     fun existsByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(followeeUserDatabaseId: Int, followerUserDatabaseId: Int): Boolean
-    fun deleteByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(followingId: Int, followerId: Int)
+    fun deleteByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(followingDatabaseId: Int, followerDatabaseId: Int)
 }

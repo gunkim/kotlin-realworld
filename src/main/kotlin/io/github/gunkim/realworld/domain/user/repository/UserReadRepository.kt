@@ -8,5 +8,5 @@ interface UserReadRepository {
     fun findById(userId: UserId): User?
     fun findByUserName(name: String): User?
     fun existsFollowingIdAndFollowerUsername(followerId: UserId, followeeId: UserId): Boolean
-    fun findFollowingUserUuids(uuid: UserId): List<UserId>
+    fun findFollowingUserUuids(userId: UserId): List<UserId>
 }

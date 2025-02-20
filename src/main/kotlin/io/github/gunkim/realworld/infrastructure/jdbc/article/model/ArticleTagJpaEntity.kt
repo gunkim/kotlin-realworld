@@ -16,7 +16,7 @@ data class ArticleTagJpaEntity(
     @Id
     @Column(name = "article_tag_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    val databaseId: Int? = null,
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "article_id", nullable = false)
     var article: ArticleJpaEntity? = null,
@@ -35,7 +35,7 @@ data class ArticleTagJpaEntity(
         )
 
         fun from(tag: Tag) = ArticleTagJpaEntity(
-            id = if (tag is ArticleTagJpaEntity) tag.id else null,
+            databaseId = if (tag is ArticleTagJpaEntity) tag.databaseId else null,
             article = if (tag is ArticleTagJpaEntity) tag.article else null,
             tag = if (tag is ArticleTagJpaEntity) tag.tag else TagJpaEntity.from(tag.name),
             createdAt = if (tag is ArticleTagJpaEntity) tag.createdAt else Instant.now(),

@@ -36,7 +36,7 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
         SELECT a.id as articleId, COUNT(*) as count
         FROM article_favorite af
              INNER JOIN
-             article a ON af.articleId = a.articleId
+             article a ON af.articleDatabaseId = a.databaseId
         WHERE a.id IN :articleIds 
         GROUP BY a.id
         """
@@ -48,9 +48,9 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
             SELECT a.id
             FROM article a
                  INNER JOIN
-                 article_favorite af ON af.articleId = a.articleId
+                 article_favorite af ON af.articleDatabaseId = a.databaseId
                  INNER JOIN
-                 users u ON u.userDatabaseId = af.userId
+                 users u ON u.databaseId = af.userDatabaseId
             WHERE u.id = :userId
         """
     )
@@ -62,8 +62,8 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
         """
         SELECT a
         FROM users u
-             INNER JOIN user_follow uf ON uf.followerUserDatabaseId = u.userDatabaseId
-             INNER JOIN article a ON a.author.userDatabaseId = uf.followeeUserDatabaseId
+             INNER JOIN user_follow uf ON uf.followerUserDatabaseId = u.databaseId
+             INNER JOIN article a ON a.author.databaseId = uf.followeeUserDatabaseId
         WHERE u.id = :userId
         """
     )
