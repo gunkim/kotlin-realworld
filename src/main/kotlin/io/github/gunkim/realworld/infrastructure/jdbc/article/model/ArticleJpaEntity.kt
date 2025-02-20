@@ -5,8 +5,10 @@ import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.model.Tag
 import io.github.gunkim.realworld.infrastructure.jdbc.share.Updatable
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
+import jakarta.persistence.AttributeConverter
 import jakarta.persistence.CascadeType
-import jakarta.persistence.Column
+import jakarta.persistence.Convert
+import jakarta.persistence.Converter
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -18,14 +20,19 @@ import jakarta.persistence.OneToMany
 import java.time.Instant
 import java.util.UUID
 
-//TODO : Refactoring
+@Converter(autoApply = true)
+class SlugConverter : AttributeConverter<Slug, String> {
+    override fun convertToDatabaseColumn(attribute: Slug): String = attribute.value
+    override fun convertToEntityAttribute(slug: String): Slug = Slug(slug)
+}
+
 @Entity(name = "article")
 class ArticleJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val articleId: Int? = null,
     override val uuid: UUID,
-    slug: String,
+    slug: Slug,
     title: String,
     description: String,
     body: String,
@@ -48,14 +55,10 @@ class ArticleJpaEntity(
     override val tags: List<Tag>
         get() = articleTagJpaEntities.map { Tag.create(it.tag.name) }
 
-    @Column(name = "slug")
-    var slugValue: String = slug
-
-    override var slug: Slug
-        get() = Slug(slugValue)
+    @Convert(converter = SlugConverter::class)
+    override var slug: Slug = slug
         set(value) {
-            slugValue = value.value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
     override var title: String = title
         set(value) {
@@ -85,7 +88,7 @@ class ArticleJpaEntity(
         if (comments != other.comments) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
-        if (slugValue != other.slugValue) return false
+        if (slug != other.slug) return false
         if (title != other.title) return false
         if (description != other.description) return false
         if (body != other.body) return false
@@ -101,7 +104,7 @@ class ArticleJpaEntity(
         result = 31 * result + comments.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()
-        result = 31 * result + slugValue.hashCode()
+        result = 31 * result + slug.hashCode()
         result = 31 * result + title.hashCode()
         result = 31 * result + description.hashCode()
         result = 31 * result + body.hashCode()
@@ -113,7 +116,7 @@ class ArticleJpaEntity(
             ArticleJpaEntity(
                 articleId = if (this is ArticleJpaEntity) articleId else null,
                 uuid = uuid,
-                slug = slug.value,
+                slug = slug,
                 title = title,
                 description = description,
                 body = body,

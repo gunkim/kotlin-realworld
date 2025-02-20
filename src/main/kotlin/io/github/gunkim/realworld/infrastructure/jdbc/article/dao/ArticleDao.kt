@@ -1,6 +1,7 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.dao
 
 import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
+import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity
 import java.util.UUID
@@ -55,7 +56,7 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
     )
     fun getFavoritesArticles(userId: UserId): List<UUID>
 
-    fun findBySlugValue(slug: String): ArticleJpaEntity?
+    fun findBySlug(slug: Slug): ArticleJpaEntity?
 
     @Query(
         """

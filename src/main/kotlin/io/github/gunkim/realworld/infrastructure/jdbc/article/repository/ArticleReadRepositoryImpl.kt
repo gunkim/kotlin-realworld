@@ -42,5 +42,5 @@ class ArticleReadRepositoryImpl(
     }
 
     override fun findBySlug(slug: Slug): Article? =
-        articleDao.findBySlugValue(slug.value)
+        articleDao.findBySlug(slug)
 }
