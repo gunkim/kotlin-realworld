@@ -13,15 +13,19 @@ class ArticleFavoriteJpaEntity(
     val favoriteId: Int? = null,
     val articleId: Int,
     val userId: Int,
-    val createdAt: Instant = Instant.now(),
-    val updatedAt: Instant? = null,
+    val createdAt: Instant,
+    val updatedAt: Instant,
 ) {
     companion object {
-        fun of(articleId: Int, userId: Int) =
-            ArticleFavoriteJpaEntity(
+        fun of(articleId: Int, userId: Int): ArticleFavoriteJpaEntity {
+            val now = Instant.now()
+
+            return ArticleFavoriteJpaEntity(
                 articleId = articleId,
                 userId = userId,
-                createdAt = Instant.now()
+                createdAt = now,
+                updatedAt = now
             )
+        }
     }
 }

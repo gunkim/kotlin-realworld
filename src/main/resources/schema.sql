@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users
     bio        VARCHAR(255),
     image      VARCHAR(255),
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP(6)
+    updated_at TIMESTAMP(6)                           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS article
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS article
     body        VARCHAR(255)                           NOT NULL,
     author_id   INT                                    NOT NULL,
     created_at  TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMP(6),
+    updated_at  TIMESTAMP(6)                           NOT NULL,
     CONSTRAINT fk_article_author FOREIGN KEY (author_id) REFERENCES users (user_id)
 );
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS article_favorite
     article_id  INT                                    NOT NULL,
     user_id     INT                                    NOT NULL,
     created_at  TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMP(6),
+    updated_at  TIMESTAMP(6)                           NOT NULL,
     CONSTRAINT fk_favorite_article FOREIGN KEY (article_id) REFERENCES article (article_id),
     CONSTRAINT fk_favorite_user FOREIGN KEY (user_id) REFERENCES users (user_id),
     CONSTRAINT unique_article_favorite UNIQUE (article_id, user_id)
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS comment
     body       VARCHAR(255)                           NOT NULL,
     author_id  INT                                    NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP(6),
+    updated_at TIMESTAMP(6)                           NOT NULL,
     CONSTRAINT fk_comment_article FOREIGN KEY (article_id) REFERENCES article (article_id),
     CONSTRAINT fk_comment_author FOREIGN KEY (author_id) REFERENCES users (user_id)
 );
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS tag
     tag_id     INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(255) UNIQUE                    NOT NULL,
     created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP(6)
+    updated_at TIMESTAMP(6)                           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS article_tag
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS user_follow
     followee_id INT                                    NOT NULL,
     follower_id INT                                    NOT NULL,
     created_at  TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at  TIMESTAMP(6),
+    updated_at  TIMESTAMP(6)                           NOT NULL,
     UNIQUE (follower_id, followee_id),
     CONSTRAINT fk_user_follow_followee FOREIGN KEY (followee_id) REFERENCES users (user_id),
     CONSTRAINT fk_user_follow_follower FOREIGN KEY (follower_id) REFERENCES users (user_id)

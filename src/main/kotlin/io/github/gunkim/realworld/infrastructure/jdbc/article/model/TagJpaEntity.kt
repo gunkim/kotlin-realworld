@@ -13,9 +13,17 @@ data class TagJpaEntity(
     val tagId: Int? = null,
     val name: String,
     val createdAt: Instant,
-    val updatedAt: Instant? = null,
+    val updatedAt: Instant,
 ) {
     companion object {
-        fun from(name: String) = TagJpaEntity(name = name, createdAt = Instant.now())
+        fun from(name: String): TagJpaEntity {
+            val now = Instant.now()
+
+            return TagJpaEntity(
+                name = name,
+                createdAt = now,
+                updatedAt = now
+            )
+        }
     }
 }

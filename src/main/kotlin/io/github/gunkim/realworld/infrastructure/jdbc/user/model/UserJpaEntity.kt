@@ -2,6 +2,7 @@ package io.github.gunkim.realworld.infrastructure.jdbc.user.model
 
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserId
+import io.github.gunkim.realworld.infrastructure.jdbc.share.Updatable
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Column
 import jakarta.persistence.Convert
@@ -40,31 +41,26 @@ class UserJpaEntity(
     password: String,
     override val createdAt: Instant,
     override var updatedAt: Instant,
-) : User.Editor {
+) : User.Editor, Updatable {
     override var name: String = name
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
     override var bio: String? = bio
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
     override var image: String? = image
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
     override var email: String = email
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
     override var password: String = password
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
 
     companion object {

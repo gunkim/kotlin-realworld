@@ -3,6 +3,7 @@ package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.model.Tag
+import io.github.gunkim.realworld.infrastructure.jdbc.share.Updatable
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -36,8 +37,8 @@ class ArticleJpaEntity(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
     override val comments: List<CommentJpaEntity> = listOf(),
     override val createdAt: Instant,
-    override var updatedAt: Instant = Instant.now(),
-) : Article.Editor {
+    override var updatedAt: Instant,
+) : Article.Editor, Updatable {
     init {
         articleTagJpaEntities.forEach {
             it.article = this
@@ -58,20 +59,17 @@ class ArticleJpaEntity(
         }
     override var title: String = title
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
 
     override var description: String = description
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
 
     override var body: String = body
         set(value) {
-            field = value
-            updatedAt = Instant.now()
+            field = updateField(field, value)
         }
 
     override fun equals(other: Any?): Boolean {
@@ -121,7 +119,8 @@ class ArticleJpaEntity(
                 body = body,
                 articleTagJpaEntities = tags.map(ArticleTagJpaEntity.Companion::from),
                 author = UserJpaEntity.from(author),
-                createdAt = Instant.now()
+                createdAt = article.createdAt,
+                updatedAt = article.updatedAt,
             )
         }
     }
