@@ -18,7 +18,7 @@ class ArticleResponseAssembler(
 ) {
     fun assembleArticleResponse(article: Article, authenticatedUser: AuthenticatedUser?): ArticleResponse {
         val favoritesCount = favoriteArticleService.getFavoritesCount(listOf(article.id))
-            .firstOrNull { it.getArticleId() == article.id }?.getCount() ?: 0
+            .firstOrNull { it.articleId == article.id }?.count ?: 0
 
         return if (authenticatedUser == null) {
             ArticleResponse.noAuthenticated(article, favoritesCount)
@@ -42,7 +42,7 @@ class ArticleResponseAssembler(
         }
         val (favoritedArticleUuids, followingUserUuids) = getUserContext(authenticatedUser)
         val responses = articles.map { article ->
-            val favoritesCount = favoritesCountMap.firstOrNull { it.getArticleId() == article.id }?.getCount() ?: 0
+            val favoritesCount = favoritesCountMap.firstOrNull { it.articleId == article.id }?.count ?: 0
             ArticleResponse.from(
                 article,
                 favoritesCount,
