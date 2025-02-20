@@ -22,48 +22,59 @@ class ArticleRepositoryImpl(
     private val tagDao: TagDao,
     private val articleFavoriteDao: ArticleFavoriteDao,
 ) : ArticleRepository, ArticleReadRepository by articleReadRepository {
+
     override fun save(article: Article): Article {
-        val allTags = articleTagJpaEntities(article)
-        return articleDao.save(ArticleJpaEntity.from(article, allTags))
+        val articleJpaEntity = convertArticleToJpaEntity(article)
+        return articleDao.save(articleJpaEntity)
     }
 
     override fun delete(article: Article) {
-        articleDao.delete(ArticleJpaEntity.from(article, articleTagJpaEntities(article)))
+        articleDao.delete(convertArticleToJpaEntity(article))
     }
 
     override fun favorite(article: Article, user: User) {
-        val articleEntity = ArticleJpaEntity.from(article, articleTagJpaEntities(article))
-        val userEntity = UserJpaEntity.from(user)
-
+        val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
         articleFavoriteDao.save(
             ArticleFavoriteJpaEntity.of(
-                articleEntity.databaseId!!,
-                userEntity.databaseId!!
+                articleJpaEntity.databaseId!!,
+                userJpaEntity.databaseId!!
             )
         )
     }
 
     override fun unFavorite(article: Article, user: User) {
-        val articleEntity = ArticleJpaEntity.from(article, articleTagJpaEntities(article))
-        val userEntity = UserJpaEntity.from(user)
-
+        val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
         articleFavoriteDao.deleteByArticleDatabaseIdAndUserDatabaseId(
-            articleEntity.databaseId!!,
-            userEntity.databaseId!!
+            articleJpaEntity.databaseId!!,
+            userJpaEntity.databaseId!!
         )
     }
 
-    private fun articleTagJpaEntities(article: Article): List<ArticleTagJpaEntity> {
-        if (article is ArticleJpaEntity) {
-            return article.articleTagJpaEntities
-        }
-        val existingTags = tagDao.findByNameIn(article.tags.map { it.name })
-        val existingTagNames = existingTags.map { it.name }.toSet()
+    private fun mapToJpaEntities(article: Article, user: User) =
+        convertArticleToJpaEntity(article) to UserJpaEntity.from(user)
 
-        val newTags = article.tags.filterNot { existingTagNames.contains(it.name) }
+    private fun convertArticleToJpaEntity(article: Article) =
+        ArticleJpaEntity.from(article, convertTagsToJpaEntities(article))
+
+    /**
+     * Converts the `tags` associated with the provided `article` into a list of `ArticleTagJpaEntity`.
+     * If the `article` is already an instance of `ArticleJpaEntity`, the existing `articleTagJpaEntities` are returned.
+     * Otherwise, it retrieves existing tag entities from the database, identifies any new tags that aren't already present,
+     * creates new tag entities, and combines both existing and new tag entities to generate the result.
+     *
+     * @param article The article whose tags need to be converted to JPA entities.
+     * @return A list of `ArticleTagJpaEntity` objects corresponding to the tags of the article.
+     */
+    private fun convertTagsToJpaEntities(article: Article): List<ArticleTagJpaEntity> {
+        if (article is ArticleJpaEntity) return article.articleTagJpaEntities
+
+        val tags = article.tags
+        val existingTagEntities = tagDao.findByNameIn(tags.map { it.name })
+        val existingTagNames = existingTagEntities.map { it.name }.toSet()
+        val newTagEntities = tags.filterNot { it.name in existingTagNames }
             .map { TagJpaEntity.from(it.name) }
 
-        val allTags = (existingTags + newTags).map(ArticleTagJpaEntity.Companion::fromTagEntity)
-        return allTags
+        return (existingTagEntities + newTagEntities)
+            .map(ArticleTagJpaEntity.Companion::fromTagEntity)
     }
 }
