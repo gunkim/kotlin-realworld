@@ -1,12 +1,14 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
 import io.github.gunkim.realworld.domain.article.model.Article
+import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.model.Tag
 import io.github.gunkim.realworld.infrastructure.jdbc.share.Updatable
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
 import jakarta.persistence.Convert
 import jakarta.persistence.Converter
 import jakarta.persistence.Entity
@@ -26,12 +28,20 @@ class SlugConverter : AttributeConverter<Slug, String> {
     override fun convertToEntityAttribute(slug: String): Slug = Slug(slug)
 }
 
+@Converter(autoApply = true)
+class ArticleIdConverter : AttributeConverter<ArticleId, UUID> {
+    override fun convertToDatabaseColumn(attribute: ArticleId): UUID = attribute.value
+    override fun convertToEntityAttribute(uuid: UUID): ArticleId = ArticleId(uuid)
+}
+
 @Entity(name = "article")
 class ArticleJpaEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val articleId: Int? = null,
-    override val uuid: UUID,
+    @Column(name = "uuid")
+    @Convert(converter = ArticleIdConverter::class)
+    override val id: ArticleId,
     slug: Slug,
     title: String,
     description: String,
@@ -82,7 +92,7 @@ class ArticleJpaEntity(
         other as ArticleJpaEntity
 
         if (articleId != other.articleId) return false
-        if (uuid != other.uuid) return false
+        if (id != other.id) return false
         if (author != other.author) return false
         if (articleTagJpaEntities != other.articleTagJpaEntities) return false
         if (comments != other.comments) return false
@@ -98,7 +108,7 @@ class ArticleJpaEntity(
 
     override fun hashCode(): Int {
         var result = articleId ?: 0
-        result = 31 * result + uuid.hashCode()
+        result = 31 * result + id.hashCode()
         result = 31 * result + author.hashCode()
         result = 31 * result + articleTagJpaEntities.hashCode()
         result = 31 * result + comments.hashCode()
@@ -115,7 +125,7 @@ class ArticleJpaEntity(
         fun from(article: Article, tags: List<Tag>): ArticleJpaEntity = with(article) {
             ArticleJpaEntity(
                 articleId = if (this is ArticleJpaEntity) articleId else null,
-                uuid = uuid,
+                id = id,
                 slug = slug,
                 title = title,
                 description = description,

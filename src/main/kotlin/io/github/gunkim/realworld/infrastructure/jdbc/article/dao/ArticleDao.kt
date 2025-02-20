@@ -1,10 +1,10 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.dao
 
 import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
+import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity
-import java.util.UUID
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -33,19 +33,19 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
 
     @Query(
         """
-        SELECT CAST(a.uuid AS char(36)) as uuid, COUNT(*) as count
+        SELECT a.id as articleId, COUNT(*) as count
         FROM article_favorite af
              INNER JOIN
-             article a ON af.article_id = a.article_id
-        WHERE a.uuid IN :articleUuids 
-        GROUP BY a.uuid
-        """, nativeQuery = true
+             article a ON af.articleId = a.articleId
+        WHERE a.id IN :articleIds 
+        GROUP BY a.id
+        """
     )
-    fun getCountAllByArticleUuids(@Param("articleUuids") articleUuids: List<UUID>): List<ArticleCountProjection>
+    fun getCountAllByArticleIds(articleIds: List<ArticleId>): List<ArticleCountProjection>
 
     @Query(
         """
-            SELECT a.uuid
+            SELECT a.id
             FROM article a
                  INNER JOIN
                  article_favorite af ON af.articleId = a.articleId
@@ -54,7 +54,7 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Long> {
             WHERE u.id = :userId
         """
     )
-    fun getFavoritesArticles(userId: UserId): List<UUID>
+    fun getFavoritesArticles(userId: UserId): List<ArticleId>
 
     fun findBySlug(slug: Slug): ArticleJpaEntity?
 

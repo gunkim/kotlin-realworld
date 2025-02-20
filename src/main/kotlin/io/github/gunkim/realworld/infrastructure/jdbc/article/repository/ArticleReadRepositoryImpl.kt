@@ -2,11 +2,11 @@ package io.github.gunkim.realworld.infrastructure.jdbc.article.repository
 
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
+import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.repository.ArticleReadRepository
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.ArticleDao
-import java.util.UUID
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 
@@ -33,11 +33,11 @@ class ArticleReadRepositoryImpl(
         return articleDao.findFeedArticles(userId, pageable)
     }
 
-    override fun getCountAllByArticleUuids(articleUuids: List<UUID>): List<ArticleCountProjection> {
-        return articleDao.getCountAllByArticleUuids(articleUuids)
+    override fun getCountAllByArticleUuids(articleIds: List<ArticleId>): List<ArticleCountProjection> {
+        return articleDao.getCountAllByArticleIds(articleIds)
     }
 
-    override fun getFavoritesArticles(userId: UserId): List<UUID> {
+    override fun getFavoritesArticles(userId: UserId): List<ArticleId> {
         return articleDao.getFavoritesArticles(userId)
     }
 
