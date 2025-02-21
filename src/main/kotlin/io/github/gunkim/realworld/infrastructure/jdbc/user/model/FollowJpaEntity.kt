@@ -20,6 +20,30 @@ class FollowJpaEntity(
     val createdAt: Instant,
     val updatedAt: Instant = Instant.now(),
 ) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FollowJpaEntity
+
+        if (databaseId != other.databaseId) return false
+        if (followeeUserDatabaseId != other.followeeUserDatabaseId) return false
+        if (followerUserDatabaseId != other.followerUserDatabaseId) return false
+        if (createdAt != other.createdAt) return false
+        if (updatedAt != other.updatedAt) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = databaseId ?: 0
+        result = 31 * result + followeeUserDatabaseId
+        result = 31 * result + followerUserDatabaseId
+        result = 31 * result + createdAt.hashCode()
+        result = 31 * result + updatedAt.hashCode()
+        return result
+    }
+
     companion object {
         fun of(followeeId: Int, followerId: Int) =
             FollowJpaEntity(

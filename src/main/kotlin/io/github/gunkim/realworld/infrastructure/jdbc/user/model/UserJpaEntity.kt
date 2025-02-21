@@ -58,22 +58,6 @@ class UserJpaEntity(
             field = updateField(field, value)
         }
 
-    companion object {
-        fun from(user: User): UserJpaEntity = with(user) {
-            UserJpaEntity(
-                databaseId = if (this is UserJpaEntity) databaseId else null,
-                id = user.id,
-                name = name,
-                bio = bio,
-                image = image,
-                email = email,
-                password = password,
-                createdAt = createdAt,
-                updatedAt = updatedAt,
-            )
-        }
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -104,5 +88,21 @@ class UserJpaEntity(
         result = 31 * result + email.hashCode()
         result = 31 * result + password.hashCode()
         return result
+    }
+
+    companion object {
+        fun from(user: User): UserJpaEntity = with(user) {
+            UserJpaEntity(
+                databaseId = if (this is UserJpaEntity) databaseId else null,
+                id = user.id,
+                name = name,
+                bio = bio,
+                image = image,
+                email = email,
+                password = password,
+                createdAt = createdAt,
+                updatedAt = updatedAt,
+            )
+        }
     }
 }

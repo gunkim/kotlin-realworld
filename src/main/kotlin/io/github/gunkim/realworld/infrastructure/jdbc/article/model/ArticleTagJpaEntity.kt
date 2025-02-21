@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne
 import java.time.Instant
 
 @Entity(name = "article_tag")
-data class ArticleTagJpaEntity(
+class ArticleTagJpaEntity(
     @Id
     @Column(name = "article_tag_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,30 @@ data class ArticleTagJpaEntity(
 ) : Tag {
     override val name: String
         get() = tag.name
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ArticleTagJpaEntity
+
+        if (databaseId != other.databaseId) return false
+        if (article != other.article) return false
+        if (tag != other.tag) return false
+        if (createdAt != other.createdAt) return false
+        if (updatedAt != other.updatedAt) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = databaseId ?: 0
+        result = 31 * result + (article?.hashCode() ?: 0)
+        result = 31 * result + tag.hashCode()
+        result = 31 * result + createdAt.hashCode()
+        result = 31 * result + (updatedAt?.hashCode() ?: 0)
+        return result
+    }
 
     companion object {
         fun fromTagEntity(tag: TagJpaEntity) = ArticleTagJpaEntity(
