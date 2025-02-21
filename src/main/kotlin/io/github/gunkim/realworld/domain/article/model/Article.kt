@@ -78,17 +78,3 @@ interface Article : Editable<Article>, DateAuditable {
         }
     }
 }
-
-interface Tag {
-    val name: String
-
-    companion object {
-        class Model(
-            override val name: String,
-        ) : Tag
-
-        fun create(name: String): Tag = Model(
-            name = name,
-        )
-    }
-}
