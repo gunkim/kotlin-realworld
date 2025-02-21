@@ -1,8 +1,8 @@
-package io.github.gunkim.realworld.test.case.integration.api
+package io.github.gunkim.realworld.web.api
 
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.TagDao
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.TagJpaEntity
-import io.github.gunkim.realworld.test.util.IntegrationTest
+import io.github.gunkim.realworld.share.IntegrationTest
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.test.TestCase
 import org.springframework.test.web.servlet.get

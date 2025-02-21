@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.test.case.integration.api
+package io.github.gunkim.realworld.web.api
 
 import io.github.gunkim.realworld.domain.article.exception.ArticleNotFoundException
 import io.github.gunkim.realworld.domain.article.model.Article
@@ -7,7 +7,7 @@ import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
-import io.github.gunkim.realworld.test.util.IntegrationTest
+import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
 import io.kotest.assertions.throwables.shouldThrow

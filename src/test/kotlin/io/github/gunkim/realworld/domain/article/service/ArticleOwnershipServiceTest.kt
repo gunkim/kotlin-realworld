@@ -1,9 +1,8 @@
-package io.github.gunkim.realworld.test.case.unit.domain.article.service
+package io.github.gunkim.realworld.domain.article.service
 
 import io.github.gunkim.realworld.domain.article.exception.NotArticleAuthorException
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
-import io.github.gunkim.realworld.domain.article.service.ArticleOwnershipService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.kotest.assertions.throwables.shouldThrow
@@ -35,19 +34,15 @@ class ArticleOwnershipServiceTest : StringSpec({
     val title = "Hello, World!"
 
     "should succeed when the user is the author of the article" {
-        val userAuthor =
-            createUser(email, "<PASSWORD>!", "Gunkim")
-        val authoredArticle =
-            createArticle(title, userAuthor)
+        val userAuthor = createUser(email, "<PASSWORD>!", "Gunkim")
+        val authoredArticle = createArticle(title, userAuthor)
         articleOwnershipService.validateOwnership(authoredArticle, userAuthor.id)
     }
 
     "should throw NotArticleAuthorException when the user is not the author of the article" {
-        val userAuthor =
-            createUser(email, "<PASSWORD>!", "Gunkim")
+        val userAuthor = createUser(email, "<PASSWORD>!", "Gunkim")
         val otherUserId = UserId.create()
-        val authoredArticle =
-            createArticle(title, userAuthor)
+        val authoredArticle = createArticle(title, userAuthor)
 
         shouldThrow<NotArticleAuthorException> {
             articleOwnershipService.validateOwnership(authoredArticle, otherUserId)

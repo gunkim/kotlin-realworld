@@ -1,7 +1,7 @@
-package io.github.gunkim.realworld.test.case.integration.api
+package io.github.gunkim.realworld.web.api
 
 import io.github.gunkim.realworld.domain.user.model.User
-import io.github.gunkim.realworld.test.util.IntegrationTest
+import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.user.model.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.web.api.user.model.request.UserRegistrationRequest
 import io.kotest.core.spec.DisplayName
