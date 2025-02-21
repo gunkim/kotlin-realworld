@@ -3,7 +3,7 @@ package io.github.gunkim.realworld.web.api.article
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
-import io.github.gunkim.realworld.domain.user.model.UserId
+import io.github.gunkim.realworld.domain.user.service.FollowPredicate
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
@@ -23,12 +23,12 @@ class ArticleResponseAssembler(
         return if (authenticatedUser == null) {
             ArticleResponse.noAuthenticated(article, favoritesCount)
         } else {
-            val (favoritedArticleUuids, followingUserUuids) = getUserContext(authenticatedUser)
+            val (favoritedArticleUuids, followingPredicate) = getUserContext(authenticatedUser)
             ArticleResponse.from(
                 article,
                 favoritesCount,
                 favoritedArticleUuids.contains(article.id),
-                followingUserUuids.contains(article.author.id)
+                followingPredicate(article.author.id)
             )
         }
     }
@@ -40,27 +40,27 @@ class ArticleResponseAssembler(
         } else {
             emptyList()
         }
-        val (favoritedArticleUuids, followingUserUuids) = getUserContext(authenticatedUser)
+        val (favoritedArticleUuids, followingPredicate) = getUserContext(authenticatedUser)
         val responses = articles.map { article ->
             val favoritesCount = favoritesCountMap.firstOrNull { it.articleId == article.id }?.count ?: 0
             ArticleResponse.from(
                 article,
                 favoritesCount,
                 favoritedArticleUuids.contains(article.id),
-                followingUserUuids.contains(article.author.id)
+                followingPredicate(article.author.id)
             )
         }
         return ArticlesResponse.create(responses)
     }
 
-    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<List<ArticleId>, List<UserId>> {
+    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<List<ArticleId>, FollowPredicate> {
         return if (authenticatedUser != null) {
             val userId = authenticatedUser.userId
             val favoritedArticleUuids = favoriteArticleService.getFavoritesArticles(userId)
-            val followingUserUuids = followUserService.getFollowingUserIds(userId)
-            favoritedArticleUuids to followingUserUuids
+            val followingPredicate = followUserService.getFollowingPredicate(userId)
+            favoritedArticleUuids to followingPredicate
         } else {
-            emptyList<ArticleId>() to emptyList()
+            emptyList<ArticleId>() to { false }
         }
     }
 }

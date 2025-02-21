@@ -78,10 +78,10 @@ class CommentsController(
         slug: String,
         authenticatedUser: AuthenticatedUser,
     ): CommentsResponse {
-        val followList = followUserService.getFollowingUserIds(authenticatedUser.userId)
+        val followingPredicate = followUserService.getFollowingPredicate(authenticatedUser.userId)
 
         return getCommentService.getComments(Slug(slug))
-            .map { CommentResponse.from(it, followList.contains(it.author.id)) }
+            .map { CommentResponse.from(it, followingPredicate(it.author.id)) }
             .let(::CommentsResponse)
     }
 }
