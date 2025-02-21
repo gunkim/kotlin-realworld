@@ -10,7 +10,8 @@ import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.comment.model.request.AddCommentRequest
 import io.github.gunkim.realworld.web.api.comment.model.response.CommentResponse
-import io.github.gunkim.realworld.web.api.comment.model.response.CommentsResponse
+import io.github.gunkim.realworld.web.api.comment.model.response.wrapper.CommentWrapper
+import io.github.gunkim.realworld.web.api.comment.model.response.wrapper.CommentsWrapper
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -29,7 +30,7 @@ interface CommentsResource {
         @PathVariable slug: String,
         @JsonRequest("comment") request: AddCommentRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): CommentResponse
+    ): CommentWrapper
 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
@@ -42,7 +43,7 @@ interface CommentsResource {
     fun getCommentsFromArticle(
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): CommentsResponse
+    ): CommentsWrapper
 }
 
 @RestController
@@ -61,6 +62,7 @@ class CommentsController(
         commentBody = request.body,
         authorId = authenticatedUser.userId,
     ).let { CommentResponse.from(it, followUserService.isFollowing(authenticatedUser.userId, it.author.name)) }
+        .let(::CommentWrapper)
 
     override fun deleteComment(
         slug: String,
@@ -77,11 +79,11 @@ class CommentsController(
     override fun getCommentsFromArticle(
         slug: String,
         authenticatedUser: AuthenticatedUser,
-    ): CommentsResponse {
+    ): CommentsWrapper {
         val followingPredicate = followUserService.getFollowingPredicate(authenticatedUser.userId)
 
         return getCommentService.getComments(Slug(slug))
             .map { CommentResponse.from(it, followingPredicate(it.author.id)) }
-            .let(::CommentsResponse)
+            .let(::CommentsWrapper)
     }
 }

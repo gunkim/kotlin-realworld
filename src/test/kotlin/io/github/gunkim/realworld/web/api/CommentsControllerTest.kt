@@ -103,14 +103,14 @@ class CommentsControllerTest(
                 status { isOk() }
                 jsonPath("$.comments") { isArray() }
                 jsonPath("$.comments.length()") { value(1) }
-                jsonPath("$.comments[0].comment.id") { value(comment.id.toString()) }
-                jsonPath("$.comments[0].comment.body") { value(comment.body) }
-                jsonPath("$.comments[0].comment.createdAt") { exists() }
-                jsonPath("$.comments[0].comment.updatedAt") { exists() }
-                jsonPath("$.comments[0].comment.author.username") { value(authUser.name) }
-                jsonPath("$.comments[0].comment.author.bio") { value(authUser.bio) }
-                jsonPath("$.comments[0].comment.author.image") { value(authUser.image) }
-                jsonPath("$.comments[0].comment.author.following") { value(false) }
+                jsonPath("$.comments[0].id") { value(comment.id.toString()) }
+                jsonPath("$.comments[0].body") { value(comment.body) }
+                jsonPath("$.comments[0].createdAt") { exists() }
+                jsonPath("$.comments[0].updatedAt") { exists() }
+                jsonPath("$.comments[0].author.username") { value(authUser.name) }
+                jsonPath("$.comments[0].author.bio") { value(authUser.bio) }
+                jsonPath("$.comments[0].author.image") { value(authUser.image) }
+                jsonPath("$.comments[0].author.following") { value(false) }
             }.andDo { print() }
         }
     }

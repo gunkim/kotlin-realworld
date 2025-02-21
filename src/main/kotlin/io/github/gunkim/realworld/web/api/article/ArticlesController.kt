@@ -12,8 +12,8 @@ import io.github.gunkim.realworld.share.PagingRequest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.GetArticlesRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
-import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponseWrapper
-import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
+import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticleWrapper
+import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticlesWrapper
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -32,30 +32,30 @@ interface ArticleResource {
     fun getArticles(
         request: GetArticlesRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser?,
-    ): ArticlesResponse
+    ): ArticlesWrapper
 
     @GetMapping("/feed")
     fun feedArticles(
         @ModelAttribute request: PagingRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): ArticlesResponse
+    ): ArticlesWrapper
 
     @GetMapping("/{slug}")
-    fun getArticle(@PathVariable slug: String): ArticleResponseWrapper
+    fun getArticle(@PathVariable slug: String): ArticleWrapper
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createArticle(
         @JsonRequest("article") request: CreateArticleRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper
+    ): ArticleWrapper
 
     @PutMapping("/{slug}")
     fun updateArticle(
         @PathVariable slug: String,
         @JsonRequest("article") request: UpdateArticleRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper
+    ): ArticleWrapper
 
     @DeleteMapping("/{slug}")
     fun deleteArticle(
@@ -67,13 +67,13 @@ interface ArticleResource {
     fun favoriteArticle(
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper
+    ): ArticleWrapper
 
     @DeleteMapping("/{slug}/favorite")
     fun unFavoriteArticle(
         @PathVariable slug: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper
+    ): ArticleWrapper
 }
 
 @RestController
@@ -88,7 +88,7 @@ class ArticlesController(
     override fun getArticles(
         request: GetArticlesRequest,
         authenticatedUser: AuthenticatedUser?,
-    ): ArticlesResponse {
+    ): ArticlesWrapper {
         val articles = getArticleService.getArticles(
             tag = request.tag,
             author = request.author,
@@ -98,16 +98,16 @@ class ArticlesController(
         return articleResponseAssembler.assembleArticlesResponse(articles, authenticatedUser)
     }
 
-    override fun getArticle(slug: String): ArticleResponseWrapper {
+    override fun getArticle(slug: String): ArticleWrapper {
         val article = getArticleService.getArticle(Slug(slug))
         return articleResponseAssembler.assembleArticleResponse(article, null)
-            .let(::ArticleResponseWrapper)
+            .let(::ArticleWrapper)
     }
 
     override fun createArticle(
         request: CreateArticleRequest,
         authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper {
+    ): ArticleWrapper {
         val article = createArticleService.createArticle(
             request.title,
             request.description,
@@ -116,14 +116,14 @@ class ArticlesController(
             authenticatedUser.userId
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
-            .let(::ArticleResponseWrapper)
+            .let(::ArticleWrapper)
     }
 
     override fun updateArticle(
         slug: String,
         request: UpdateArticleRequest,
         authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper {
+    ): ArticleWrapper {
         val article = updateArticleService.updateArticle(
             slug = Slug(slug),
             title = request.title,
@@ -131,7 +131,7 @@ class ArticlesController(
             body = request.body,
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
-            .let(::ArticleResponseWrapper)
+            .let(::ArticleWrapper)
     }
 
     override fun deleteArticle(
@@ -144,28 +144,28 @@ class ArticlesController(
     override fun favoriteArticle(
         slug: String,
         authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper {
+    ): ArticleWrapper {
         val article = favoriteArticleService.favoriteArticle(
             slug = Slug(slug),
             favoritingId = authenticatedUser.userId
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
-            .let(::ArticleResponseWrapper)
+            .let(::ArticleWrapper)
     }
 
     override fun unFavoriteArticle(
         slug: String,
         authenticatedUser: AuthenticatedUser,
-    ): ArticleResponseWrapper {
+    ): ArticleWrapper {
         val article = favoriteArticleService.unfavoriteArticle(
             slug = Slug(slug),
             unavoritingId = authenticatedUser.userId
         )
         return articleResponseAssembler.assembleArticleResponse(article, authenticatedUser)
-            .let(::ArticleResponseWrapper)
+            .let(::ArticleWrapper)
     }
 
-    override fun feedArticles(request: PagingRequest, authenticatedUser: AuthenticatedUser): ArticlesResponse {
+    override fun feedArticles(request: PagingRequest, authenticatedUser: AuthenticatedUser): ArticlesWrapper {
         val articles = getArticleService.feedArticles(
             userId = authenticatedUser.userId,
             limit = request.limit,

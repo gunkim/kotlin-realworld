@@ -1,6 +1,5 @@
 package io.github.gunkim.realworld.web.api.article.model.response
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
 import java.time.Instant
@@ -15,7 +14,6 @@ data class ArticleResponse(
     val updatedAt: Instant,
     val favorited: Boolean,
     val favoritesCount: Int,
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
     val author: ProfileResponse,
 ) {
     companion object {
@@ -38,11 +36,6 @@ data class ArticleResponse(
                 article.author,
                 authorFollowing
             )
-        )
-
-        fun noAuthenticated(article: Article, favoritesCount: Int) = from(
-            article = article,
-            favoritesCount = favoritesCount
         )
 
         fun create(article: Article) = from(

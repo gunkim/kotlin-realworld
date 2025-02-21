@@ -4,6 +4,7 @@ import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.domain.user.service.GetUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
+import io.github.gunkim.realworld.web.api.user.model.response.wrapper.ProfileWrapper
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ interface ProfilesResource {
     fun getProfile(
         @PathVariable username: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser?,
-    ): ProfileResponse
+    ): ProfileWrapper
 
     @PostMapping("/{username}/follow")
     fun follow(
@@ -41,11 +42,12 @@ class ProfilesController(
     override fun getProfile(
         username: String,
         authenticatedUser: AuthenticatedUser?,
-    ): ProfileResponse {
+    ): ProfileWrapper {
         val user = getUserService.getByUsername(username)
         val isFollowing = isUserFollowing(authenticatedUser, username)
 
         return ProfileResponse.of(user, isFollowing)
+            .let(::ProfileWrapper)
     }
 
     override fun follow(

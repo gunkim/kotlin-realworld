@@ -6,7 +6,7 @@ import io.github.gunkim.realworld.domain.user.service.CreateUserService
 import io.github.gunkim.realworld.domain.user.service.GetUserService
 import io.github.gunkim.realworld.web.api.user.model.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.web.api.user.model.request.UserRegistrationRequest
-import io.github.gunkim.realworld.web.api.user.model.response.UserResponse
+import io.github.gunkim.realworld.web.api.user.model.response.wrapper.UserWrapper
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -17,13 +17,13 @@ interface UsersResource {
     fun registration(
         @JsonRequest("user")
         request: UserRegistrationRequest,
-    ): UserResponse
+    ): UserWrapper
 
     @PostMapping("/login")
     fun authenticate(
         @JsonRequest("user")
         request: UserAuthenticateRequest,
-    ): UserResponse
+    ): UserWrapper
 }
 
 @RestController
@@ -33,18 +33,20 @@ class UsersController(
     private val createUserService: CreateUserService,
     private val getUserService: GetUserService,
 ) : UsersResource {
-    override fun registration(request: UserRegistrationRequest): UserResponse {
+    override fun registration(request: UserRegistrationRequest): UserWrapper {
         val registeredUser = createUserService.createUser(
             email = request.email,
             username = request.username,
             encodedPassword = authenticateUserService.encodePassword(request.password),
         )
         return userResponseAssembler.assembleUserResponse(registeredUser)
+            .let(::UserWrapper)
     }
 
-    override fun authenticate(request: UserAuthenticateRequest): UserResponse {
+    override fun authenticate(request: UserAuthenticateRequest): UserWrapper {
         val user = getUserService.getByEmail(request.email)
         authenticateUserService.authenticate(user, request.password)
         return userResponseAssembler.assembleUserResponse(user)
+            .let(::UserWrapper)
     }
 }

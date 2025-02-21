@@ -8,7 +8,7 @@ import io.github.gunkim.realworld.domain.user.service.FollowPredicate
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
-import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
+import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticlesWrapper
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,8 +22,8 @@ class ArticleResponseAssembler(
         return createArticleResponse(article, favoritesCounter, favoritePredicate, followingPredicate)
     }
 
-    fun assembleArticlesResponse(articles: List<Article>, authenticatedUser: AuthenticatedUser?): ArticlesResponse {
-        if (articles.isEmpty()) return ArticlesResponse.create(emptyList())
+    fun assembleArticlesResponse(articles: List<Article>, authenticatedUser: AuthenticatedUser?): ArticlesWrapper {
+        if (articles.isEmpty()) return ArticlesWrapper.create(emptyList())
 
         val articleIds = articles.map { it.id }
         val favoritesCounter = favoriteArticleService.getFavoritesCounter(articleIds)
@@ -38,7 +38,7 @@ class ArticleResponseAssembler(
             )
         }
 
-        return ArticlesResponse.create(responses)
+        return ArticlesWrapper.create(responses)
     }
 
     private fun createArticleResponse(
