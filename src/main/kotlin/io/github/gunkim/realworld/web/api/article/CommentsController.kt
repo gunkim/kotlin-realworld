@@ -1,10 +1,10 @@
 package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.config.request.JsonRequest
-import io.github.gunkim.realworld.domain.article.model.CommentId
+import io.github.gunkim.realworld.domain.comment.model.CommentId
 import io.github.gunkim.realworld.domain.article.model.Slug
-import io.github.gunkim.realworld.domain.article.service.AddCommentService
-import io.github.gunkim.realworld.domain.article.service.DeleteCommentService
+import io.github.gunkim.realworld.domain.comment.service.AddCommentService
+import io.github.gunkim.realworld.domain.comment.service.DeleteCommentService
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.request.AddCommentRequest
@@ -32,7 +32,7 @@ interface CommentsResource {
     fun deleteComment(
         @PathVariable slug: String,
         @PathVariable commentId: Int,
-        @AuthenticationPrincipal authenticatedUse: AuthenticatedUser,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     )
 }
 

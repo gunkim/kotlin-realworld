@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As.WRAPPER_OBJECT
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME
 import com.fasterxml.jackson.annotation.JsonTypeName
-import io.github.gunkim.realworld.domain.article.model.Comment
+import io.github.gunkim.realworld.domain.comment.model.Comment
 import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
 import java.time.Instant
 

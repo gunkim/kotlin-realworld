@@ -1,11 +1,11 @@
-package io.github.gunkim.realworld.domain.article.service
+package io.github.gunkim.realworld.domain.comment.service
 
 import io.github.gunkim.realworld.domain.article.ArticleFindable
-import io.github.gunkim.realworld.domain.article.CommentFindable
-import io.github.gunkim.realworld.domain.article.model.CommentId
+import io.github.gunkim.realworld.domain.comment.CommentFindable
+import io.github.gunkim.realworld.domain.comment.model.CommentId
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
-import io.github.gunkim.realworld.domain.article.repository.CommentRepository
+import io.github.gunkim.realworld.domain.comment.repository.CommentRepository
 import io.github.gunkim.realworld.domain.user.model.UserId
 import org.springframework.stereotype.Service
 

@@ -1,7 +1,8 @@
-package io.github.gunkim.realworld.domain.article.model
+package io.github.gunkim.realworld.domain.comment.model
 
 import io.github.gunkim.realworld.domain.DateAuditable
 import io.github.gunkim.realworld.domain.EntityId
+import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.user.model.User
 import java.time.Instant
 

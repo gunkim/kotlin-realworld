@@ -1,8 +1,9 @@
-package io.github.gunkim.realworld.infrastructure.jdbc.article.model
+package io.github.gunkim.realworld.infrastructure.jdbc.comment.model
 
 import io.github.gunkim.realworld.domain.article.model.Article
-import io.github.gunkim.realworld.domain.article.model.Comment
-import io.github.gunkim.realworld.domain.article.model.CommentId
+import io.github.gunkim.realworld.domain.comment.model.Comment
+import io.github.gunkim.realworld.domain.comment.model.CommentId
+import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

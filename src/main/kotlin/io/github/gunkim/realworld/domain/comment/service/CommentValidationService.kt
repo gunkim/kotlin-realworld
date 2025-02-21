@@ -1,7 +1,7 @@
-package io.github.gunkim.realworld.domain.article.service
+package io.github.gunkim.realworld.domain.comment.service
 
 import io.github.gunkim.realworld.domain.article.model.Article
-import io.github.gunkim.realworld.domain.article.model.Comment
+import io.github.gunkim.realworld.domain.comment.model.Comment
 import org.springframework.stereotype.Service
 
 @Service

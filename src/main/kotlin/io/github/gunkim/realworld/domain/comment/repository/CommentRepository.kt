@@ -1,6 +1,6 @@
-package io.github.gunkim.realworld.domain.article.repository
+package io.github.gunkim.realworld.domain.comment.repository
 
-import io.github.gunkim.realworld.domain.article.model.Comment
+import io.github.gunkim.realworld.domain.comment.model.Comment
 
 
 interface CommentRepository : CommentReadRepository {

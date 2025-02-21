@@ -1,10 +1,10 @@
-package io.github.gunkim.realworld.infrastructure.jdbc.article.repository
+package io.github.gunkim.realworld.infrastructure.jdbc.comment.repository
 
-import io.github.gunkim.realworld.domain.article.model.Comment
-import io.github.gunkim.realworld.domain.article.repository.CommentReadRepository
-import io.github.gunkim.realworld.domain.article.repository.CommentRepository
-import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.CommentDao
-import io.github.gunkim.realworld.infrastructure.jdbc.article.model.CommentJpaEntity
+import io.github.gunkim.realworld.domain.comment.model.Comment
+import io.github.gunkim.realworld.domain.comment.repository.CommentReadRepository
+import io.github.gunkim.realworld.domain.comment.repository.CommentRepository
+import io.github.gunkim.realworld.infrastructure.jdbc.comment.dao.CommentDao
+import io.github.gunkim.realworld.infrastructure.jdbc.comment.model.CommentJpaEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
