@@ -3,7 +3,7 @@ package io.github.gunkim.realworld.web.api
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
 import io.github.gunkim.realworld.domain.comment.service.AddCommentService
 import io.github.gunkim.realworld.share.IntegrationTest
-import io.github.gunkim.realworld.web.api.article.model.request.AddCommentRequest
+import io.github.gunkim.realworld.web.api.comment.model.request.AddCommentRequest
 import io.kotest.core.annotation.DisplayName
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.delete

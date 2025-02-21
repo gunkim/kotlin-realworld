@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.api.article.model.response
+package io.github.gunkim.realworld.web.api.comment.model.response
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
