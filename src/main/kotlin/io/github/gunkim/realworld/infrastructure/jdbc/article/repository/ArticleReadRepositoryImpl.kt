@@ -37,7 +37,7 @@ class ArticleReadRepositoryImpl(
         return articleDao.getCountAllByArticleIds(articleIds)
     }
 
-    override fun getFavoritesArticles(userId: UserId): List<ArticleId> {
+    override fun getFavoritesArticleIds(userId: UserId): List<ArticleId> {
         return articleDao.getFavoritesArticles(userId)
     }
 

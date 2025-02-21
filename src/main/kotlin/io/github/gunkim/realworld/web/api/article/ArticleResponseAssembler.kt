@@ -1,8 +1,9 @@
 package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.domain.article.model.Article
-import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
+import io.github.gunkim.realworld.domain.article.service.FavoritePredicate
+import io.github.gunkim.realworld.domain.article.service.FavoritesCounter
 import io.github.gunkim.realworld.domain.user.service.FollowPredicate
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.share.AuthenticatedUser
@@ -10,57 +11,56 @@ import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
 import io.github.gunkim.realworld.web.api.article.model.response.ArticlesResponse
 import org.springframework.stereotype.Component
 
-
 @Component
 class ArticleResponseAssembler(
     private val favoriteArticleService: FavoriteArticleService,
     private val followUserService: FollowUserService,
 ) {
     fun assembleArticleResponse(article: Article, authenticatedUser: AuthenticatedUser?): ArticleResponse {
-        val favoritesCount = favoriteArticleService.getFavoritesCount(listOf(article.id))
-            .firstOrNull { it.articleId == article.id }?.count ?: 0
-
-        return if (authenticatedUser == null) {
-            ArticleResponse.noAuthenticated(article, favoritesCount)
-        } else {
-            val (favoritedArticleUuids, followingPredicate) = getUserContext(authenticatedUser)
-            ArticleResponse.from(
-                article,
-                favoritesCount,
-                favoritedArticleUuids.contains(article.id),
-                followingPredicate(article.author.id)
-            )
-        }
+        val favoritesCounter = favoriteArticleService.getFavoritesCounter(listOf(article.id))
+        val (favoritePredicate, followingPredicate) = getUserContext(authenticatedUser)
+        return createArticleResponse(article, favoritesCounter, favoritePredicate, followingPredicate)
     }
 
     fun assembleArticlesResponse(articles: List<Article>, authenticatedUser: AuthenticatedUser?): ArticlesResponse {
-        val articleUuids = articles.map { it.id }
-        val favoritesCountMap = if (articleUuids.isNotEmpty()) {
-            favoriteArticleService.getFavoritesCount(articleUuids)
-        } else {
-            emptyList()
-        }
-        val (favoritedArticleUuids, followingPredicate) = getUserContext(authenticatedUser)
+        if (articles.isEmpty()) return ArticlesResponse.create(emptyList())
+
+        val articleIds = articles.map { it.id }
+        val favoritesCounter = favoriteArticleService.getFavoritesCounter(articleIds)
+        val (favoritePredicate, followingPredicate) = getUserContext(authenticatedUser)
+
         val responses = articles.map { article ->
-            val favoritesCount = favoritesCountMap.firstOrNull { it.articleId == article.id }?.count ?: 0
-            ArticleResponse.from(
+            createArticleResponse(
                 article,
-                favoritesCount,
-                favoritedArticleUuids.contains(article.id),
-                followingPredicate(article.author.id)
+                favoritesCounter,
+                favoritePredicate,
+                followingPredicate
             )
         }
+
         return ArticlesResponse.create(responses)
     }
 
-    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<List<ArticleId>, FollowPredicate> {
+    private fun createArticleResponse(
+        article: Article,
+        favoritesCounter: FavoritesCounter,
+        favoritePredicate: FavoritePredicate,
+        followingPredicate: FollowPredicate,
+    ): ArticleResponse {
+        return ArticleResponse.from(
+            article,
+            favoritesCounter(article.id),
+            favoritePredicate(article.id),
+            followingPredicate(article.author.id)
+        )
+    }
+
+    private fun getUserContext(authenticatedUser: AuthenticatedUser?): Pair<FavoritePredicate, FollowPredicate> {
         return if (authenticatedUser != null) {
             val userId = authenticatedUser.userId
-            val favoritedArticleUuids = favoriteArticleService.getFavoritesArticles(userId)
-            val followingPredicate = followUserService.getFollowingPredicate(userId)
-            favoritedArticleUuids to followingPredicate
+            favoriteArticleService.getFavoritePredicate(userId) to followUserService.getFollowingPredicate(userId)
         } else {
-            emptyList<ArticleId>() to { false }
+            Pair({ false }, { false })
         }
     }
 }
