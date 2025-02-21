@@ -78,7 +78,7 @@ class CommentsController(
         slug: String,
         authenticatedUser: AuthenticatedUser,
     ): CommentsResponse {
-        val followList = followUserService.getFollowingUserUuids(authenticatedUser.userId)
+        val followList = followUserService.getFollowingUserIds(authenticatedUser.userId)
 
         return getCommentService.getComments(Slug(slug))
             .map { CommentResponse.from(it, followList.contains(it.author.id)) }

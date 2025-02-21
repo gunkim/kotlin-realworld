@@ -32,7 +32,7 @@ class UserReadRepositoryImpl(
         return followDao.existsByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(id, targetId)
     }
 
-    override fun findFollowingUserUuids(userId: UserId): List<UserId> {
-        return userDao.findAllByFollowerUserUuid(userId)
+    override fun findFollowingUserIds(userId: UserId): List<UserId> {
+        return userDao.findAllByFollowerUserId(userId)
     }
 }

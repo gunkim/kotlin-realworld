@@ -57,7 +57,7 @@ class ArticleResponseAssembler(
         return if (authenticatedUser != null) {
             val userId = authenticatedUser.userId
             val favoritedArticleUuids = favoriteArticleService.getFavoritesArticles(userId)
-            val followingUserUuids = followUserService.getFollowingUserUuids(userId)
+            val followingUserUuids = followUserService.getFollowingUserIds(userId)
             favoritedArticleUuids to followingUserUuids
         } else {
             emptyList<ArticleId>() to emptyList()

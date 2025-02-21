@@ -19,5 +19,5 @@ interface UserDao : JpaRepository<UserJpaEntity, Long> {
         WHERE u.id = :userId
     """
     )
-    fun findAllByFollowerUserUuid(userId: UserId): List<UserId>
+    fun findAllByFollowerUserId(userId: UserId): List<UserId>
 }

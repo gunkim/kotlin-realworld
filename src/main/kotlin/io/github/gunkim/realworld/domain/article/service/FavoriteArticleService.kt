@@ -16,7 +16,7 @@ class FavoriteArticleService(
     private val getUserService: GetUserService,
 ) : ArticleFindable {
     fun getFavoritesCount(articleIds: List<ArticleId>): List<ArticleCountProjection> =
-        articleRepository.getCountAllByArticleUuids(articleIds)
+        articleRepository.getCountAllByArticleIds(articleIds)
 
     fun getFavoritesArticles(userId: UserId): List<ArticleId> = articleRepository.getFavoritesArticles(userId)
 

@@ -8,11 +8,11 @@ class NotArticleAuthorException internal constructor(
     message: String,
 ) : DomainException(message) {
     companion object {
-        fun fromArticleUuidAndAuthUuid(
+        fun of(
             articleId: ArticleId,
             authUuid: UserId,
         ) = NotArticleAuthorException(
-            "User with UUID: $authUuid is not the author of the article with UUID: $articleId"
+            "User with ID: $authUuid is not the author of the article with Id: $articleId"
         )
     }
 }

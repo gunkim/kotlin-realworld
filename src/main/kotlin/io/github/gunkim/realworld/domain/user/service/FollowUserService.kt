@@ -3,7 +3,6 @@ package io.github.gunkim.realworld.domain.user.service
 import io.github.gunkim.realworld.domain.UserFindable
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
-import java.util.UUID
 import org.springframework.stereotype.Service
 
 @Service
@@ -28,5 +27,5 @@ class FollowUserService(
         return userRepository.existsFollowingIdAndFollowerUsername(followerId, followee.id)
     }
 
-    fun getFollowingUserUuids(userId: UserId): List<UserId> = userRepository.findFollowingUserUuids(userId)
+    fun getFollowingUserIds(userId: UserId): List<UserId> = userRepository.findFollowingUserIds(userId)
 }

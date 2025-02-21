@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 class ArticleOwnershipService {
     fun validateOwnership(article: Article, authUuid: UserId) {
         require(article.author.id == authUuid) {
-            throw NotArticleAuthorException.fromArticleUuidAndAuthUuid(article.id, authUuid)
+            throw NotArticleAuthorException.of(article.id, authUuid)
         }
     }
 }

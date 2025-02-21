@@ -33,7 +33,7 @@ class ArticleReadRepositoryImpl(
         return articleDao.findFeedArticles(userId, pageable)
     }
 
-    override fun getCountAllByArticleUuids(articleIds: List<ArticleId>): List<ArticleCountProjection> {
+    override fun getCountAllByArticleIds(articleIds: List<ArticleId>): List<ArticleCountProjection> {
         return articleDao.getCountAllByArticleIds(articleIds)
     }
 
