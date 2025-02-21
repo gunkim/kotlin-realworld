@@ -24,7 +24,7 @@ class UserReadRepositoryImpl(
         return userDao.findByName(name)
     }
 
-    override fun existsFollowingIdAndFollowerUsername(followerId: UserId, followeeId: UserId): Boolean {
+    override fun existsFollowerIdAndFolloweeId(followerId: UserId, followeeId: UserId): Boolean {
         // TODO: According to the original design intention, it is more appropriate to execute a SELECT query with the UUID condition using a native query rather than retrieving the user here.
         val id = userDao.findById(followerId)?.databaseId ?: throw IllegalArgumentException()
         val targetId = userDao.findById(followeeId)?.databaseId ?: throw IllegalArgumentException()
@@ -32,7 +32,7 @@ class UserReadRepositoryImpl(
         return followDao.existsByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(id, targetId)
     }
 
-    override fun findFollowingUserIds(userId: UserId): List<UserId> {
+    override fun findFollowedUserIdsFor(userId: UserId): List<UserId> {
         return userDao.findAllByFollowerUserId(userId)
     }
 }

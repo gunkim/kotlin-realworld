@@ -33,7 +33,7 @@ class FollowUserService(
      */
     fun isFollowing(followerId: UserId, followeeUsername: String): Boolean {
         val followee = findFollowee(followeeUsername)
-        return userRepository.existsFollowingIdAndFollowerUsername(followerId, followee.id)
+        return userRepository.existsFollowerIdAndFolloweeId(followerId, followee.id)
     }
 
     /**
@@ -43,7 +43,7 @@ class FollowUserService(
      * @return A predicate function to evaluate follow relationships.
      */
     fun getFollowingPredicate(userId: UserId): FollowPredicate {
-        val followings: List<UserId> = userRepository.findFollowingUserIds(userId)
+        val followings: List<UserId> = userRepository.findFollowedUserIdsFor(userId)
         return followings::contains
     }
 
