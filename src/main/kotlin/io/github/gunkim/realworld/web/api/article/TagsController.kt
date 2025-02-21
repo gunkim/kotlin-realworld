@@ -1,8 +1,8 @@
-package io.github.gunkim.realworld.web.api.tag
+package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.domain.article.model.Tag
 import io.github.gunkim.realworld.domain.article.service.GetTagService
-import io.github.gunkim.realworld.web.api.tag.model.response.TagResponse
+import io.github.gunkim.realworld.web.api.article.model.response.TagResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
