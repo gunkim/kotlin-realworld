@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.share
+package io.github.gunkim.realworld.test.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.application.AuthenticationService
