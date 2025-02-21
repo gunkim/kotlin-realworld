@@ -1,9 +1,9 @@
 package io.github.gunkim.realworld.web.api.article
 
-import io.github.gunkim.realworld.application.DeleteArticleUseCase
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.service.CreateArticleService
+import io.github.gunkim.realworld.domain.article.service.DeleteArticleService
 import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
 import io.github.gunkim.realworld.domain.article.service.GetArticleService
 import io.github.gunkim.realworld.domain.article.service.UpdateArticleService
@@ -81,7 +81,7 @@ class ArticlesController(
     private val getArticleService: GetArticleService,
     private val createArticleService: CreateArticleService,
     private val updateArticleService: UpdateArticleService,
-    private val deleteArticleUseCase: DeleteArticleUseCase,
+    private val deleteArticleService: DeleteArticleService,
     private val articleResponseAssembler: ArticleResponseAssembler,
     private val favoriteArticleService: FavoriteArticleService,
 ) : ArticleResource {
@@ -138,7 +138,7 @@ class ArticlesController(
         slug: String,
         authenticatedUser: AuthenticatedUser,
     ) {
-        deleteArticleUseCase.deleteArticle(slug, authenticatedUser.userId)
+        deleteArticleService.deleteArticle(Slug(slug), authenticatedUser.userId)
     }
 
     override fun favoriteArticle(
