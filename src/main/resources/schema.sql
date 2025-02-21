@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS article_favorite
 CREATE TABLE IF NOT EXISTS comment
 (
     comment_id INT                                    NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    uuid       UUID                                   NOT NULL,
     article_id INT                                    NOT NULL,
     body       VARCHAR(255)                           NOT NULL,
     author_id  INT                                    NOT NULL,

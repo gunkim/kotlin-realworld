@@ -52,8 +52,6 @@ class ArticleJpaEntity(
     override val author: UserJpaEntity,
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val articleTagJpaEntities: List<ArticleTagJpaEntity> = listOf(),
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    override val comments: List<CommentJpaEntity> = listOf(),
     override val createdAt: Instant,
     override var updatedAt: Instant,
 ) : Article.Editor, Updatable {
@@ -96,7 +94,6 @@ class ArticleJpaEntity(
         if (id != other.id) return false
         if (author != other.author) return false
         if (articleTagJpaEntities != other.articleTagJpaEntities) return false
-        if (comments != other.comments) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
         if (slug != other.slug) return false
@@ -112,7 +109,6 @@ class ArticleJpaEntity(
         result = 31 * result + id.hashCode()
         result = 31 * result + author.hashCode()
         result = 31 * result + articleTagJpaEntities.hashCode()
-        result = 31 * result + comments.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()
         result = 31 * result + slug.hashCode()
@@ -123,6 +119,23 @@ class ArticleJpaEntity(
     }
 
     companion object {
+        fun from(article: Article): ArticleJpaEntity = with(article) {
+            ArticleJpaEntity(
+                databaseId = if (this is ArticleJpaEntity) databaseId else null,
+                id = id,
+                slug = slug,
+                title = title,
+                description = description,
+                body = body,
+                author = UserJpaEntity.from(author),
+                articleTagJpaEntities =
+                    if (this is ArticleJpaEntity) articleTagJpaEntities
+                    else article.tags.map(ArticleTagJpaEntity.Companion::from),
+                createdAt = createdAt,
+                updatedAt = updatedAt,
+            )
+        }
+
         fun from(article: Article, tags: List<Tag>): ArticleJpaEntity = with(article) {
             ArticleJpaEntity(
                 databaseId = if (this is ArticleJpaEntity) databaseId else null,

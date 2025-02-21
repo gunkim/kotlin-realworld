@@ -1,7 +1,10 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.model
 
+import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Comment
+import io.github.gunkim.realworld.domain.article.model.CommentId
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -10,25 +13,30 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import java.time.Instant
-import java.util.UUID
 
-//TODO : Refactoring
 @Entity(name = "comment")
 class CommentJpaEntity(
     @Id
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val commentId: Int,
-    override val uuid: UUID,
+    val databaseId: Int? = null,
     body: String,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorId", nullable = false)
     override val author: UserJpaEntity,
+    article: ArticleJpaEntity? = null,
     override val createdAt: Instant,
     override var updatedAt: Instant = Instant.now(),
-) : Comment.Editor {
-    @ManyToOne(fetch = FetchType.LAZY)
+) : Comment {
+    override val id: CommentId
+        get() = CommentId(databaseId!!)
+
+    override val article: Article
+        get() = articleJpaEntity!!
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "articleId", nullable = false)
-    val article: ArticleJpaEntity? = null
+    val articleJpaEntity: ArticleJpaEntity? = article
 
     override var body = body
         set(value) {
@@ -36,29 +44,18 @@ class CommentJpaEntity(
             updatedAt = Instant.now()
         }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CommentJpaEntity
-
-        if (commentId != other.commentId) return false
-        if (uuid != other.uuid) return false
-        if (body != other.body) return false
-        if (author != other.author) return false
-        if (createdAt != other.createdAt) return false
-        if (updatedAt != other.updatedAt) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = commentId.hashCode()
-        result = 31 * result + uuid.hashCode()
-        result = 31 * result + body.hashCode()
-        result = 31 * result + author.hashCode()
-        result = 31 * result + createdAt.hashCode()
-        result = 31 * result + updatedAt.hashCode()
-        return result
+    companion object {
+        fun from(
+            comment: Comment,
+        ): CommentJpaEntity {
+            val now = Instant.now()
+            return CommentJpaEntity(
+                body = comment.body,
+                author = comment.author.let(UserJpaEntity.Companion::from),
+                article = comment.article.let(ArticleJpaEntity.Companion::from),
+                createdAt = now,
+                updatedAt = now,
+            )
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.util.UUID
 
 data class UserId internal constructor(
     override val value: UUID,
-) : EntityId {
+) : EntityId<UUID> {
     override fun toString(): String {
         return value.toString()
     }
