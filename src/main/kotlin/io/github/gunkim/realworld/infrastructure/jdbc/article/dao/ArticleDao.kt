@@ -8,7 +8,6 @@ import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEn
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
-import org.springframework.data.repository.query.Param
 
 interface ArticleDao : JpaRepository<ArticleJpaEntity, Int> {
 
@@ -19,15 +18,19 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Int> {
         """
         SELECT DISTINCT a 
         FROM article a 
-        LEFT JOIN a.articleTagJpaEntities at
-        INNER JOIN at.tag t
+              LEFT JOIN a.articleTagJpaEntities at
+              LEFT JOIN article_favorite af ON af.articleDatabaseId = a.databaseId
+              LEFT JOIN users u ON u.databaseId = af.userDatabaseId
+             INNER JOIN at.tag t
         WHERE (:tag IS NULL OR t.name = :tag)
           AND (:author IS NULL OR a.author.name = :author)
+          AND (:favoritedUsername IS NULL OR u.name = :favoritedUsername)
         """
     )
-    fun findArticlesByTagAndAuthor(
-        @Param("tag") tag: String?,
-        @Param("author") author: String?,
+    fun find(
+        tag: String?,
+        author: String?,
+        favoritedUsername: String?,
         pageable: Pageable,
     ): List<ArticleJpaEntity>
 
