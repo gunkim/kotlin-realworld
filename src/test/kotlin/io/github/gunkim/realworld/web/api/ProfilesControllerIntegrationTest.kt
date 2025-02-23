@@ -6,7 +6,6 @@ import io.github.gunkim.realworld.share.IntegrationTest
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
@@ -52,14 +51,18 @@ class ProfilesControllerIntegrationTest(
                     jsonPath("$.profile.bio") { value(profileUser.bio) }
                     jsonPath("$.profile.image") { value(profileUser.image) }
                     jsonPath("$.profile.following") { value(false) }
-                }
+                }.andDo { print() }
         }
         "POST /api/profiles/:username/follow - Follow a profile" {
             mockMvc.post(followEndpoint(profileUser.name)) {
                 header(authHeaderName, token)
             }.andExpect {
                 status { isOk() }
-            }
+                jsonPath("$.profile.username") { value(profileUser.name) }
+                jsonPath("$.profile.bio") { value(profileUser.bio) }
+                jsonPath("$.profile.image") { value(profileUser.image) }
+                jsonPath("$.profile.following") { value(true) }
+            }.andDo { print() }
         }
         "DELETE /api/profiles/:username/follow - Unfollow a profile" {
             followUserService.followUser(authenticatedUser.id, profileUser.name)
@@ -67,7 +70,11 @@ class ProfilesControllerIntegrationTest(
                 header(authHeaderName, token)
             }.andExpect {
                 status { isOk() }
-            }
+                jsonPath("$.profile.username") { value(profileUser.name) }
+                jsonPath("$.profile.bio") { value(profileUser.bio) }
+                jsonPath("$.profile.image") { value(profileUser.image) }
+                jsonPath("$.profile.following") { value(false) }
+            }.andDo { print() }
         }
     }
 }

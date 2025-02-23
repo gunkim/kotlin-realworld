@@ -25,13 +25,13 @@ interface ProfilesResource {
     fun follow(
         @PathVariable username: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    )
+    ) : ProfileWrapper
 
     @DeleteMapping("/{username}/follow")
     fun unfollow(
         @PathVariable username: String,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
-    )
+    ) : ProfileWrapper
 }
 
 @RestController
@@ -53,19 +53,27 @@ class ProfilesController(
     override fun follow(
         username: String,
         authenticatedUser: AuthenticatedUser,
-    ) {
-        followUserService.followUser(authenticatedUser.userId, username)
+    ): ProfileWrapper {
+        val followee = followUserService.followUser(authenticatedUser.userId, username)
+        val isFollowing = isUserFollowing(authenticatedUser, username)
+
+        return ProfileResponse.of(followee, isFollowing)
+            .let(::ProfileWrapper)
     }
 
     override fun unfollow(
         username: String,
         authenticatedUser: AuthenticatedUser,
-    ) {
-        followUserService.unfollowUser(authenticatedUser.userId, username)
+    ): ProfileWrapper {
+        val followee = followUserService.unfollowUser(authenticatedUser.userId, username)
+        val isFollowing = isUserFollowing(authenticatedUser, username)
+
+        return ProfileResponse.of(followee, isFollowing)
+            .let(::ProfileWrapper)
     }
 
     private fun isUserFollowing(authenticatedUser: AuthenticatedUser?, targetUsername: String): Boolean {
-        val userUuid = authenticatedUser?.userId ?: return false
-        return followUserService.isFollowing(userUuid, targetUsername)
+        val userId = authenticatedUser?.userId ?: return false
+        return followUserService.isFollowing(userId, targetUsername)
     }
 }
