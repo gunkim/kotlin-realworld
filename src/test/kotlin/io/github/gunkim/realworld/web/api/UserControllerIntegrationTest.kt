@@ -31,7 +31,7 @@ class UserControllerIntegrationTest : IntegrationTest() {
     init {
         "GET /api/user - Return authenticated user's details" {
             mockMvc.get("/api/user") {
-                header(HttpHeaders.AUTHORIZATION, authorizationToken)
+                header(authHeaderName, authorizationToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.user.email") { value(authUser.email) }
@@ -53,7 +53,7 @@ class UserControllerIntegrationTest : IntegrationTest() {
             val requestJson = toJsonString(requestBody)
 
             mockMvc.put("/api/user") {
-                header(HttpHeaders.AUTHORIZATION, authorizationToken)
+                header(authHeaderName, authorizationToken)
                 contentType = MediaType.APPLICATION_JSON
                 content = requestJson
             }.andExpect {

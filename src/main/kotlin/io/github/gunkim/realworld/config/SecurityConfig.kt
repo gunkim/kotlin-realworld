@@ -2,6 +2,7 @@ package io.github.gunkim.realworld.config
 
 import io.github.gunkim.realworld.config.security.CustomJwtAuthenticationConverter
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,6 +22,10 @@ import javax.crypto.spec.SecretKeySpec
 @EnableWebSecurity
 class SecurityConfiguration(
     private val secretKey: SecretKeySpec,
+    @Value("\${jwt.header-prefix}")
+    private val headerPrefix: String,
+    @Value("\${jwt.header-name}")
+    private val headerName: String,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -58,9 +63,9 @@ class SecurityConfiguration(
      * @return An instance of BearerTokenResolver used to extract bearer tokens from HTTP requests.
      */
     private fun customBearerTokenResolver(): BearerTokenResolver = BearerTokenResolver { request: HttpServletRequest ->
-        val authHeader = request.getHeader("Authorization")
-        if (authHeader != null && authHeader.startsWith("Token ")) {
-            authHeader.substring("Token ".length)
+        val authHeader = request.getHeader(headerName)
+        if (authHeader != null && authHeader.startsWith(headerPrefix)) {
+            authHeader.substring(headerPrefix.length)
         } else {
             null
         }

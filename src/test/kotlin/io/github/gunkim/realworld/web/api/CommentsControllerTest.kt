@@ -36,7 +36,7 @@ class CommentsControllerTest(
 
             val requestJson = toJsonString(mapOf("comment" to request))
             mockMvc.post("/api/articles/${article.slug}/comments") {
-                header("Authorization", authToken)
+                header(authHeaderName, authToken)
                 content = requestJson
                 contentType = MediaType.APPLICATION_JSON
             }.andExpect {
@@ -72,7 +72,7 @@ class CommentsControllerTest(
             )
 
             mockMvc.delete("/api/articles/${article.slug}/comments/${comment.id}") {
-                header("Authorization", authToken)
+                header(authHeaderName, authToken)
             }.andExpect {
                 status { isOk() }
             }.andDo { print() }
@@ -98,7 +98,7 @@ class CommentsControllerTest(
             )
 
             mockMvc.get("/api/articles/${article.slug}/comments") {
-                header("Authorization", authToken)
+                header(authHeaderName, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.comments") { isArray() }

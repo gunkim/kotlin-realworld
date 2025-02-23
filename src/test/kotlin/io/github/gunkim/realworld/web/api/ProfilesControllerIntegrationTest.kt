@@ -56,7 +56,7 @@ class ProfilesControllerIntegrationTest(
         }
         "POST /api/profiles/:username/follow - Follow a profile" {
             mockMvc.post(followEndpoint(profileUser.name)) {
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(authHeaderName, token)
             }.andExpect {
                 status { isOk() }
             }
@@ -64,7 +64,7 @@ class ProfilesControllerIntegrationTest(
         "DELETE /api/profiles/:username/follow - Unfollow a profile" {
             followUserService.followUser(authenticatedUser.id, profileUser.name)
             mockMvc.delete(followEndpoint(profileUser.name)) {
-                header(HttpHeaders.AUTHORIZATION, token)
+                header(authHeaderName, token)
             }.andExpect {
                 status { isOk() }
             }

@@ -58,7 +58,7 @@ class ArticlesControllerIntegrationTest(
     init {
         "GET /api/articles - Get all articles" {
             mockMvc.get("/api/articles") {
-                header(HttpHeaders.AUTHORIZATION, authToken)
+                header(authHeaderName, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.articles.length()") { value(articles.size) }
@@ -98,7 +98,7 @@ class ArticlesControllerIntegrationTest(
             )
 
             mockMvc.get("/api/articles/feed") {
-                header(HttpHeaders.AUTHORIZATION, authToken)
+                header(authHeaderName, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.articles.length()") { value(articles.size) }
@@ -129,7 +129,7 @@ class ArticlesControllerIntegrationTest(
 
             mockMvc.post("/api/articles") {
                 contentType = org.springframework.http.MediaType.APPLICATION_JSON
-                header(HttpHeaders.AUTHORIZATION, authToken)
+                header(authHeaderName, authToken)
                 content = requestJson
             }.andExpect {
                 status { isCreated() }
@@ -157,7 +157,7 @@ class ArticlesControllerIntegrationTest(
 
             mockMvc.put("/api/articles/${articles[0].slug}") {
                 contentType = org.springframework.http.MediaType.APPLICATION_JSON
-                header(HttpHeaders.AUTHORIZATION, authToken)
+                header(authHeaderName, authToken)
                 content = requestJson
             }.andExpect {
                 status { isOk() }
@@ -171,7 +171,7 @@ class ArticlesControllerIntegrationTest(
 
         "DELETE /api/articles/:slug - Delete an article" {
             mockMvc.delete("/api/articles/${articles[0].slug}") {
-                header(HttpHeaders.AUTHORIZATION, authorToken)
+                header(authHeaderName, authorToken)
             }.andExpect {
                 status { isOk() }
                 assertArticleDeletionThrowsException()
@@ -180,7 +180,7 @@ class ArticlesControllerIntegrationTest(
 
         "POST /api/articles/:slug/favorite" {
             mockMvc.post("/api/articles/${articles[0].slug}/favorite") {
-                header(HttpHeaders.AUTHORIZATION, authToken)
+                header(authHeaderName, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.article.favoritesCount") { value(1) }
@@ -203,7 +203,7 @@ class ArticlesControllerIntegrationTest(
                 authUser.id
             )
             mockMvc.delete("/api/articles/${articles[0].slug}/favorite") {
-                header(HttpHeaders.AUTHORIZATION, authToken)
+                header(authHeaderName, authToken)
             }.andExpect {
                 status { isOk() }
                 jsonPath("$.article.favoritesCount") { value(0) }
@@ -217,7 +217,7 @@ class ArticlesControllerIntegrationTest(
                 jsonPath("$.article.author.username") { value(author.name) }
                 jsonPath("$.article.createdAt") { exists() }
                 jsonPath("$.article.updatedAt") { exists() }
-            }
+            }.andDo { print() }
         }
     }
 

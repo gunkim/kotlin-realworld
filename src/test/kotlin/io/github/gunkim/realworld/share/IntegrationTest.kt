@@ -12,6 +12,7 @@ import io.kotest.core.test.TestCase
 import io.kotest.extensions.spring.SpringTestExtension
 import io.kotest.extensions.spring.SpringTestLifecycleMode
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
@@ -44,6 +45,12 @@ abstract class IntegrationTest : FreeSpec() {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
+    @Value("\${jwt.header-prefix}")
+    private lateinit var authHeaderPrefix: String
+
+    @Value("\${jwt.header-name}")
+    protected lateinit var authHeaderName: String
 
     init {
         extensions(SpringTestExtension(SpringTestLifecycleMode.Root))
@@ -81,9 +88,5 @@ abstract class IntegrationTest : FreeSpec() {
 
     protected fun toJsonString(any: Any) = objectMapper.writeValueAsString(any)
 
-    private fun toToken(token: String) = "$BEARER_TOKEN_PREFIX$token"
-
-    companion object {
-        private const val BEARER_TOKEN_PREFIX = "Bearer "
-    }
+    private fun toToken(token: String) = "$authHeaderPrefix$token"
 }
