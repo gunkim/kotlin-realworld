@@ -5,7 +5,6 @@ import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.repository.ArticleRepository
 import io.github.gunkim.realworld.domain.user.model.UserId
-import java.util.UUID
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,12 +14,14 @@ class GetArticleService(
     fun getArticles(
         tag: String?,
         author: String?,
+        favoritedUsername: String?,
         limit: Int,
         offset: Int,
     ): List<Article> {
         return articleRepository.find(
             tag = tag,
             author = author,
+            favoritedUsername = favoritedUsername,
             limit = limit,
             offset = offset
         )

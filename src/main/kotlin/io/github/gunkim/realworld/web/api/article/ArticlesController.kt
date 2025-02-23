@@ -2,11 +2,7 @@ package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.article.model.Slug
-import io.github.gunkim.realworld.domain.article.service.CreateArticleService
-import io.github.gunkim.realworld.domain.article.service.DeleteArticleService
-import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
-import io.github.gunkim.realworld.domain.article.service.GetArticleService
-import io.github.gunkim.realworld.domain.article.service.UpdateArticleService
+import io.github.gunkim.realworld.domain.article.service.*
 import io.github.gunkim.realworld.share.AuthenticatedUser
 import io.github.gunkim.realworld.share.PagingRequest
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
@@ -16,15 +12,7 @@ import io.github.gunkim.realworld.web.api.article.model.response.wrapper.Article
 import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticlesWrapper
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/api/articles")
 interface ArticleResource {
@@ -94,6 +82,7 @@ class ArticlesController(
             author = request.author,
             offset = request.offset,
             limit = request.limit,
+            favoritedUsername = request.favorited
         )
         return articleResponseAssembler.assembleArticlesResponse(articles, authenticatedUser)
     }

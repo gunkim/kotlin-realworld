@@ -17,13 +17,14 @@ class ArticleReadRepositoryImpl(
     override fun find(
         tag: String?,
         author: String?,
+        favoritedUsername: String?,
         limit: Int,
         offset: Int,
     ): List<Article> {
         val page = offset / limit
         val pageable = PageRequest.of(page, limit)
 
-        return articleDao.findArticlesByTagAndAuthor(tag, author, pageable)
+        return articleDao.find(tag, author, favoritedUsername, pageable)
     }
 
     override fun findFeedArticles(userId: UserId, limit: Int, offset: Int): List<Article> {

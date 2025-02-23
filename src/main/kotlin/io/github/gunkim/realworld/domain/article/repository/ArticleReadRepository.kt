@@ -10,6 +10,7 @@ interface ArticleReadRepository {
     fun find(
         tag: String?,
         author: String?,
+        favoritedUsername: String?,
         limit: Int,
         offset: Int,
     ): List<Article>
