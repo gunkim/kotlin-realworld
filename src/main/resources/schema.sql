@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS article
     author_id   INT                                    NOT NULL,
     created_at  TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at  TIMESTAMP(6)                           NOT NULL,
+    deleted_at  TIMESTAMP(6),
     CONSTRAINT fk_article_author FOREIGN KEY (author_id) REFERENCES users (user_id)
 );
 

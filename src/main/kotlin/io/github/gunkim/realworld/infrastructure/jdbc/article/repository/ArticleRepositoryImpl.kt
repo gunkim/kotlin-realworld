@@ -14,8 +14,10 @@ import io.github.gunkim.realworld.infrastructure.jdbc.article.model.TagJpaEntity
 import io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
+@Transactional
 class ArticleRepositoryImpl(
     @Qualifier("articleReadRepositoryImpl") private val articleReadRepository: ArticleReadRepository,
     private val articleDao: ArticleDao,

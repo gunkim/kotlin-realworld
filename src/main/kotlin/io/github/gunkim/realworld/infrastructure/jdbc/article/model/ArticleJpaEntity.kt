@@ -21,6 +21,8 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import java.time.Instant
 import java.util.UUID
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 
 @Converter(autoApply = true)
 class SlugConverter : AttributeConverter<Slug, String> {
@@ -35,6 +37,9 @@ class ArticleIdConverter : AttributeConverter<ArticleId, UUID> {
 }
 
 @Entity(name = "article")
+// Soft Delete
+@SQLDelete(sql = "UPDATE article SET deleted_at = now() WHERE article_id = ?")
+@SQLRestriction("deleted_at is NULL")
 class ArticleJpaEntity(
     @Id
     @Column(name = "article_id")
