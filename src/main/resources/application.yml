@@ -8,10 +8,4 @@ spring:
         - local-mysql-datasource
       dev-mysql:
         - dev-mysql-datasource
-    include: datasource
-
-jwt:
-  header-prefix: "Token "
-  header-name: "Authorization"
-  secret:
-    key: QzVGR0EyREMyNzRBQkQyRTNBNTZGQjVGMzlEOTY3MjVDM0M3QTcwNkQ1QUJBRTcw
+    include: datasource, auth
