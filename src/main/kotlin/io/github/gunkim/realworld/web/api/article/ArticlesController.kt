@@ -2,17 +2,29 @@ package io.github.gunkim.realworld.web.api.article
 
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.article.model.Slug
-import io.github.gunkim.realworld.domain.article.service.*
-import io.github.gunkim.realworld.share.AuthenticatedUser
-import io.github.gunkim.realworld.share.PagingRequest
+import io.github.gunkim.realworld.domain.article.service.CreateArticleService
+import io.github.gunkim.realworld.domain.article.service.DeleteArticleService
+import io.github.gunkim.realworld.domain.article.service.FavoriteArticleService
+import io.github.gunkim.realworld.domain.article.service.GetArticleService
+import io.github.gunkim.realworld.domain.article.service.UpdateArticleService
+import io.github.gunkim.realworld.web.api.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.request.CreateArticleRequest
+import io.github.gunkim.realworld.web.api.article.model.request.FeedArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.request.GetArticlesRequest
 import io.github.gunkim.realworld.web.api.article.model.request.UpdateArticleRequest
 import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticleWrapper
 import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticlesWrapper
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/articles")
 interface ArticleResource {
@@ -24,7 +36,7 @@ interface ArticleResource {
 
     @GetMapping("/feed")
     fun feedArticles(
-        @ModelAttribute request: PagingRequest,
+        @ModelAttribute request: FeedArticleRequest,
         @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
     ): ArticlesWrapper
 
@@ -154,7 +166,7 @@ class ArticlesController(
             .let(::ArticleWrapper)
     }
 
-    override fun feedArticles(request: PagingRequest, authenticatedUser: AuthenticatedUser): ArticlesWrapper {
+    override fun feedArticles(request: FeedArticleRequest, authenticatedUser: AuthenticatedUser): ArticlesWrapper {
         val articles = getArticleService.feedArticles(
             userId = authenticatedUser.userId,
             limit = request.limit,

@@ -2,7 +2,7 @@ package io.github.gunkim.realworld.web.api.user
 
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
 import io.github.gunkim.realworld.domain.user.service.GetUserService
-import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.user.model.response.ProfileResponse
 import io.github.gunkim.realworld.web.api.user.model.response.wrapper.ProfileWrapper
 import org.springframework.security.core.annotation.AuthenticationPrincipal

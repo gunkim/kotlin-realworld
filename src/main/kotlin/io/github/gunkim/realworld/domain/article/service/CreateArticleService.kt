@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.domain.article.service
 
-import io.github.gunkim.realworld.domain.UserFindable
+import io.github.gunkim.realworld.domain.user.UserFindable
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.model.Tag

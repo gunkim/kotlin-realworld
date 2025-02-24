@@ -7,7 +7,7 @@ import io.github.gunkim.realworld.domain.comment.service.AddCommentService
 import io.github.gunkim.realworld.domain.comment.service.DeleteCommentService
 import io.github.gunkim.realworld.domain.comment.service.GetCommentService
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
-import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.comment.model.request.AddCommentRequest
 import io.github.gunkim.realworld.web.api.comment.model.response.CommentResponse
 import io.github.gunkim.realworld.web.api.comment.model.response.wrapper.CommentWrapper

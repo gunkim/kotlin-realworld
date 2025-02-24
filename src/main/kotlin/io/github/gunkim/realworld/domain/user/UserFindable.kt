@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.domain
+package io.github.gunkim.realworld.domain.user
 
 import io.github.gunkim.realworld.domain.user.exception.UserNotFoundException
 import io.github.gunkim.realworld.domain.user.model.User

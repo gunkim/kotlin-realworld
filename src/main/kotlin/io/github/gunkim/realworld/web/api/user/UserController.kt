@@ -3,7 +3,7 @@ package io.github.gunkim.realworld.web.api.user
 import io.github.gunkim.realworld.config.request.JsonRequest
 import io.github.gunkim.realworld.domain.user.service.GetUserService
 import io.github.gunkim.realworld.domain.user.service.UpdateUserService
-import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.user.model.request.UserUpdateRequest
 import io.github.gunkim.realworld.web.api.user.model.response.wrapper.UserWrapper
 import org.springframework.security.core.annotation.AuthenticationPrincipal

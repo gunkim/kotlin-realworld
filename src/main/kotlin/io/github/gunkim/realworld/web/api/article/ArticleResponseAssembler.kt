@@ -6,7 +6,7 @@ import io.github.gunkim.realworld.domain.article.service.FavoritePredicate
 import io.github.gunkim.realworld.domain.article.service.FavoritesCounter
 import io.github.gunkim.realworld.domain.user.service.FollowPredicate
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
-import io.github.gunkim.realworld.share.AuthenticatedUser
+import io.github.gunkim.realworld.web.api.AuthenticatedUser
 import io.github.gunkim.realworld.web.api.article.model.response.ArticleResponse
 import io.github.gunkim.realworld.web.api.article.model.response.wrapper.ArticlesWrapper
 import org.springframework.stereotype.Component

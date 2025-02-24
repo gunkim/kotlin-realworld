@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.share
+package io.github.gunkim.realworld.web.api
 
 import io.github.gunkim.realworld.domain.user.model.UserId
 

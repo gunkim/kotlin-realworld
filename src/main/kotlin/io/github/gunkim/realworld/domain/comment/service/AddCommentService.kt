@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.domain.comment.service
 
-import io.github.gunkim.realworld.domain.UserFindable
+import io.github.gunkim.realworld.domain.user.UserFindable
 import io.github.gunkim.realworld.domain.article.ArticleFindable
 import io.github.gunkim.realworld.domain.comment.model.Comment
 import io.github.gunkim.realworld.domain.article.model.Slug

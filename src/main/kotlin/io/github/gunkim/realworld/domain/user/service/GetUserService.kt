@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.domain.user.service
 
-import io.github.gunkim.realworld.domain.UserFindable
+import io.github.gunkim.realworld.domain.user.UserFindable
 import io.github.gunkim.realworld.domain.user.exception.UserNotFoundException
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
