@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class CommentValidationService {
     fun validateCommentBelongsToArticle(comment: Comment, article: Article) {
-        require(comment.article == article) {
+        require(comment.article.id == article.id) {
             //TODO: A custom domain exception should be thrown.
             "Comment does not belong to the specified article.(comment.article: ${comment.article}, article: $article)"
         }

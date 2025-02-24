@@ -53,6 +53,11 @@ class ArticleTagJpaEntity(
         return result
     }
 
+    override fun toString(): String {
+        return "ArticleTagJpaEntity(databaseId=$databaseId, tag=$tag, createdAt=$createdAt, updatedAt=$updatedAt)"
+    }
+
+
     companion object {
         fun fromTagEntity(tag: TagJpaEntity) = ArticleTagJpaEntity(
             tag = tag,

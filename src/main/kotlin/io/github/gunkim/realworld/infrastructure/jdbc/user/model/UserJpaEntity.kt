@@ -90,6 +90,10 @@ class UserJpaEntity(
         return result
     }
 
+    override fun toString(): String {
+        return "UserJpaEntity(databaseId=$databaseId, id=$id, createdAt=$createdAt, updatedAt=$updatedAt, name='$name', bio=$bio, image=$image, email='$email', password='$password')"
+    }
+
     companion object {
         fun from(user: User): UserJpaEntity = with(user) {
             UserJpaEntity(
