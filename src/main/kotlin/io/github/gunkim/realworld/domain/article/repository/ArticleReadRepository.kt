@@ -1,10 +1,14 @@
 package io.github.gunkim.realworld.domain.article.repository
 
 import io.github.gunkim.realworld.domain.article.model.Article
-import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
 import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.user.model.UserId
+
+interface ArticleCountProjection {
+    val articleId: ArticleId
+    val count: Int
+}
 
 interface ArticleReadRepository {
     fun find(

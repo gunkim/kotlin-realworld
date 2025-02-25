@@ -1,8 +1,8 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.dao
 
-import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
 import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
+import io.github.gunkim.realworld.domain.article.repository.ArticleCountProjection
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleJpaEntity
 import org.springframework.data.domain.Pageable

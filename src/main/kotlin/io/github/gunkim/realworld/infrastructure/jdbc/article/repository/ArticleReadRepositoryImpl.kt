@@ -1,9 +1,9 @@
 package io.github.gunkim.realworld.infrastructure.jdbc.article.repository
 
 import io.github.gunkim.realworld.domain.article.model.Article
-import io.github.gunkim.realworld.domain.article.model.ArticleCountProjection
 import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
+import io.github.gunkim.realworld.domain.article.repository.ArticleCountProjection
 import io.github.gunkim.realworld.domain.article.repository.ArticleReadRepository
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.ArticleDao
