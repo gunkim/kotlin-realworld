@@ -1,8 +1,9 @@
-package io.github.gunkim.realworld.domain.comment.service
+package io.github.gunkim.realworld.testcase.domain.comment.service
 
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.comment.model.Comment
+import io.github.gunkim.realworld.domain.comment.service.CommentValidationService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow

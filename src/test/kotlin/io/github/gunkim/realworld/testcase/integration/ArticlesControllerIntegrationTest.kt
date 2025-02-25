@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.api
+package io.github.gunkim.realworld.testcase.integration
 
 import io.github.gunkim.realworld.domain.article.exception.ArticleNotFoundException
 import io.github.gunkim.realworld.domain.article.model.Article
@@ -15,7 +15,6 @@ import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Assertions.*
-import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post

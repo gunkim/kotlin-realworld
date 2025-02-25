@@ -1,6 +1,7 @@
-package io.github.gunkim.realworld.infrastructure.auth
+package io.github.gunkim.realworld.testcase.infrastructure.auth
 
 import io.github.gunkim.realworld.domain.user.model.UserId
+import io.github.gunkim.realworld.infrastructure.auth.JwtProvider
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.StringSpec

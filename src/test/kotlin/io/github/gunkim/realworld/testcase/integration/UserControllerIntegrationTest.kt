@@ -1,11 +1,10 @@
-package io.github.gunkim.realworld.web.api
+package io.github.gunkim.realworld.testcase.integration
 
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
 import io.github.gunkim.realworld.web.api.user.model.request.UserUpdateRequest
 import io.kotest.core.spec.DisplayName
 import io.kotest.core.test.TestCase
-import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.put

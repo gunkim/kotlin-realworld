@@ -1,8 +1,9 @@
-package io.github.gunkim.realworld.domain.article.service
+package io.github.gunkim.realworld.testcase.domain.article.service
 
 import io.github.gunkim.realworld.domain.article.exception.NotArticleAuthorException
 import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.Slug
+import io.github.gunkim.realworld.domain.article.service.ArticleOwnershipService
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.kotest.assertions.throwables.shouldThrow

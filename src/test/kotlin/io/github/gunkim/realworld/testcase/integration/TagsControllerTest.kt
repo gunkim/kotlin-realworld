@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.api
+package io.github.gunkim.realworld.testcase.integration
 
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.TagDao
 import io.github.gunkim.realworld.infrastructure.jdbc.article.model.TagJpaEntity

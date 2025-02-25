@@ -1,4 +1,4 @@
-package io.github.gunkim.realworld.web.api
+package io.github.gunkim.realworld.testcase.integration
 
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.share.IntegrationTest
