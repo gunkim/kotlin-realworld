@@ -1,7 +1,7 @@
 package io.github.gunkim.realworld.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.gunkim.realworld.config.request.JsonRequestArgumentResolver
+import io.github.gunkim.realworld.config.resolver.JsonRequestArgumentResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

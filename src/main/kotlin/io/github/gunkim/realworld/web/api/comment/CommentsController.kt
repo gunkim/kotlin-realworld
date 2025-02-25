@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.web.api.comment
 
-import io.github.gunkim.realworld.config.request.JsonRequest
+import io.github.gunkim.realworld.web.api.JsonRequest
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.comment.model.CommentId
 import io.github.gunkim.realworld.domain.comment.service.AddCommentService

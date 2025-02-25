@@ -1,6 +1,7 @@
-package io.github.gunkim.realworld.config.request
+package io.github.gunkim.realworld.config.resolver
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.gunkim.realworld.web.api.JsonRequest
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -26,8 +27,8 @@ class JsonRequestArgumentResolver(
 
         val body = webRequest.getNativeRequest(HttpServletRequest::class.java)!!.reader.use { it.readText() }
         val node = objectMapper.readTree(body)
-        val subTreeNode =
-            node.get(subTreeKey) ?: throw IllegalArgumentException("JSON does not contain '$subTreeKey' field")
+        val subTreeNode = node.get(subTreeKey)
+            ?: throw IllegalArgumentException("JSON does not contain '$subTreeKey' field")
 
         return objectMapper.treeToValue(subTreeNode, parameter.parameterType)
     }

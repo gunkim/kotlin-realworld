@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.web.api.user
 
-import io.github.gunkim.realworld.config.request.JsonRequest
+import io.github.gunkim.realworld.web.api.JsonRequest
 import io.github.gunkim.realworld.domain.user.service.GetUserService
 import io.github.gunkim.realworld.domain.user.service.UpdateUserService
 import io.github.gunkim.realworld.web.api.AuthenticatedUser
