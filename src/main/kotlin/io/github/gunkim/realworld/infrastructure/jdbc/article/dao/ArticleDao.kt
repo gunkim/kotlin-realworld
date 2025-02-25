@@ -48,13 +48,13 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Int> {
 
     @Query(
         """
-            SELECT a.id
-            FROM article a
-                 INNER JOIN
-                 article_favorite af ON af.articleDatabaseId = a.databaseId
-                 INNER JOIN
-                 users u ON u.databaseId = af.userDatabaseId
-            WHERE u.id = :userId
+        SELECT a.id
+        FROM article a
+             INNER JOIN
+             article_favorite af ON af.articleDatabaseId = a.databaseId
+             INNER JOIN
+             users u ON u.databaseId = af.userDatabaseId
+        WHERE u.id = :userId
         """
     )
     fun getFavoritesArticles(userId: UserId): List<ArticleId>
