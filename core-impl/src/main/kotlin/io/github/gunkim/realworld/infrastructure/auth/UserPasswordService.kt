@@ -1,13 +1,13 @@
 package io.github.gunkim.realworld.infrastructure.auth
 
-import io.github.gunkim.realworld.domain.user.model.UserPasswordManager
+import io.github.gunkim.realworld.domain.auth.service.UserPasswordService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserPasswordService(
     private val passwordEncoder: BCryptPasswordEncoder,
-) : UserPasswordManager {
+) : UserPasswordService {
     override fun matches(rawPassword: String, encodedPassword: String) =
         passwordEncoder.matches(rawPassword, encodedPassword)
 

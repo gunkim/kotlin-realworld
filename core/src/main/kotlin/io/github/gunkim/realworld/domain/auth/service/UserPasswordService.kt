@@ -1,6 +1,6 @@
-package io.github.gunkim.realworld.domain.user.model
+package io.github.gunkim.realworld.domain.auth.service
 
-interface UserPasswordManager {
+interface UserPasswordService {
     fun matches(rawPassword: String, encodedPassword: String): Boolean
     fun encode(rawPassword: String): String
 }

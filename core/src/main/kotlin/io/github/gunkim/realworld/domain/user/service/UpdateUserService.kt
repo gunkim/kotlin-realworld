@@ -1,16 +1,16 @@
 package io.github.gunkim.realworld.domain.user.service
 
+import io.github.gunkim.realworld.domain.auth.service.UserPasswordService
 import io.github.gunkim.realworld.domain.user.UserFindable
 import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserId
-import io.github.gunkim.realworld.domain.user.model.UserPasswordManager
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class UpdateUserService(
     override val userRepository: UserRepository,
-    private val passwordManager: UserPasswordManager,
+    private val passwordManager: UserPasswordService,
 ) : UserFindable {
     fun updateUser(
         authorId: UserId,
