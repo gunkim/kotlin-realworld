@@ -17,9 +17,6 @@ For further information on how this project interacts with various frontends and
 - [Configuration and Environment Variables](#configuration-and-environment-variables)
 - [Running the Application](#running-the-application)
 - [Testing](#testing)
-- [API Documentation](#api-documentation)
-- [Contribution Guidelines](#contribution-guidelines)
-- [License](#license)
 
 ---
 
