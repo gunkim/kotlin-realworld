@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: local-h2
+    group:
+      local-h2:
+        - local-h2-datasource
+      local-mysql:
+        - local-mysql-datasource
+      dev-mysql:
+        - dev-mysql-datasource
+    include: datasource, auth

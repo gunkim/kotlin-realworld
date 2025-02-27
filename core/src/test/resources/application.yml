@@ -1,0 +1,15 @@
+# TODO: It is necessary to clean up the properties.
+spring:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+jwt:
+  header-prefix: "Token "
+  header-name: "Authorization"
+  secret:
+    key: QzVGR0EyREMyNzRBQkQyRTNBNTZGQjVGMzlEOTY3MjVDM0M3QTcwNkQ1QUJBRTcw
