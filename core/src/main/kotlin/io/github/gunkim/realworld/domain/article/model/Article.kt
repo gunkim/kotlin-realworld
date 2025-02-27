@@ -40,7 +40,7 @@ interface Article : Editable<Article>, DateAuditable {
     }
 
     companion object {
-        class Model(
+        internal data class Model(
             override val id: ArticleId,
             override var slug: Slug,
             override var title: String,

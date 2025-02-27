@@ -4,7 +4,7 @@ interface Tag {
     val name: String
 
     companion object {
-        class Model(
+        internal data class Model(
             override val name: String,
         ) : Tag
 

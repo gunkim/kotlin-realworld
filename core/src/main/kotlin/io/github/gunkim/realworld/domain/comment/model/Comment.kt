@@ -31,7 +31,7 @@ interface Comment : DateAuditable {
     }
 
     companion object {
-        class Model(
+        internal data class Model(
             override val id: CommentId,
             override var body: String,
             override val article: Article,
