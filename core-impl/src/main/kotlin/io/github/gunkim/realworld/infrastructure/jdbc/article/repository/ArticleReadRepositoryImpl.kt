@@ -24,7 +24,7 @@ class ArticleReadRepositoryImpl(
         limit: Int,
         offset: Int,
     ): List<Article> {
-        val page = offset / limit
+        val page = calculatePage(offset, limit)
         val pageable = PageRequest.of(page, limit)
 
         val spec = buildArticleSpecification(tag, author, favoritedUsername)
@@ -32,7 +32,7 @@ class ArticleReadRepositoryImpl(
     }
 
     override fun findFeedArticles(userId: UserId, limit: Int, offset: Int): List<Article> {
-        val page = offset / limit
+        val page = calculatePage(offset, limit)
         val pageable = PageRequest.of(page, limit)
 
         return articleDao.findFeedArticles(userId, pageable)
@@ -48,4 +48,6 @@ class ArticleReadRepositoryImpl(
 
     override fun findBySlug(slug: Slug): Article? =
         articleDao.findBySlug(slug)
+
+    private fun calculatePage(offset: Int, limit: Int) = offset / limit
 }
