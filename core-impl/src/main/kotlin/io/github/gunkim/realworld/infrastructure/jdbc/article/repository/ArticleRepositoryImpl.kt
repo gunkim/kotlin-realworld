@@ -52,7 +52,7 @@ class ArticleRepositoryImpl(
     }
 
     private fun mapToJpaEntities(article: Article, user: User) =
-        convertArticleToJpaEntity(article) to io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity.from(user)
+        convertArticleToJpaEntity(article) to UserJpaEntity.from(user)
 
     private fun convertArticleToJpaEntity(article: Article) =
         ArticleJpaEntity.from(article, convertTagsToJpaEntities(article))

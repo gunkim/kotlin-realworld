@@ -136,7 +136,7 @@ class ArticleJpaEntity(
                 title = title,
                 description = description,
                 body = body,
-                author = io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity.from(author),
+                author = UserJpaEntity.from(author),
                 articleTagJpaEntities =
                     if (this is ArticleJpaEntity) articleTagJpaEntities
                     else article.tags.map(ArticleTagJpaEntity.Companion::from),
@@ -154,7 +154,7 @@ class ArticleJpaEntity(
                 description = description,
                 body = body,
                 articleTagJpaEntities = tags.map(ArticleTagJpaEntity.Companion::from),
-                author = io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity.from(author),
+                author = UserJpaEntity.from(author),
                 createdAt = article.createdAt,
                 updatedAt = article.updatedAt,
             )

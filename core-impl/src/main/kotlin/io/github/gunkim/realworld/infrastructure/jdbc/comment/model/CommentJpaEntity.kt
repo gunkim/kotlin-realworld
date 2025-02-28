@@ -24,7 +24,7 @@ class CommentJpaEntity(
     body: String,
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorId", nullable = false)
-    override val author: io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity,
+    override val author: UserJpaEntity,
     article: ArticleJpaEntity? = null,
     override val createdAt: Instant,
     override var updatedAt: Instant = Instant.now(),
@@ -52,7 +52,7 @@ class CommentJpaEntity(
             val now = Instant.now()
             return CommentJpaEntity(
                 body = comment.body,
-                author = comment.author.let(io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity.Companion::from),
+                author = comment.author.let(UserJpaEntity.Companion::from),
                 article = comment.article.let(ArticleJpaEntity.Companion::from),
                 createdAt = now,
                 updatedAt = now,
