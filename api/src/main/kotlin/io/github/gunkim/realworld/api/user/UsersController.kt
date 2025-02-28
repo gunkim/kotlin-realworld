@@ -1,12 +1,12 @@
 package io.github.gunkim.realworld.api.user
 
 import io.github.gunkim.realworld.api.JsonRequest
-import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
-import io.github.gunkim.realworld.domain.user.service.CreateUserService
-import io.github.gunkim.realworld.domain.user.service.GetUserService
 import io.github.gunkim.realworld.api.user.model.request.UserAuthenticateRequest
 import io.github.gunkim.realworld.api.user.model.request.UserRegistrationRequest
 import io.github.gunkim.realworld.api.user.model.response.wrapper.UserWrapper
+import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
+import io.github.gunkim.realworld.domain.user.service.CreateUserService
+import io.github.gunkim.realworld.domain.user.service.GetUserService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -37,7 +37,7 @@ class UsersController(
         val registeredUser = createUserService.createUser(
             email = request.email,
             username = request.username,
-            encodedPassword = authenticateUserService.encodePassword(request.password),
+            password = request.password,
         )
         return userResponseAssembler.assembleUserResponse(registeredUser)
             .let(::UserWrapper)
@@ -46,6 +46,7 @@ class UsersController(
     override fun authenticate(request: UserAuthenticateRequest): UserWrapper {
         val user = getUserService.getByEmail(request.email)
         authenticateUserService.authenticate(user, request.password)
+
         return userResponseAssembler.assembleUserResponse(user)
             .let(::UserWrapper)
     }

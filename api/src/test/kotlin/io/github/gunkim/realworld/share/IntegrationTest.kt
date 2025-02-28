@@ -80,7 +80,7 @@ abstract class IntegrationTest : FreeSpec() {
         val user = createUserService.createUser(
             email = email,
             username = username,
-            encodedPassword = authenticationUserService.encodePassword(password)
+            password = authenticationUserService.encodePassword(password)
         )
 
         return user to createTokenService.createToken(user.id).let(::toToken)

@@ -14,6 +14,4 @@ class AuthenticateUserService(
             InvalidUserPasswordException("Password does not match")
         }
     }
-
-    fun encodePassword(rawPassword: String): String = userPasswordService.encode(rawPassword)
 }
