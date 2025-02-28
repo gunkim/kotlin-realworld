@@ -16,9 +16,9 @@ the [RealWorld](https://github.com/gothinkster/realworld) repository.
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
+- [Features](#features)
 - [Project Structure](#project-structure)
 - [Database Design](#database-design)
-- [Features](#features)
 - [Configuration and Environment Variables](#configuration-and-environment-variables)
 - [Running the Application](#running-the-application)
 - [Testing](#testing)
@@ -28,6 +28,17 @@ the [RealWorld](https://github.com/gothinkster/realworld) repository.
 ## Prerequisites
 
 - **JDK 21** or higher
+
+---
+
+## Features
+
+- **CRUD Operations**: Enables create, read, update, and delete functionalities.
+- **Authentication & Authorization**: Implements secure user authentication using JWT or similar mechanisms.
+- **Routing**: Follows a clean architecture pattern for efficient route management.
+- **Pagination & Sorting**: Optimized for handling large datasets.
+- **Error Handling**: Centralized error management and logging mechanisms.
+- **Testing**: Comprehensive testing includes unit, integration, and end-to-end tests.
 
 ---
 
@@ -48,24 +59,12 @@ The project is structured using a modular architecture, where each module plays 
 
 ## **Database Design**
 
-
-![Schema Diagram](/docs/schema.png)
-
 Since there were no strict requirements regarding the field lengths, arbitrary sizes were chosen. To facilitate the use
 of UUIDs for domain IDs, the column was defined as `binary(16)`. Additionally, as MySQL InnoDB manages a clustered index
 by default, a dedicated primary key using `int` (4 bytes) was selected to prevent unnecessary expansion of the clustered
 index. No extra indexes have been defined at this stage in order to avoid premature optimization.
 
----
-
-## Features
-
-- **CRUD Operations**: Enables create, read, update, and delete functionalities.
-- **Authentication & Authorization**: Implements secure user authentication using JWT or similar mechanisms.
-- **Routing**: Follows a clean architecture pattern for efficient route management.
-- **Pagination & Sorting**: Optimized for handling large datasets.
-- **Error Handling**: Centralized error management and logging mechanisms.
-- **Testing**: Comprehensive testing includes unit, integration, and end-to-end tests.
+![Schema Diagram](/docs/schema.png)
 
 ---
 
