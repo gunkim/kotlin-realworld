@@ -63,8 +63,6 @@ The project is organized into a modular architecture where each component serves
 
 ## **Domain Design**
 
-## Domain Design
-
 1. As an experienced Java developer, I am accustomed to the object-oriented paradigm, where internal fields are kept private and each object is responsible for its own behavior. In contrast, functional programming emphasizes immutability, allowing fields to be safely exposed without side effects. Consequently, what might be seen as “anemic objects” or “thin models” in traditional DDD or OOP are not only natural in functional programming, but are often considered best practices.
 
 2. When intentionally designing thin models, the challenge arises as to where to locate the behavior-bearing methods typically associated with object-oriented design. I have chosen to place these methods within a Domain Service in the domain layer to enhance cohesion. This approach is in line with the functional paradigm, which favors a tight coupling between models and functions.
