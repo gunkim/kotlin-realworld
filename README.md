@@ -35,6 +35,8 @@ The project is structured using a modular architecture, where each module plays 
 - **/core-impl**: Provides concrete implementations for the domain logic specified in the `/core` module. This includes functionality such as CRUD operations and integration with specific frameworks.
 - **/e2e**: Maintains end-to-end test scripts and related resources.
 
+![](/docs/module-structures.png)
+
 ---
 
 ## Features
