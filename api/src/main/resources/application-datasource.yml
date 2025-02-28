@@ -14,7 +14,7 @@ spring:
     activate:
       on-profile: local-h2-datasource
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;MODE=MySQL
     driverClassName: org.h2.Driver
     username: sa
   h2:
@@ -28,12 +28,13 @@ spring:
     init:
       mode: always
 ---
+# Note: Execute /docker/docker-compose.yml to start MySQL for local development!
 spring:
   config:
     activate:
       on-profile: local-mysql-datasource
   datasource:
-    url: jdbc:mysql://localhost:3306/realworld?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/realworld?useSSL=false
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: test

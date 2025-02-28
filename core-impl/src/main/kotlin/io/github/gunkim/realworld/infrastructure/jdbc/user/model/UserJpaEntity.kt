@@ -26,7 +26,7 @@ class UserJpaEntity(
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val databaseId: Int? = null,
-    @Column(name = "uuid")
+    @Column(name = "uuid", columnDefinition = "BINARY(16)")
     @Convert(converter = UserIdConverter::class)
     override val id: UserId,
     name: String,

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer
@@ -26,6 +25,8 @@ class SecurityConfiguration(
     private val headerPrefix: String,
     @Value("\${jwt.header-name}")
     private val headerName: String,
+    @Value("\${spring.h2.console.enabled:false}")
+    private val h2ConsoleEnabled: Boolean,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -79,7 +80,7 @@ class SecurityConfiguration(
     private fun configureAuthorization(it: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
         // users
         it.requestMatchers("/api/users/**").permitAll()
-        it.requestMatchers(HttpMethod.GET, "/api/profiles/**").permitAll()
+        it.requestMatchers("/api/profiles/**").permitAll()
 
         // articles
         it.requestMatchers("/api/articles/**").permitAll()
@@ -88,7 +89,9 @@ class SecurityConfiguration(
         it.requestMatchers("/api/tags/**").permitAll()
 
         // H2 Console
-        it.requestMatchers(PathRequest.toH2Console()).permitAll()
+        if (h2ConsoleEnabled) {
+            it.requestMatchers(PathRequest.toH2Console()).permitAll()
+        }
         it.anyRequest().authenticated()
     }
 

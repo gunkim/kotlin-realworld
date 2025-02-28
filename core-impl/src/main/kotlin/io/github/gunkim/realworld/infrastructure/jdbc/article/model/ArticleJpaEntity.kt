@@ -45,7 +45,7 @@ class ArticleJpaEntity(
     @Column(name = "article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val databaseId: Int? = null,
-    @Column(name = "uuid")
+    @Column(name = "uuid", columnDefinition = "BINARY(16)")
     @Convert(converter = ArticleIdConverter::class)
     override val id: ArticleId,
     slug: Slug,
