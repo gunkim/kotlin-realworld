@@ -44,14 +44,18 @@ the [RealWorld](https://github.com/gothinkster/realworld) repository.
 
 ## Project Structure
 
-The project is structured using a modular architecture, where each module plays a specific role:
+This project is built on a solid foundation using Spring Boot 3, JDK 21, Spring MVC, Spring Data JPA, and Spring Security. From the outset, we evaluated various options, including more Kotlin-centric ORMs such as exposed, but ultimately opted for JPA. This decision was driven by the fact that most Kotlin developers also possess strong Java expertise, making familiarity with JPA a practical and essential skill in real-world settings.
 
-- **/api**: Contains the main application server code, including the entry point. This module implements the
-  presentation and application layers.
-- **/core**: Houses the domain layer, defining the core business logic and domain rules.
-- **/core-impl**: Provides concrete implementations for the domain logic specified in the `/core` module. This includes
-  functionality such as CRUD operations and integration with specific frameworks.
-- **/e2e**: Maintains end-to-end test scripts and related resources.
+By choosing JPA, we ensure that our team can leverage a widely adopted and industry-tested solution, while our decoupled infrastructure remains flexible enough to allow for switching to an alternative ORM in the future if the need arises.
+
+Moreover, Spring remains a dominant framework in the Java ecosystem and offers robust capabilities when used with Kotlin. Consequently, all modules in our project are built upon Spring-related dependencies, reflecting our commitment to utilizing proven technologies and streamlining development efforts.
+
+The project is organized into a modular architecture where each component serves a distinct purpose:
+
+- **/api**: Contains the main application server code including the entry point. This module implements both the presentation and application layers.
+- **/core**: Defines the domain layer, encapsulating the core business logic and domain rules.
+- **/core-impl**: Provides concrete implementations of the domain logic specified in the `/core` module, including CRUD operations and integration with specific frameworks.
+- **/e2e**: Houses the end-to-end test scripts and all related testing resources.
 
 ![](/docs/module-structures.png)
 
