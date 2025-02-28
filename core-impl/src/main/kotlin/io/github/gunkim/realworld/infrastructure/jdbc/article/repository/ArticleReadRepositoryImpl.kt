@@ -7,6 +7,7 @@ import io.github.gunkim.realworld.domain.article.repository.ArticleCountProjecti
 import io.github.gunkim.realworld.domain.article.repository.ArticleReadRepository
 import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.ArticleDao
+import io.github.gunkim.realworld.infrastructure.jdbc.article.model.buildArticleSpecification
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -26,7 +27,8 @@ class ArticleReadRepositoryImpl(
         val page = offset / limit
         val pageable = PageRequest.of(page, limit)
 
-        return articleDao.find(tag, author, favoritedUsername, pageable)
+        val spec = buildArticleSpecification(tag, author, favoritedUsername)
+        return articleDao.findAll(spec, pageable).content
     }
 
     override fun findFeedArticles(userId: UserId, limit: Int, offset: Int): List<Article> {
