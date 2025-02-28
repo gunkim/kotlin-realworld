@@ -6,9 +6,11 @@ import io.github.gunkim.realworld.domain.comment.model.CommentId
 import io.github.gunkim.realworld.domain.comment.repository.CommentReadRepository
 import io.github.gunkim.realworld.infrastructure.jdbc.comment.dao.CommentDao
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import kotlin.jvm.optionals.getOrNull
 
 @Repository
+@Transactional(readOnly = true)
 class CommentReadRepositoryImpl(
     private val commentDao: CommentDao,
 ) : CommentReadRepository {

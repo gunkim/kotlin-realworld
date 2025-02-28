@@ -9,8 +9,10 @@ import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.infrastructure.jdbc.article.dao.ArticleDao
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
+@Transactional(readOnly = true)
 class ArticleReadRepositoryImpl(
     private val articleDao: ArticleDao,
 ) : ArticleReadRepository {

@@ -5,8 +5,10 @@ import io.github.gunkim.realworld.domain.user.model.UserId
 import io.github.gunkim.realworld.domain.user.repository.UserReadRepository
 import io.github.gunkim.realworld.infrastructure.jdbc.user.dao.UserDao
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
+@Transactional(readOnly = true)
 class UserReadRepositoryImpl(
     private val userDao: UserDao,
 ) : UserReadRepository {

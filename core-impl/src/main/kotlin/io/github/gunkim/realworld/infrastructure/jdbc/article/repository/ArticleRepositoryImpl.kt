@@ -24,7 +24,6 @@ class ArticleRepositoryImpl(
     private val tagDao: TagDao,
     private val articleFavoriteDao: ArticleFavoriteDao,
 ) : ArticleRepository, ArticleReadRepository by articleReadRepository {
-
     override fun save(article: Article): Article {
         val articleJpaEntity = convertArticleToJpaEntity(article)
         return articleDao.save(articleJpaEntity)
