@@ -13,46 +13,50 @@ fun buildArticleSpecification(
 ): Specification<ArticleEntity> {
     return Specification { root, query, criteriaBuilder ->
         query.distinct(true)
-        criteriaBuilder.and(*mutableListOf<Predicate>().apply {
-            equalTagName(tag, root, criteriaBuilder)
-            equalAuthorName(author, root, criteriaBuilder)
-            equalFavoritedUsername(favoritedUsername, root, criteriaBuilder)
-        }.toTypedArray())
+        criteriaBuilder.and(
+            *mutableListOf<Predicate>().apply {
+                where(root, criteriaBuilder) {
+                    equalTagName(tag)
+                    equalAuthorName(author)
+                    equalFavoritedUsername(favoritedUsername)
+                }
+            }.toTypedArray()
+        )
     }
 }
 
-private fun MutableList<Predicate>.equalTagName(
-    tag: String?,
-    root: Root<ArticleEntity>,
-    criteriaBuilder: CriteriaBuilder,
+private class PredicateContext(
+    val root: Root<ArticleEntity>,
+    val criteriaBuilder: CriteriaBuilder,
+    val predicates: MutableList<Predicate>,
 ) {
-    if (tag == null) return
+    fun equalTagName(tag: String?) {
+        if (tag == null) return
+        val tagJoin = root.join<Any, Any>("tagEntities", JoinType.LEFT)
+        val tagName = tagJoin.get<String>("tagEntity").get<String>("name")
+        predicates.add(criteriaBuilder.equal(tagName, tag))
+    }
 
-    val tagJoin = root.join<Any, Any>("tagEntities", JoinType.LEFT)
-    val tagName = tagJoin.get<String>("tagEntity").get<String>("name")
-    this.add(criteriaBuilder.equal(tagName, tag))
+    fun equalAuthorName(author: String?) {
+        if (author == null) return
+        predicates.add(
+            criteriaBuilder.equal(root.get<Any>("authorEntity").get<String>("name"), author)
+        )
+    }
+
+    fun equalFavoritedUsername(favoritedUsername: String?) {
+        if (favoritedUsername == null) return
+        val favoritedJoin = root.join<Any, Any>("favoriteEntities", JoinType.LEFT)
+        val userJoin = favoritedJoin.join<Any, Any>("userEntity", JoinType.LEFT)
+        val favoritedName = userJoin.get<String>("name")
+        predicates.add(criteriaBuilder.equal(favoritedName, favoritedUsername))
+    }
 }
 
-private fun MutableList<Predicate>.equalAuthorName(
-    author: String?,
+private inline fun MutableList<Predicate>.where(
     root: Root<ArticleEntity>,
     criteriaBuilder: CriteriaBuilder,
+    block: PredicateContext.() -> Unit,
 ) {
-    if (author == null) return
-
-    this.add(criteriaBuilder.equal(root.get<Any>("authorEntity").get<String>("name"), author))
-}
-
-private fun MutableList<Predicate>.equalFavoritedUsername(
-    favoritedUsername: String?,
-    root: Root<ArticleEntity>,
-    criteriaBuilder: CriteriaBuilder,
-) {
-    if (favoritedUsername == null) return
-
-    val favoritedJoin = root.join<Any, Any>("favoriteEntities", JoinType.LEFT)
-    val userJoin = favoritedJoin.join<Any, Any>("userEntity", JoinType.LEFT)
-
-    val favoritedName = userJoin.get<String>("name")
-    this.add(criteriaBuilder.equal(favoritedName, favoritedUsername))
+    PredicateContext(root, criteriaBuilder, this).block()
 }
