@@ -66,6 +66,9 @@ class ArticleJpaEntity(
         }
     }
 
+    @OneToMany(mappedBy = "articleJpaEntity", fetch = FetchType.LAZY)
+    var articleFavoriteJpaEntities: List<ArticleFavoriteJpaEntity>? = listOf()
+
     override val tags: List<Tag>
         get() = articleTagJpaEntities.map { Tag.create(it.tag.name) }
 

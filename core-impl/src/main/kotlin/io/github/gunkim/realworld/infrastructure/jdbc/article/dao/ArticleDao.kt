@@ -14,9 +14,9 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Int>, JpaSpecificationExe
     @Query(
         """
         SELECT a.id as articleId, COUNT(*) as count
-        FROM article_favorite af
+        FROM article a
              INNER JOIN
-             article a ON af.articleDatabaseId = a.databaseId
+             a.articleFavoriteJpaEntities af
         WHERE a.id IN :articleIds 
         GROUP BY a.id
         """
@@ -28,9 +28,9 @@ interface ArticleDao : JpaRepository<ArticleJpaEntity, Int>, JpaSpecificationExe
         SELECT a.id
         FROM article a
              INNER JOIN
-             article_favorite af ON af.articleDatabaseId = a.databaseId
+             a.articleFavoriteJpaEntities af
              INNER JOIN
-             users u ON u.databaseId = af.userDatabaseId
+             af.userJpaEntity u
         WHERE u.id = :userId
         """
     )

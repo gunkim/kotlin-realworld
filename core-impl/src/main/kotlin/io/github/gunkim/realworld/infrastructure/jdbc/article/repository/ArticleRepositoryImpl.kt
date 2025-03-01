@@ -37,15 +37,15 @@ class ArticleRepositoryImpl(
         val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
         articleFavoriteDao.save(
             ArticleFavoriteJpaEntity.of(
-                articleJpaEntity.databaseId!!,
-                userJpaEntity.databaseId!!
+                articleJpaEntity,
+                userJpaEntity
             )
         )
     }
 
     override fun unFavorite(article: Article, user: User) {
         val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
-        articleFavoriteDao.deleteByArticleDatabaseIdAndUserDatabaseId(
+        articleFavoriteDao.deleteByArticleJpaEntityDatabaseIdAndUserJpaEntityDatabaseId(
             articleJpaEntity.databaseId!!,
             userJpaEntity.databaseId!!
         )

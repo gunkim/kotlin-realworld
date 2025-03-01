@@ -4,5 +4,5 @@ import io.github.gunkim.realworld.infrastructure.jdbc.article.model.ArticleFavor
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ArticleFavoriteDao : JpaRepository<ArticleFavoriteJpaEntity, Int> {
-    fun deleteByArticleDatabaseIdAndUserDatabaseId(articleDatabaseId: Int, userDatabaseId: Int)
+    fun deleteByArticleJpaEntityDatabaseIdAndUserJpaEntityDatabaseId(articleDatabaseId: Int, userDatabaseId: Int)
 }

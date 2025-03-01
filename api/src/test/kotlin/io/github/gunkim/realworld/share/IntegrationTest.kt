@@ -3,7 +3,6 @@ package io.github.gunkim.realworld.share
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.gunkim.realworld.domain.auth.service.CreateTokenService
 import io.github.gunkim.realworld.domain.user.model.User
-import io.github.gunkim.realworld.domain.user.service.AuthenticateUserService
 import io.github.gunkim.realworld.domain.user.service.CreateUserService
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.kotest.core.annotation.Tags
@@ -36,9 +35,6 @@ abstract class IntegrationTest : FreeSpec() {
 
     @Autowired
     private lateinit var createUserService: CreateUserService
-
-    @Autowired
-    private lateinit var authenticationUserService: AuthenticateUserService
 
     @Autowired
     private lateinit var createTokenService: CreateTokenService
@@ -80,7 +76,7 @@ abstract class IntegrationTest : FreeSpec() {
         val user = createUserService.createUser(
             email = email,
             username = username,
-            password = authenticationUserService.encodePassword(password)
+            password = password
         )
 
         return user to createTokenService.createToken(user.id).let(::toToken)
