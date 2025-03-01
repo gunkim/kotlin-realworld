@@ -15,9 +15,9 @@ interface UserDao : JpaRepository<UserEntity, Long> {
         SELECT followee.id
         FROM users u
              INNER JOIN 
-             user_follow f ON f.followerUserDatabaseId = u.databaseId
+             user_follow f ON f.followerEntity = u
              INNER JOIN
-             users followee ON f.followeeUserDatabaseId = followee.databaseId
+             users followee ON f.followeeEntity = followee
         WHERE u.id = :userId
     """
     )

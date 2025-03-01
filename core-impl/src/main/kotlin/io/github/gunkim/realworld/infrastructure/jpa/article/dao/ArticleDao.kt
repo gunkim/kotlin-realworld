@@ -42,8 +42,8 @@ interface ArticleDao : JpaRepository<ArticleEntity, Int>, JpaSpecificationExecut
         """
         SELECT a
         FROM users u
-             INNER JOIN user_follow uf ON uf.followerUserDatabaseId = u.databaseId
-             INNER JOIN article a ON a.authorEntity.databaseId = uf.followeeUserDatabaseId
+             INNER JOIN user_follow uf ON uf.followerEntity = u
+             INNER JOIN article a ON a.authorEntity = uf.followeeEntity
         WHERE u.id = :userId
         """
     )

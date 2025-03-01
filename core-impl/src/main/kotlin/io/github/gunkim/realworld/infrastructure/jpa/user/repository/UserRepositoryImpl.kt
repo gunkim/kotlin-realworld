@@ -7,7 +7,7 @@ import io.github.gunkim.realworld.domain.user.repository.UserReadRepository
 import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import io.github.gunkim.realworld.infrastructure.jpa.user.dao.FollowDao
 import io.github.gunkim.realworld.infrastructure.jpa.user.dao.UserDao
-import io.github.gunkim.realworld.infrastructure.jpa.user.model.FollowJpaEntity
+import io.github.gunkim.realworld.infrastructure.jpa.user.model.FollowEntity
 import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
@@ -26,32 +26,32 @@ class UserRepositoryImpl(
     }
 
     override fun follow(followerId: UserId, followeeId: UserId) {
-        val (followerDatabaseId, followeeDatabaseId) = resolveUserDatabaseIds(followerId, followeeId)
+        val (follower, followee) = resolveUserEntity(followerId, followeeId)
         followDao.save(
-            FollowJpaEntity.of(
-                followeeId = followeeDatabaseId,
-                followerId = followerDatabaseId
+            FollowEntity.of(
+                followerUserEntity = follower,
+                followeeUserEntity = followee
             )
         )
     }
 
     override fun unfollow(followerId: UserId, followeeId: UserId) {
-        val (followerDatabaseId, followeeDatabaseId) = resolveUserDatabaseIds(followerId, followeeId)
-        followDao.deleteByFolloweeUserDatabaseIdAndFollowerUserDatabaseId(
-            followingDatabaseId = followeeDatabaseId,
-            followerDatabaseId = followerDatabaseId
+        val (follower, followee) = resolveUserEntity(followerId, followeeId)
+        followDao.deleteByFolloweeEntityAndFollowerEntity(
+            followeeUserEntity = followee,
+            followerUserEntity = follower
         )
     }
 
-    private fun resolveUserDatabaseIds(followerId: UserId, followeeId: UserId): Pair<Int, Int> {
-        val followerDatabaseId = getUserDatabaseIdOrThrow(followerId)
-        val followeeDatabaseId = getUserDatabaseIdOrThrow(followeeId)
+    private fun resolveUserEntity(followerId: UserId, followeeId: UserId): Pair<UserEntity, UserEntity> {
+        val follower = getUserEntityOrThrow(followerId)
+        val followee = getUserEntityOrThrow(followeeId)
 
-        return followerDatabaseId to followeeDatabaseId
+        return follower to followee
     }
 
-    private fun getUserDatabaseIdOrThrow(userId: UserId): Int {
-        return userDao.findById(userId)?.databaseId
+    private fun getUserEntityOrThrow(userId: UserId): UserEntity {
+        return userDao.findById(userId)
             ?: throw UserNotFoundException.fromId(userId)
     }
 }

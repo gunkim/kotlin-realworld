@@ -130,10 +130,6 @@ class ArticleEntity(
         return result
     }
 
-    override fun toString(): String {
-        return "ArticleJpaEntity(databaseId=$databaseId, id=$id, author=$authorEntity, articleTagJpaEntities=$tagEntities, createdAt=$createdAt, updatedAt=$updatedAt, slug=$slug, title='$title', description='$description', body='$body')"
-    }
-
     companion object {
         fun from(article: Article): ArticleEntity = with(article) {
             ArticleEntity(

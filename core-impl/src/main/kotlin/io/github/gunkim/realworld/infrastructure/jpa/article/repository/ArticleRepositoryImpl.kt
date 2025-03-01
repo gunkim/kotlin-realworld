@@ -25,37 +25,37 @@ class ArticleRepositoryImpl(
     private val articleFavoriteDao: ArticleFavoriteDao,
 ) : ArticleRepository, ArticleReadRepository by articleReadRepository {
     override fun save(article: Article): Article {
-        val articleJpaEntity = convertArticleToJpaEntity(article)
-        return articleDao.save(articleJpaEntity)
+        val articleEntity = convertArticleToEntity(article)
+        return articleDao.save(articleEntity)
     }
 
     override fun delete(article: Article) {
-        articleDao.delete(convertArticleToJpaEntity(article))
+        articleDao.delete(convertArticleToEntity(article))
     }
 
     override fun favorite(article: Article, user: User) {
-        val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
+        val (articleEntity, userEntity) = mapToEntities(article, user)
         articleFavoriteDao.save(
             FavoriteEntity.of(
-                articleJpaEntity,
-                userJpaEntity
+                articleEntity = articleEntity,
+                userEntity = userEntity
             )
         )
     }
 
     override fun unFavorite(article: Article, user: User) {
-        val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
-        articleFavoriteDao.deleteByArticleEntityDatabaseIdAndUserEntityDatabaseId(
-            articleJpaEntity.databaseId!!,
-            userJpaEntity.databaseId!!
+        val (articleEntity, userEntity) = mapToEntities(article, user)
+        articleFavoriteDao.deleteByArticleEntityAndUserEntity(
+            articleEntity = articleEntity,
+            userEntity = userEntity
         )
     }
 
-    private fun mapToJpaEntities(article: Article, user: User) =
-        convertArticleToJpaEntity(article) to UserEntity.from(user)
+    private fun mapToEntities(article: Article, user: User) =
+        convertArticleToEntity(article) to UserEntity.from(user)
 
-    private fun convertArticleToJpaEntity(article: Article) =
-        ArticleEntity.from(article, convertTagsToJpaEntities(article))
+    private fun convertArticleToEntity(article: Article) =
+        ArticleEntity.from(article, convertTagsToEntities(article))
 
     /**
      * Converts the `tags` associated with the provided `article` into a list of `ArticleTagJpaEntity`.
@@ -66,7 +66,7 @@ class ArticleRepositoryImpl(
      * @param article The article whose tags need to be converted to JPA entities.
      * @return A list of `ArticleTagJpaEntity` objects corresponding to the tags of the article.
      */
-    private fun convertTagsToJpaEntities(article: Article): List<ArticleTagEntity> {
+    private fun convertTagsToEntities(article: Article): List<ArticleTagEntity> {
         if (article is ArticleEntity) return article.tagEntities
 
         val tags = article.tags
