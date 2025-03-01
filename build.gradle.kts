@@ -7,10 +7,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5" apply false
 }
 
-repositories {
-    mavenCentral()
-}
-
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "org.springframework.boot")
