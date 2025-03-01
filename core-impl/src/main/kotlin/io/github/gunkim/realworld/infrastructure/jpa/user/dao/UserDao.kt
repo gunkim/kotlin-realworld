@@ -1,14 +1,14 @@
 package io.github.gunkim.realworld.infrastructure.jpa.user.dao
 
 import io.github.gunkim.realworld.domain.user.model.UserId
-import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserJpaEntity
+import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface UserDao : JpaRepository<UserJpaEntity, Long> {
-    fun findByEmail(email: String): UserJpaEntity?
-    fun findById(id: UserId): UserJpaEntity?
-    fun findByName(username: String): UserJpaEntity?
+interface UserDao : JpaRepository<UserEntity, Long> {
+    fun findByEmail(email: String): UserEntity?
+    fun findById(id: UserId): UserEntity?
+    fun findByName(username: String): UserEntity?
 
     @Query(
         """

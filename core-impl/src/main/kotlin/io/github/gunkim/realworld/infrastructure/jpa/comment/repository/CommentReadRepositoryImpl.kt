@@ -18,5 +18,5 @@ class CommentReadRepositoryImpl(
         commentDao.findById(commentId.value).getOrNull()
 
     override fun findByArticleSlug(slug: Slug): List<Comment> =
-        commentDao.findByArticleJpaEntitySlug(slug)
+        commentDao.findByArticleEntitySlug(slug)
 }

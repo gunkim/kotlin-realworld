@@ -1,6 +1,6 @@
 package io.github.gunkim.realworld.infrastructure.jpa.article.model
 
-import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserJpaEntity
+import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -12,17 +12,17 @@ import jakarta.persistence.ManyToOne
 import java.time.Instant
 
 @Entity(name = "article_favorite")
-class ArticleFavoriteJpaEntity(
+class FavoriteEntity(
     @Id
     @Column(name = "favorite_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val databaseId: Int? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", nullable = false)
-    val articleJpaEntity: ArticleJpaEntity? = null,
+    val articleEntity: ArticleEntity? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    val userJpaEntity: UserJpaEntity? = null,
+    val userEntity: UserEntity? = null,
     val createdAt: Instant,
     val updatedAt: Instant,
 ) {
@@ -30,11 +30,11 @@ class ArticleFavoriteJpaEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ArticleFavoriteJpaEntity
+        other as FavoriteEntity
 
         if (databaseId != other.databaseId) return false
-        if (articleJpaEntity != other.articleJpaEntity) return false
-        if (userJpaEntity != other.userJpaEntity) return false
+        if (articleEntity != other.articleEntity) return false
+        if (userEntity != other.userEntity) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
 
@@ -43,20 +43,20 @@ class ArticleFavoriteJpaEntity(
 
     override fun hashCode(): Int {
         var result = databaseId ?: 0
-        result = 31 * result + (articleJpaEntity?.hashCode() ?: 0)
-        result = 31 * result + (userJpaEntity?.hashCode() ?: 0)
+        result = 31 * result + (articleEntity?.hashCode() ?: 0)
+        result = 31 * result + (userEntity?.hashCode() ?: 0)
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()
         return result
     }
 
     companion object {
-        fun of(articleJpaEntity: ArticleJpaEntity, userJpaEntity: UserJpaEntity): ArticleFavoriteJpaEntity {
+        fun of(articleEntity: ArticleEntity, userEntity: UserEntity): FavoriteEntity {
             val now = Instant.now()
 
-            return ArticleFavoriteJpaEntity(
-                articleJpaEntity = articleJpaEntity,
-                userJpaEntity = userJpaEntity,
+            return FavoriteEntity(
+                articleEntity = articleEntity,
+                userEntity = userEntity,
                 createdAt = now,
                 updatedAt = now
             )

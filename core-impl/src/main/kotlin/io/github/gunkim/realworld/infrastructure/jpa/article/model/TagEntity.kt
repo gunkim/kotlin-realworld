@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 import java.time.Instant
 
 @Entity(name = "tag")
-class TagJpaEntity(
+class TagEntity(
     @Id
     @Column(name = "tag_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ class TagJpaEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TagJpaEntity
+        other as TagEntity
 
         if (databaseId != other.databaseId) return false
         if (name != other.name) return false
@@ -40,10 +40,10 @@ class TagJpaEntity(
     }
 
     companion object {
-        fun from(name: String): TagJpaEntity {
+        fun from(name: String): TagEntity {
             val now = Instant.now()
 
-            return TagJpaEntity(
+            return TagEntity(
                 name = name,
                 createdAt = now,
                 updatedAt = now

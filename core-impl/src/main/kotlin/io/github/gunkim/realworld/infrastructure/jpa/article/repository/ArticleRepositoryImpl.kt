@@ -7,11 +7,11 @@ import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.infrastructure.jpa.article.dao.ArticleDao
 import io.github.gunkim.realworld.infrastructure.jpa.article.dao.ArticleFavoriteDao
 import io.github.gunkim.realworld.infrastructure.jpa.article.dao.TagDao
-import io.github.gunkim.realworld.infrastructure.jpa.article.model.ArticleFavoriteJpaEntity
-import io.github.gunkim.realworld.infrastructure.jpa.article.model.ArticleJpaEntity
-import io.github.gunkim.realworld.infrastructure.jpa.article.model.ArticleTagJpaEntity
-import io.github.gunkim.realworld.infrastructure.jpa.article.model.TagJpaEntity
-import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserJpaEntity
+import io.github.gunkim.realworld.infrastructure.jpa.article.model.ArticleEntity
+import io.github.gunkim.realworld.infrastructure.jpa.article.model.ArticleTagEntity
+import io.github.gunkim.realworld.infrastructure.jpa.article.model.FavoriteEntity
+import io.github.gunkim.realworld.infrastructure.jpa.article.model.TagEntity
+import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -36,7 +36,7 @@ class ArticleRepositoryImpl(
     override fun favorite(article: Article, user: User) {
         val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
         articleFavoriteDao.save(
-            ArticleFavoriteJpaEntity.of(
+            FavoriteEntity.of(
                 articleJpaEntity,
                 userJpaEntity
             )
@@ -45,17 +45,17 @@ class ArticleRepositoryImpl(
 
     override fun unFavorite(article: Article, user: User) {
         val (articleJpaEntity, userJpaEntity) = mapToJpaEntities(article, user)
-        articleFavoriteDao.deleteByArticleJpaEntityDatabaseIdAndUserJpaEntityDatabaseId(
+        articleFavoriteDao.deleteByArticleEntityDatabaseIdAndUserEntityDatabaseId(
             articleJpaEntity.databaseId!!,
             userJpaEntity.databaseId!!
         )
     }
 
     private fun mapToJpaEntities(article: Article, user: User) =
-        convertArticleToJpaEntity(article) to UserJpaEntity.from(user)
+        convertArticleToJpaEntity(article) to UserEntity.from(user)
 
     private fun convertArticleToJpaEntity(article: Article) =
-        ArticleJpaEntity.from(article, convertTagsToJpaEntities(article))
+        ArticleEntity.from(article, convertTagsToJpaEntities(article))
 
     /**
      * Converts the `tags` associated with the provided `article` into a list of `ArticleTagJpaEntity`.
@@ -66,16 +66,16 @@ class ArticleRepositoryImpl(
      * @param article The article whose tags need to be converted to JPA entities.
      * @return A list of `ArticleTagJpaEntity` objects corresponding to the tags of the article.
      */
-    private fun convertTagsToJpaEntities(article: Article): List<ArticleTagJpaEntity> {
-        if (article is ArticleJpaEntity) return article.articleTagJpaEntities
+    private fun convertTagsToJpaEntities(article: Article): List<ArticleTagEntity> {
+        if (article is ArticleEntity) return article.tagEntities
 
         val tags = article.tags
         val existingTagEntities = tagDao.findByNameIn(tags.map { it.name })
         val existingTagNames = existingTagEntities.map { it.name }.toSet()
         val newTagEntities = tags.filterNot { it.name in existingTagNames }
-            .map { TagJpaEntity.from(it.name) }
+            .map { TagEntity.from(it.name) }
 
         return (existingTagEntities + newTagEntities)
-            .map(ArticleTagJpaEntity.Companion::fromTagEntity)
+            .map(ArticleTagEntity.Companion::fromTagEntity)
     }
 }

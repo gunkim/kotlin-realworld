@@ -4,8 +4,9 @@ import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.ArticleId
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.article.model.Tag
+import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.infrastructure.jpa.share.Updatable
-import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserJpaEntity
+import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserEntity
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
@@ -40,7 +41,7 @@ class ArticleIdConverter : AttributeConverter<ArticleId, UUID> {
 // Soft Delete
 @SQLDelete(sql = "UPDATE article SET deleted_at = now() WHERE article_id = ?")
 @SQLRestriction("deleted_at is NULL")
-class ArticleJpaEntity(
+class ArticleEntity(
     @Id
     @Column(name = "article_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,24 +54,27 @@ class ArticleJpaEntity(
     description: String,
     body: String,
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "authorId", nullable = false)
-    override val author: UserJpaEntity,
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val articleTagJpaEntities: List<ArticleTagJpaEntity> = listOf(),
+    @JoinColumn(name = "authorId")
+    val authorEntity: UserEntity,
+    @OneToMany(mappedBy = "articleEntity", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val tagEntities: List<ArticleTagEntity> = listOf(),
     override val createdAt: Instant,
     override var updatedAt: Instant,
 ) : Article.Editor, Updatable {
     init {
-        articleTagJpaEntities.forEach {
-            it.article = this
+        tagEntities.forEach {
+            it.articleEntity = this
         }
     }
 
-    @OneToMany(mappedBy = "articleJpaEntity", fetch = FetchType.LAZY)
-    var articleFavoriteJpaEntities: List<ArticleFavoriteJpaEntity>? = listOf()
+    @OneToMany(mappedBy = "articleEntity", fetch = FetchType.LAZY)
+    var favoriteEntities: List<FavoriteEntity>? = listOf()
+
+    override val author: User
+        get() = authorEntity
 
     override val tags: List<Tag>
-        get() = articleTagJpaEntities.map { Tag.create(it.tag.name) }
+        get() = tagEntities.map { Tag.create(it.tagEntity.name) }
 
     @Convert(converter = SlugConverter::class)
     override var slug: Slug = slug
@@ -96,12 +100,12 @@ class ArticleJpaEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ArticleJpaEntity
+        other as ArticleEntity
 
         if (databaseId != other.databaseId) return false
         if (id != other.id) return false
-        if (author != other.author) return false
-        if (articleTagJpaEntities != other.articleTagJpaEntities) return false
+        if (authorEntity != other.authorEntity) return false
+        if (tagEntities != other.tagEntities) return false
         if (createdAt != other.createdAt) return false
         if (updatedAt != other.updatedAt) return false
         if (slug != other.slug) return false
@@ -115,8 +119,8 @@ class ArticleJpaEntity(
     override fun hashCode(): Int {
         var result = databaseId ?: 0
         result = 31 * result + id.hashCode()
-        result = 31 * result + author.hashCode()
-        result = 31 * result + articleTagJpaEntities.hashCode()
+        result = 31 * result + authorEntity.hashCode()
+        result = 31 * result + tagEntities.hashCode()
         result = 31 * result + createdAt.hashCode()
         result = 31 * result + updatedAt.hashCode()
         result = 31 * result + slug.hashCode()
@@ -127,37 +131,37 @@ class ArticleJpaEntity(
     }
 
     override fun toString(): String {
-        return "ArticleJpaEntity(databaseId=$databaseId, id=$id, author=$author, articleTagJpaEntities=$articleTagJpaEntities, createdAt=$createdAt, updatedAt=$updatedAt, slug=$slug, title='$title', description='$description', body='$body')"
+        return "ArticleJpaEntity(databaseId=$databaseId, id=$id, author=$authorEntity, articleTagJpaEntities=$tagEntities, createdAt=$createdAt, updatedAt=$updatedAt, slug=$slug, title='$title', description='$description', body='$body')"
     }
 
     companion object {
-        fun from(article: Article): ArticleJpaEntity = with(article) {
-            ArticleJpaEntity(
-                databaseId = if (this is ArticleJpaEntity) databaseId else null,
+        fun from(article: Article): ArticleEntity = with(article) {
+            ArticleEntity(
+                databaseId = if (this is ArticleEntity) databaseId else null,
                 id = id,
                 slug = slug,
                 title = title,
                 description = description,
                 body = body,
-                author = UserJpaEntity.from(author),
-                articleTagJpaEntities =
-                    if (this is ArticleJpaEntity) articleTagJpaEntities
-                    else article.tags.map(ArticleTagJpaEntity.Companion::from),
+                authorEntity = UserEntity.from(author),
+                tagEntities =
+                    if (this is ArticleEntity) tagEntities
+                    else article.tags.map(ArticleTagEntity.Companion::from),
                 createdAt = createdAt,
                 updatedAt = updatedAt,
             )
         }
 
-        fun from(article: Article, tags: List<Tag>): ArticleJpaEntity = with(article) {
-            ArticleJpaEntity(
-                databaseId = if (this is ArticleJpaEntity) databaseId else null,
+        fun from(article: Article, tags: List<Tag>): ArticleEntity = with(article) {
+            ArticleEntity(
+                databaseId = if (this is ArticleEntity) databaseId else null,
                 id = id,
                 slug = slug,
                 title = title,
                 description = description,
                 body = body,
-                articleTagJpaEntities = tags.map(ArticleTagJpaEntity.Companion::from),
-                author = UserJpaEntity.from(author),
+                tagEntities = tags.map(ArticleTagEntity.Companion::from),
+                authorEntity = UserEntity.from(author),
                 createdAt = article.createdAt,
                 updatedAt = article.updatedAt,
             )

@@ -21,7 +21,7 @@ class UserIdConverter : AttributeConverter<UserId, UUID> {
 }
 
 @Entity(name = "users")
-class UserJpaEntity(
+class UserEntity(
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +62,7 @@ class UserJpaEntity(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as UserJpaEntity
+        other as UserEntity
 
         if (databaseId != other.databaseId) return false
         if (id != other.id) return false
@@ -90,14 +90,10 @@ class UserJpaEntity(
         return result
     }
 
-    override fun toString(): String {
-        return "UserJpaEntity(databaseId=$databaseId, id=$id, createdAt=$createdAt, updatedAt=$updatedAt, name='$name', bio=$bio, image=$image, email='$email', password='$password')"
-    }
-
     companion object {
-        fun from(user: User): UserJpaEntity = with(user) {
-            UserJpaEntity(
-                databaseId = if (this is UserJpaEntity) databaseId else null,
+        fun from(user: User): UserEntity = with(user) {
+            UserEntity(
+                databaseId = if (this is UserEntity) databaseId else null,
                 id = user.id,
                 name = name,
                 bio = bio,

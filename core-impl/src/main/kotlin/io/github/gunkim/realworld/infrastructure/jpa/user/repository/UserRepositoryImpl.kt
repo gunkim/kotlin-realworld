@@ -8,7 +8,7 @@ import io.github.gunkim.realworld.domain.user.repository.UserRepository
 import io.github.gunkim.realworld.infrastructure.jpa.user.dao.FollowDao
 import io.github.gunkim.realworld.infrastructure.jpa.user.dao.UserDao
 import io.github.gunkim.realworld.infrastructure.jpa.user.model.FollowJpaEntity
-import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserJpaEntity
+import io.github.gunkim.realworld.infrastructure.jpa.user.model.UserEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -22,7 +22,7 @@ class UserRepositoryImpl(
     private val userReadRepository: UserReadRepository,
 ) : UserRepository, UserReadRepository by userReadRepository {
     override fun save(user: User): User {
-        return userDao.save(UserJpaEntity.from(user))
+        return userDao.save(UserEntity.from(user))
     }
 
     override fun follow(followerId: UserId, followeeId: UserId) {
