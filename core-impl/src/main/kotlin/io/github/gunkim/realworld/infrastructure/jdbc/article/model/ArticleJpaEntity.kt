@@ -54,7 +54,7 @@ class ArticleJpaEntity(
     body: String,
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "authorId", nullable = false)
-    override val author: io.github.gunkim.realworld.infrastructure.jdbc.user.model.UserJpaEntity,
+    override val author: UserJpaEntity,
     @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val articleTagJpaEntities: List<ArticleTagJpaEntity> = listOf(),
     override val createdAt: Instant,
