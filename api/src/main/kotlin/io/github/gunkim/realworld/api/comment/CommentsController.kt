@@ -1,17 +1,17 @@
 package io.github.gunkim.realworld.api.comment
 
+import io.github.gunkim.realworld.api.AuthenticatedUser
 import io.github.gunkim.realworld.api.JsonRequest
+import io.github.gunkim.realworld.api.comment.model.request.AddCommentRequest
+import io.github.gunkim.realworld.api.comment.model.response.CommentResponse
+import io.github.gunkim.realworld.api.comment.model.response.wrapper.CommentWrapper
+import io.github.gunkim.realworld.api.comment.model.response.wrapper.CommentsWrapper
 import io.github.gunkim.realworld.domain.article.model.Slug
 import io.github.gunkim.realworld.domain.comment.model.CommentId
 import io.github.gunkim.realworld.domain.comment.service.AddCommentService
 import io.github.gunkim.realworld.domain.comment.service.DeleteCommentService
 import io.github.gunkim.realworld.domain.comment.service.GetCommentService
 import io.github.gunkim.realworld.domain.user.service.FollowUserService
-import io.github.gunkim.realworld.api.AuthenticatedUser
-import io.github.gunkim.realworld.api.comment.model.request.AddCommentRequest
-import io.github.gunkim.realworld.api.comment.model.response.CommentResponse
-import io.github.gunkim.realworld.api.comment.model.response.wrapper.CommentWrapper
-import io.github.gunkim.realworld.api.comment.model.response.wrapper.CommentsWrapper
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -42,7 +42,7 @@ interface CommentsResource {
     @GetMapping
     fun getCommentsFromArticle(
         @PathVariable slug: String,
-        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser,
+        @AuthenticationPrincipal authenticatedUser: AuthenticatedUser?,
     ): CommentsWrapper
 }
 
@@ -78,9 +78,12 @@ class CommentsController(
 
     override fun getCommentsFromArticle(
         slug: String,
-        authenticatedUser: AuthenticatedUser,
+        authenticatedUser: AuthenticatedUser?,
     ): CommentsWrapper {
-        val followingPredicate = followUserService.getFollowingPredicate(authenticatedUser.userId)
+        val followingPredicate = authenticatedUser
+            ?.let(AuthenticatedUser::userId)
+            ?.let(followUserService::getFollowingPredicate)
+            ?: { false }
 
         return getCommentService.getComments(Slug.from(slug))
             .map { CommentResponse.from(it, followingPredicate(it.author.id)) }

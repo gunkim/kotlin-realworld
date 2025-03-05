@@ -74,7 +74,9 @@ class ArticleEntity(
         get() = authorEntity
 
     override val tags: List<Tag>
-        get() = tagEntities.map { Tag.create(it.tagEntity.name) }
+        get() = tagEntities
+            .map { Tag.create(it.tagEntity.name) }
+            .sortedBy { it.name }
 
     @Convert(converter = SlugConverter::class)
     override var slug: Slug = slug
