@@ -1,11 +1,13 @@
 package io.github.gunkim.realworld.share
 
+import io.github.gunkim.realworld.domain.article.model.Article
 import io.github.gunkim.realworld.domain.article.model.ArticleId
+import io.github.gunkim.realworld.domain.user.model.User
 import io.github.gunkim.realworld.domain.user.model.UserId
 
 object InMemoryDatabase {
-    val users: MutableMap<UserId, Any> = mutableMapOf() // User 저장소
-    val articles: MutableMap<ArticleId, Any> = mutableMapOf() // Article 저장소
+    val users: MutableMap<UserId, User> = mutableMapOf() // User 저장소
+    val articles: MutableMap<ArticleId, Article> = mutableMapOf() // Article 저장소
 
     val followings: MutableMap<UserId, MutableSet<UserId>> = mutableMapOf()
     val favorites: MutableMap<ArticleId, MutableSet<UserId>> = mutableMapOf()

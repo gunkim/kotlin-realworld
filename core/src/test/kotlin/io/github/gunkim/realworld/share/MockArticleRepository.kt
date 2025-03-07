@@ -15,7 +15,7 @@ data class ArticleCountProjectionImpl(
 
 class MockArticleRepository : ArticleRepository {
     override fun save(article: Article): Article {
-        val updatedAuthor: User = InMemoryDatabase.users[article.author.id] as? User ?: article.author
+        val updatedAuthor: User = InMemoryDatabase.users[article.author.id] ?: article.author
         val updatedArticle = if (article is Article.Companion.Model) {
             article.copy(author = updatedAuthor)
         } else {
@@ -46,7 +46,7 @@ class MockArticleRepository : ArticleRepository {
         limit: Int,
         offset: Int,
     ): List<Article> {
-        var filtered = InMemoryDatabase.articles.values.toList().mapNotNull { it as? Article }
+        var filtered = InMemoryDatabase.articles.values.toList().map { it }
 
         if (tag != null) {
             filtered = filtered.filter { article ->
@@ -62,7 +62,7 @@ class MockArticleRepository : ArticleRepository {
 
         if (favoritedUsername != null) {
             val favoriter = InMemoryDatabase.users.values
-                .mapNotNull { it as? User }
+                .map { it }
                 .find { it.name == favoritedUsername }
             filtered = if (favoriter != null) {
                 filtered.filter { article ->
@@ -78,7 +78,7 @@ class MockArticleRepository : ArticleRepository {
 
     override fun findFeedArticles(userId: UserId, limit: Int, offset: Int): List<Article> {
         val followedUserIds = InMemoryDatabase.followings[userId] ?: emptySet()
-        val feedArticles = InMemoryDatabase.articles.values.toList().mapNotNull { it as? Article }
+        val feedArticles = InMemoryDatabase.articles.values.toList().map { it }
             .filter { article ->
                 followedUserIds.contains(article.author.id)
             }
@@ -100,7 +100,7 @@ class MockArticleRepository : ArticleRepository {
 
     override fun findBySlug(slug: Slug): Article? {
         return InMemoryDatabase.articles.values
-            .mapNotNull { it as? Article }
+            .map { it }
             .find { it.slug == slug }
     }
 }

@@ -11,7 +11,7 @@ class MockUserRepository : UserRepository {
         InMemoryDatabase.users[user.id] = user
 
         if (existingUser != null) {
-            InMemoryDatabase.articles.replaceAll { articleId, article ->
+            InMemoryDatabase.articles.replaceAll { _, article ->
                 if (article.author.id == user.id) {
                     if (article is Article.Companion.Model) {
                         article.copy(author = user)
@@ -27,7 +27,6 @@ class MockUserRepository : UserRepository {
     }
 
     override fun follow(followerId: UserId, followeeId: UserId) {
-        // followerId가 followeeId를 팔로우하도록 followings 맵을 업데이트합니다.
         val followingSet = InMemoryDatabase.followings.getOrPut(followerId) { mutableSetOf() }
         followingSet.add(followeeId)
     }
