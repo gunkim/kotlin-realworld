@@ -12,7 +12,7 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
-    runtimeOnly(project(":core-impl"))
+    implementation(project(":core-impl"))
 
     // web
     implementation("org.springframework.boot:spring-boot-starter-web")
